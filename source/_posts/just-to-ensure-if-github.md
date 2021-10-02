@@ -1,5 +1,29 @@
 ---
-title: just to ensure if github
+title: hexo github 部署的基本工作原理
 date: 2021-10-02 20:09:35
 tags:
 ---
+
+看起来其实没问题了……没关系，现在我们来梳理一下
+
+这次使用的是 travis 的部署，其实这个基本上就是根据 main 分支下的文件等等一系列东西，然后生成一个 gh-pages 的 branch，里面就包含了界面啊图片啊这些。所以需要在 github page 这个设置 （github page 是啥，坑，要填）里面让它 follow gh-pages 而不是 main，要不然它要找 index.html，你拿着这一堆配置也没用啊对吧
+
+
+
+没用啊没用啊没用
+
+
+
+travis-CI 是啥我的确不知道，不过看起来是创建了很小的虚拟机？容器？帮你跑这种轻量级的服务……啊啊啊啊啊无服务器！serverless！不知道是好还是坏的时代来临嘞（
+
+
+
+然后你在 project 的 setting 的 page 选项里等等看，上面那个网址就是你访问用的网址，有且只能有一个<用户名>.github.io ，想要就 repo 命名成这个就 ok 辽，然后访问，然后就没有然后了。
+
+
+
+那么接下来说一下 hexo 整个的逻辑吼，其实你 down 下来的就是配置啊生成什么的，node 到底怎么回事我也不知道（继续挖坑），然后根据官方教程本地弄好之后，url 记得就是你要 display 的连接，就是<用户名>.github.io 本身啦啦啦啦啦，至于这里提供的 deploy，看官方文档 you will know，其实根据不同部署种类生成的静态文件吧？不过不 deploy 之前本地不知道能不能行
+
+哦能行 ~~马上去试了一下~~
+
+so，deploy 到底是干啥的，本地那啥的话应该说是直接 find 到了这个 md 文档？有可能吼，再试试
