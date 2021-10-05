@@ -2,6 +2,7 @@
 title: term 1 学科任务
 date: 2021-10-04 14:30:51
 categories: 学校学习
+top: true
 tags:
 ---
 
@@ -13,7 +14,8 @@ tags:
 
 每周完成 Practice Problems ，周三之前 hand on QA，周五解答
 
-
+- [ ]  week 1 practice（你还差个画图）
+- [ ]  拿板子
 
 assessment set at week 6, hand on week 15.
 
@@ -31,7 +33,15 @@ assessment set at week 6, hand on week 15.
 
 
 
-## 我最期待的操作系统和网络还杳无音讯啊啊啊啊啊啊啊！    
+## ~~我最期待的操作系统和网络还杳无音讯啊啊啊啊啊啊啊！~~
+
+有消息了
+
+# CS241:Operating Systems and Computer Networks
+
+周一上午十点 lecture，第三周开始周二下午一点 lab，目前没有更多资料。
+
+
 
 ​            
 
