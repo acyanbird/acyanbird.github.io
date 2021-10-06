@@ -15,7 +15,7 @@ tags:
 每周完成 Practice Problems ，周三之前 hand on QA，周五解答
 
 - [ ]  week 1 practice（你还差个画图）
-- [ ]  拿板子
+- [x]  拿板子
 
 assessment set at week 6, hand on week 15.
 
@@ -30,6 +30,14 @@ assessment set at week 6, hand on week 15.
 ### ES2C7:Engineering Mathematics and and Data Analytics
 
 我的天啊每周一大堆的 lecture，数学真不是人干的事情……从第三周开始周四下午五点 seminar，记得带作业嗷
+
+  week 1
+
+- [x] lecture 1
+- [x] lecture 2
+- [ ] lecture 3
+
+
 
 
 
