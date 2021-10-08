@@ -2,6 +2,7 @@
 title: hexo github 部署的基本工作原理
 date: 2021-10-02 20:09:35
 tags:
+categories: 折腾
 ---
 
 看起来其实没问题了……没关系，现在我们来梳理一下
