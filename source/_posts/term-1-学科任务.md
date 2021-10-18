@@ -10,6 +10,8 @@ tags:
 
 ## ES2E3:Digital Systems Design          
 
+xc7a100tcsg324-1 型号！
+
 周一下午一点，实验课 face to face，带上开发板
 
 每周完成 Practice Problems ，周三之前 hand on QA，周五解答
