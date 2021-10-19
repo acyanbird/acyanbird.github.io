@@ -19,6 +19,8 @@ xc7a100tcsg324-1 型号！
 - [ ]  week 1 practice（你还差个画图）
 - [x]  拿板子
 
+现在都快写麻了……lab2还有 4'hf 是否等价于 4'd15 这样的问题，interface 中间的要结合 constrain file 查看
+
 assessment set at week 6, hand on week 15.
 
 
@@ -26,6 +28,16 @@ assessment set at week 6, hand on week 15.
 ### CS255: Artificial Intelligence 
 
 从第二周开始，周一上午 11 点直播课程，开课之前阅读 pdf，阅读推荐书目（摊爪
+
+
+
+老子不学了！干！
+
+
+
+### CS258:Database Systems
+
+第三周的课还没补上，so sad
 
 
 
@@ -51,7 +63,7 @@ assessment set at week 6, hand on week 15.
 
 周一上午十点 lecture，第三周开始周二下午一点 lab，目前没有更多资料。
 
-
+正在抓紧写 lab+探索 makefile 中，已死勿扰
 
 ​            
 
