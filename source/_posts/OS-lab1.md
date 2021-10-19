@@ -93,9 +93,35 @@ calloc() 函数用来动态地分配内存空间并初始化为 0，其原型为
 
 
 
+##### 使用 debugger
+
+使用的是 GNU Debugger (GDB), 在编译的时候加入选项
+
+`gcc -g -o helloworld helloworld.c`
+
+然后
+
+`gdb ./helloworld`
+
+会给予你 interact interface，你输入 run 可以显示 debug 内容，这次的 example 是
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char *argv[]) {
+   int *my_array = (int *) malloc(5 * sizeof(int)); 
+   int i;
+   for (i = 0; i < 1000000; i++) { 
+      my_array[i] = i;
+   }
+   free(my_array);
+}
+```
 
 
 
+Program received signal SIGSEGV, Segmentation fault, 存储器区段错误 (Segmentation fault)。应该来说就是访问了不属于这个程序被 assign  的存储区块，可以通过修改 malloc 得到（唉其实没有 gdb 也会终止程序？哦，不会）
 
 
 

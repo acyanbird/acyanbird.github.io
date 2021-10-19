@@ -25,6 +25,15 @@ gcc -c main.c
 
 这样就是多个程序一起编译了
 
+如果需要加入其他的lib，在后面加上 -lm，like
+
+```bash
+gcc -c main.c prime.c -lm
+// 你得到了 main.o prime.o
+gcc main.o prime.o -o findPrime -lm
+// 记得这里也要加上 -lm 
+```
+
 
 
 这个其实是自动生成 makefile，具体的 makefile 是
