@@ -80,7 +80,11 @@ size_t size
 
 size_t 好像是 size 的类型？unsigned data type，可以存储所有的 array
 
-还是不知道，记得去问。
+~~还是不知道，记得去问。~~
+
+是的，这个 size_t 就是一种类型，于 int double 什么的类似。
+
+
 
 `p = (int *) malloc (sizeof(int) * 10);`
 
