@@ -160,6 +160,28 @@ counter = 32'h64 ;
 4'd-2 //非法说明
 ```
 
+##### assign 语句变更
+
+只要 RHS 上的任何操作数的值发生变化， LHS 就会使用新值进行更新。
+
+assign 语句也称为连续赋值， 并且始终处于活动状态
+
+##### verilog {} 大括号的使用
+
+{} 的基本使用是两个，一个是拼接，一个是复制，下面列举了几种常见用法。
+
+- { }表示拼接，{第一位，第二位…}；
+- {{ }}表示复制，{4{a}}等同于{a,a,a,a}；
+   所以{13{1‘b1}}就表示将13个1拼接起来，即13’b1111111111111。
+
+所以
+
+`assign {a,b,c,d,e,f,g} = ~intseg;`
+
+就是将 a,b,c,d,e,f,g 拼接，一起接受 not intseg 的赋值
+
+
+
 ref：
 
 https://blog.csdn.net/gududeyhc/article/details/8795202
@@ -173,3 +195,7 @@ https://blog.csdn.net/qq_45467083/article/details/103368097
 https://blog.csdn.net/sinat_20265495/article/details/41314577
 
 https://blog.csdn.net/Times_poem/article/details/52032890
+
+https://blog.csdn.net/Reborn_Lee/article/details/106985139
+
+https://blog.csdn.net/uiojhi/article/details/108764543
