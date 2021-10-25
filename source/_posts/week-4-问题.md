@@ -11,6 +11,9 @@ tags: linux c
 - [ ] meaning of addr space? is code, data, stack?
 - [ ] Do all processes has parents? init is the ancestor of the all processes, create all processes?
 - [ ] what is fd in lecture menas?
+- [ ] where will job be in the memory? main or disk?
+- [ ] what is execlp() use for?
+- [ ] using for loop to frok()
 
 
 
@@ -18,5 +21,8 @@ tags: linux c
 
 - [ ] Is that means until sysnthesis give netlist, FPGA and ASIC is same, and implement netlist to broad in mapping stage is difference?
 - [ ] scanning of 7 seg, auto doing by FPGA?
-- [ ] underline separate num like 8'b1001_1111, can it be put in different place like  8'b100_11111
+- [x] underline separate num like 8'b1001_1111, can it be put in different place like  8'b100_11111
+
+yes, it does not matter
+
 - [ ] why in the top, output abcdefg, an which did not change in main program? init the var?
