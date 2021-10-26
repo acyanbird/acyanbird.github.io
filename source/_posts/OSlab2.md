@@ -1,0 +1,82 @@
+---
+title: OSlab2
+date: 2021-10-26 15:32:25
+categories: 学校学习
+tags:
+---
+
+要死嘞要死嘞——
+
+
+
+##### fprintf 函数
+
+其实 printf 便是 fprintf(stdout, "output"); 的简写，将字符串投向标准输出。
+
+C 语言把所有的设备都当作文件。所以设备（比如显示器）被处理的方式与文件相同。以下三个文件会在程序执行时自动打开，以便访问键盘和屏幕。
+
+| 标准文件 | 文件指针 | 设备     |
+| -------- | -------- | -------- |
+| 标准输入 | stdin    | 键盘     |
+| 标准输出 | stdout   | 屏幕     |
+| 标准错误 | stderr   | 您的屏幕 |
+
+所以相对而言的，scanf 就是从标准输入中读取，不过这个比较复杂就没有一个直接对应的函数了
+
+
+
+##### 文件操作：stream mode
+
+函数	功能
+fopen()	打开流
+fclose()	关闭流
+fputc()	写一个字符到流中
+fgetc()	从流中读一个字符
+fseek()	在流中定位到指定的字符
+fputs()	写字符串到流
+fgets()	从流中读一行或指定个字符
+fprintf()	按格式输出到流
+fscanf()	从流中按格式读取
+feof()	到达文件尾时返回真值
+ferror()	发生错误时返回其值
+rewind()	复位文件定位器到文件开始处
+remove()	删除文件
+fread()	从流中读指定个数的字符
+fwrite()	向流中写指定个数的字符
+tmpfile()	生成一个临时文件流
+tmpnam()	生成一个唯一的文件名
+
+
+
+这个就差不多是……要用的，不过其实 `fopen() fclose() fputs() fgets() `用的比较多啦
+
+```c
+FILE *fp = fopen("文件名包括路经和后缀", "mode");	// 一般包括r,w,a这些，若是 fp == NULL，则打开失败
+
+while(fgets(str,BUFSIZE,fp)!=NULL){ // read the file line by line
+        fprintf(stdout,"%s",str);         // same as doing printf("%s",str);
+    }	// 读取文件内容，str存储，bufsize 读取多少，最后是文件 pointer
+
+char *fgets(char * restrict str, int size, FILE * restrict stream);	// fgets 原型
+
+int fputs(const char *str, FILE *stream);
+fputs("这是 C 语言。", fp);	// 这个是输出
+
+fclose(fp);
+fp = NULL;
+
+// 记得要 close fp 唷~也要手动将 fp 指向 NULL 才行
+```
+
+`fputs()` 和 `fgets()` 来自 `fputc()` 和 `fgetc()` ，反正是 string 和 char 的区别嘛~ 
+
+
+
+ref:
+
+https://blog.csdn.net/qq_38374864/article/details/72794221
+
+https://www.runoob.com/cprogramming/c-input-output.html
+
+https://www.runoob.com/cprogramming/c-function-fputs.html
+
