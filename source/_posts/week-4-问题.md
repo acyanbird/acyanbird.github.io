@@ -13,7 +13,7 @@ tags: linux c
 - [ ] what is fd in lecture menas?
 - [ ] where will job be in the memory? main or disk?
 - [ ] what is execlp() use for?
-- [ ] using for loop to frok()
+- [ ] using for loop to frok(), is that means we have several processes doing the same fork() together cuz it's copy?
 
 
 
