@@ -112,7 +112,77 @@ int main(){
 
 
 
+在 discriptor 状态下 w 并非不存在会自己创造，所以需要
 
+```c
+int fd2 = open(name2, O_WRONLY);
+
+    if(fd2 < 0){    // if file not exist
+        fd2 = open(name2, O_CREAT, 0777);
+    }
+```
+
+记住一定要在最后加入 permission 不然会错误并且不会报错的！！！是八进制所以要四位数四位数！
+
+
+
+##### 结构
+
+一个或多个变量的集合，格式如下
+
+```c
+
+struct tag { 
+    member-list
+    member-list 
+    member-list  
+    ...
+} variable-list ;
+
+struct t {...} x,y,z;
+// 等价于 
+int x,y,z;
+
+//其中 tag 是结构标记，可选
+
+struct B;    //对结构体B进行不完整声明,不需要分配存储空间
+```
+
+可以使用 结构名.成员 的方式访问，不过赋值变量到结构需要添加 struct 关键字在结构名之前，例如
+
+```c
+struct point {
+    int x;
+    int y;
+};	//需要加上分号唷
+
+// 结构也可以嵌套
+
+struct rect {	// 定义一个长方形
+    struct point pt1;
+    struct point pt2;
+};
+
+struct rect screen;	// 定义rect成员
+
+screen.pt1.x;	// 这样访问多重变量
+```
+
+可以生成指向结构的指针，这样访问的速度会比直接复制结构更快
+
+```c
+struct point origin, *pp;
+pp = &origin;
+printf("origin is (%d, %d)", (*pp).x, (*pp).y);
+```
+
+
+
+因为 . 的优先度高于 * 所以必须加括号，当然也有简写
+
+`pp -> x`
+
+这也是等价的
 
 ref:
 
