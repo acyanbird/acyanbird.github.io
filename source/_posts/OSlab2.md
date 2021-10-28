@@ -70,6 +70,48 @@ fp = NULL;
 
 `fputs()` 和 `fgets()` 来自 `fputc()` 和 `fgetc()` ，反正是 string 和 char 的区别嘛~ 
 
+`fopen()` 的返回值是 0，错误则是 1。
+
+上面的是 file pointer which is c lib, but file discriptor is system function in unix like. 
+
+`read() write() open()` 是系统功能，它们也许也是 c 实现的，但是在使用的时候的确是 call system. 其中 [`stdin,`](http://linux.die.net/man/3/close)[`stdout`](http://linux.die.net/man/3/close), and [`stderr`](http://linux.die.net/man/3/close) 分别对应 0, 1, 2
+
+```c
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#include<fcntl.h>  // for the open() function
+#include<unistd.h> // for read(), write() and close() functions
+
+#define BUFSIZE 10
+
+int main(){
+
+    int fd1=open("./textfile1.txt",O_RDONLY);  // opens the file in read only mode and returns a file descriptor for the file
+    int x;
+
+    if(fd1 < 0){
+        write(2,"Error opening file\n",sizeof("Error opening file\n")); // writes the error message to stderr
+        exit(1);
+    }
+
+    char str[BUFSIZE];
+
+    printf("Content of the opened file:\n");
+    while((x=read(fd1,str,BUFSIZE-1)) > 0){ // read() reads up to BUFSIZE-1 bytes from fd1 and stores in str
+                                           // the number of bytes actually read is returned
+            str[x]='\0';
+            write(1,str,strlen(str));   // '1' is the file dscriptor for stdout, hence this is equivalent to printf("%s", str)
+    }
+    printf("\n");
+    close(fd1);
+    return 0;
+
+}
+```
+
+
+
 
 
 ref:
