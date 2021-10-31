@@ -44,6 +44,10 @@ CREATE TABLE 表名称
 
 这些加在数据类型之后
 
+
+
+唔，mvn， java 操纵……挺麻烦的嘛~
+
 ref:
 
 https://zhuanlan.zhihu.com/p/43802865

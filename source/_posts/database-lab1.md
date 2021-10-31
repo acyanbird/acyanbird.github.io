@@ -35,6 +35,8 @@ psql
 
 然后可以 create database
 
+使用 `\c nature;` 连接到指定数据库。
+
 ref:
 
 https://www.digitalocean.com/community/tutorials/how-to-install-postgresql-on-ubuntu-20-04-quickstart

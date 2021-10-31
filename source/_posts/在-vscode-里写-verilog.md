@@ -11,6 +11,18 @@ tags:
 
 
 
+安装 verilator
+
+`sudo apt-get install verilator`
+
+在扩展设置里面使用 verilator
+
+安装 ctags，也是一样 apt 一下。
+
+
+
+
+
 ref:
 
 https://zhuanlan.zhihu.com/p/338497672
@@ -18,3 +30,5 @@ https://zhuanlan.zhihu.com/p/338497672
 https://github.com/mshr-h/vscode-verilog-hdl-support
 
 https://github.com/universal-ctags/ctags/blob/master/docs/autotools.rst
+
+https://blog.fkynjyq.com/write-verilog-with-vscode/
