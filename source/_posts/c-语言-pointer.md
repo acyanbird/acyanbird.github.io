@@ -22,6 +22,10 @@ int *a;
 
 以下这个来解释不错，有时间我写上
 
+
+
+
+
 ref:
 
 https://zhuanlan.zhihu.com/p/27974028
