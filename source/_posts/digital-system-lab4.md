@@ -3,6 +3,8 @@ title: digital system lab4
 date: 2021-11-01 14:07:08
 categories: 学校学习
 tags:
+- verilog
+- digitalLab
 ---
 
 ##### 在一个 always 里两次赋值同一个变量

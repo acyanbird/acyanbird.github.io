@@ -3,7 +3,7 @@ title: clion math.h 加入执行
 date: 2021-10-18 21:14:12
 categories: 学校学习
 tags:
--c
+- c
 ---
 
 ```c

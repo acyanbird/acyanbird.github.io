@@ -3,6 +3,7 @@ title: 在 vscode 里写 verilog
 date: 2021-10-25 14:19:44
 categories: 学校学习
 tags:
+- verilog
 ---
 
 因为十分智障的错误被坑……我觉得 xilinx 的自带 editor 和那啥没什么大区别，atom 似乎不能用，所以用 vscode 好了

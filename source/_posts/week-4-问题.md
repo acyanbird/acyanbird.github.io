@@ -2,7 +2,8 @@
 title: week 4 问题
 date: 2021-10-22 20:30:43
 categories: 学校学习
-tags: linux c
+tags: 
+- 学校问题
 ---
 
 ##### OS

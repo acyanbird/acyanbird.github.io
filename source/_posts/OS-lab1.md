@@ -3,8 +3,8 @@ title: OS lab1
 date: 2021-10-18 22:50:50
 categories: 学校学习
 tags: 
--c
--OSLab
+- c
+- OSLab
 ---
 
 还是太乱了啊……所以就直接以 lab 命名吧，反正涉及很多小项的。

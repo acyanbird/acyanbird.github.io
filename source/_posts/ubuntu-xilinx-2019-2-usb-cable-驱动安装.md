@@ -3,7 +3,7 @@ title: ubuntu xilinx 2019.2 usb cable 驱动安装
 date: 2021-10-10 21:30:24
 categories: 折腾
 tags:
--xilinx
+- xilinx
 ---
 
 我不知道是 ubuntu 要额外安装 lib 的操作，还是 linux 共性如此……总之，如果没有安装 cable driver 的话，那么插入 FPGA dev broad 是无法被识别的。我手上的是 NEXYS A7，所以使用的是 vivado。

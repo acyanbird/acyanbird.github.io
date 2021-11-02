@@ -3,8 +3,8 @@ title: digital system lab2 问题
 date: 2021-10-18 10:19:31
 categories: 学校学习
 tags:
--digitalLab
--verilog
+- digitalLab
+- verilog
 ---
 
 ##### 为什么不能在两个 always 块中赋值同一个变量？

@@ -3,8 +3,8 @@ title: digital system lab3
 date: 2021-10-25 00:11:47
 categories: 学校学习
 tags:
--digitalLab
--verilog
+- digitalLab
+- verilog
 ---
 
 ##### 赋值问题

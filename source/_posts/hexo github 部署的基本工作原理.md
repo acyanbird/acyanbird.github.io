@@ -2,7 +2,7 @@
 title: hexo github 部署的基本工作原理
 date: 2021-10-02 20:09:35
 tags:
--hexo
+- hexo
 categories: 折腾
 ---
 

@@ -1,9 +1,9 @@
 ---
-
 title: OS lab3
 date: 2021-11-02 13:17:55
 categories: 学校学习
 tags:
+- OSLab
 ---
 
 哎呀，其实这次是 network lab 了

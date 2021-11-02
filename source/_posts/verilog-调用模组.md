@@ -3,7 +3,7 @@ title: verilog 调用模组
 date: 2021-10-12 13:31:59
 categories: 学校学习
 tags:
--verilog
+- verilog
 ---
 
 因为在给出的范例代码中有调用同一个文件夹里上一个 module 的操作，于是四处寻找了一下调用的语法规范。
