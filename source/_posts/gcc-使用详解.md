@@ -2,7 +2,8 @@
 title: gcc 使用详解
 date: 2021-10-18 21:25:10
 categories: 折腾
-tags: c语言
+tags: 
+-c
 ---
 
 gcc -o <更改名称> 源文件

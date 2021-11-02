@@ -3,6 +3,7 @@ title: linux user mask 是什么
 date: 2021-10-28 20:56:28
 categories: 折腾
 tags:
+-linux
 ---
 
 嗯……真的是，一直困扰我的问题吧，就是三位权限中的第一位，比如0777中的第一个就是 user mask，所以这个是什么呢

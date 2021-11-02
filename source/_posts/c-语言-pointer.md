@@ -3,6 +3,7 @@ title: c 语言 pointer
 date: 2021-10-18 22:26:11
 categories: 学习
 tags:
+-c
 ---
 
 一直困扰我的……指针的语法其实不是很重要，以下三种都可以

@@ -2,7 +2,9 @@
 title: database lab1
 date: 2021-10-19 16:08:17
 categories: 学校学习
-tags: sql
+tags: 
+-sql
+-dblab
 ---
 
 ##### 安装并使用 PostgreSQL

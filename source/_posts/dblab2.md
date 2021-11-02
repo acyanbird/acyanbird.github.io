@@ -3,6 +3,8 @@ title: dblab2
 date: 2021-10-26 16:45:06
 categories: 学校学习
 tags:
+-dblab
+-sql
 ---
 
 让我们复习一下基本语句
