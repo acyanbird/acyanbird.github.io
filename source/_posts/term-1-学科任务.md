@@ -65,9 +65,7 @@ assessment set at week 6, hand on week 15.
 
 正在抓紧写 lab+探索 makefile 中，已死勿扰
 
-lab1 结束，还没能跟教授套磁，so sad++
 
-难不成要跟 digital system 的套磁了？
 
 ​            
 

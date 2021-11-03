@@ -32,6 +32,8 @@ tags:
 
 唉，那为什么要四位数呢……请看 777 vs 0777 这一篇~
 
+https://acyanbird.github.io/2021/10/28/linux-0777-vs-777/
+
 ref:
 
 https://www.howtoforge.com/linux-umask/

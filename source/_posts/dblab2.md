@@ -13,6 +13,12 @@ tags:
 /modules/cs258/bin/psql postgres
 ```
 
+为了更加方便使用我在 `.bashrc` 里面设置别名了
+
+`alias psql='/modules/cs258/bin/psql postgres'`
+
+也可以在命令行写来一次性使用，lab2c 来编译java
+
 连接
 
 CREATE TABLE 
@@ -150,9 +156,35 @@ https://blog.51cto.com/u_15293798/2977463
 
 
 
+**记住java里面操纵语句不加分号嗷！**
+
+
+
+预编译？
+
+https://blog.csdn.net/Lirx_Tech/article/details/51148853
+
+SQL语句的执行过程：提交SQL语句 -> 数据库引擎对SQL语句进行编译得到数据库可执行的代码 -> 执行SQL代码
+
+查看这个，所以是先行编译了语句，预编译支持占位符，意思就是说 INSERT 
+
+```
+PreparedStatement preparedStatement = conn.prepareStatement(selectQuery);
+ResultSet rs = preparedStatement.executeQuery();
+
+如果是 update 就是
+需要填充占位符在这里
+preparedStatement.setSrting(1, 'a');
+preparedStatment.setInt(2, 2);
+... 以此类推
+
+int result = preparedStaement.executeUpdate();
+
+```
+
 要实现的
 
-- [ ] Count the number of species that have an adult weight greater than 4000g.
+- [x] Count the number of species that have an adult weight greater than 4000g.
 
 `select count(*) from anage where anage.adultweight > 4000;`
 
@@ -201,10 +233,101 @@ private static void commonNameLitterCluch(Connection conn){
 
 其实不知道能不能 select 名字……
 
-- [ ] Find the species name and common name of species that have an adultweight greater than 200 times their birthweight.
-- [ ] Change the weight of 'Apis mellifera' ('Honey bee') to be 3g.
-- [ ] Insert a (maybe fictional) animal of your choice (or one that  doesn't appear in the dataset already — there don't seem to be many  insects).
-- [ ] Delete your newly inserted animal.
+- [x] Find the species name and common name of species that have an adultweight greater than 200 times their birthweight.
+
+语句
+
+`SELECT anage.species, anage.commonname FROM anage WHERE anage.adultweight > (200*anage.birthweight);`
+
+`System.out.format("%56s, %-31s\t\n", animals.getString(2),animals.getString(1));`
+
+参考一下这个，同样也是输出学名和common name，占字节和左对齐
+
+- [x] Change the weight of 'Apis mellifera' ('Honey bee') to be 3g.
+
+要用 `int  executeUpdate(String sql)` 了
+
+```sql
+UPDATE table_name
+SET column1 = value1, column2 = value2, ...
+WHERE condition; 
+
+UPDATE anage
+SET adultweight = 3	
+WHERE commonname = 'Honey bee';
+
+-- 加不加3.00 无所谓，会补充的
+```
+
+代码
+
+```java
+private static void changeBee(Connection conn){
+        String sql = "UPDATE anage SET adultweight = 3 WHERE commonname = 'Honey bee'";
+        try{
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            // create prepared statement
+            int success = preparedStatement.executeUpdate();
+            // get int as file discriptor?
+            if(success < 0){
+                // unsucessful
+                System.out.println("Update failed.");
+            }
+            else {
+                System.out.println("Update sucessful.");
+            }
+        }catch(SQLException e){
+            System.err.format("SQL State: %s\n%s\n", e.getSQLState(), e.getMessage());
+            e.printStackTrace();
+        }
+    }
+```
+
+
+
+- [x] Insert a (maybe fictional) animal of your choice (or one that  doesn't appear in the dataset already — there don't seem to be many  insects).
+
+这个其实大同小异了，查询语句
+
+`INSERT INTO anage(Species, CommonName, GestationIncubation, LitterOrClutchSize) VALUES ('Caprimulgus indicus', 'Jungle nightjar', 16, 2);`
+
+
+
+#### 不可以将占位符用作 anage(?,?,?,?)，因为预编译？
+
+
+
+- [x] Delete your newly inserted animal.
+
+`DELETE FROM anage WHERE species = 'Caprimulgus indicus';`
+
+
+
+
+
+##### 创建 NBN
+
+这个简单多了，按照要求写就可以，但是注意一下 common name 不再是 not null，然后要 `\i nature-schema.sql` 一下
+
+sample code 使用了 addbatch 替代逐个 commit，修改 anage 是 if you can，所以还是下次再说罢
+
+##### 创建 observation
+
+`ObservationID SERIAL PRIMARY KEY`
+
+ the 'SERIAL' part will assign a unique incremental number everytime something is inserted.
+
+
+
+decimal 负号不占位置
+
+数据类型为decimal的字段，可以存储的最大值/范围是多少？
+例如：decimal(5,2)，则该字段可以存储-999.99~999.99，最大值为999.99。
+也就是说D表示的是小数部分长度，(M-D)表示的是整数部分长度。
+
+
+
+剩下的是看文档写constrain，我真的要死了，吐魂，下次再说
 
 
 
@@ -221,3 +344,7 @@ https://www.cnblogs.com/kenx/p/13553931.html
 https://blog.csdn.net/qbg19881206/article/details/19850857
 
 https://qiushurong.github.io/2014/02/22/jdbc-resultset/
+
+https://blog.csdn.net/Lirx_Tech/article/details/51148853
+
+https://bbs.huaweicloud.com/forum/thread-90199-1-1.html
