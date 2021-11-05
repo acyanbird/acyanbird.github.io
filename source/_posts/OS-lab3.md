@@ -262,6 +262,35 @@ When a socket is created with socket(2), it exists in a name space (address fami
 
 
 
+下一个是收听端口了
+
+`recvlen = recvfrom(servSocket, buf, BUFSIZE, 0, (struct sockaddr *)&remaddr, &addrlen);`
+
+原型函数是
+
+```c
+ssize_t recvfrom(int sockfd, void *buf, size_t len, int flags,
+                 struct sockaddr *src_addr, socklen_t *addrlen);
+/*fd:file discriptor
+*buf 指向存储接收变量的指针*/
+char buf[BUFSIZE];
+// 接下来是buf大小
+// flag 各种报错？0就是默认吧，没问题的啦
+// A parameter that can be set to 0, MSG_CONNTERM, MSG_PEEK, MSG_OOB, or MSG_WAITALL. The MSG_CONNTERM flag is mutually exclusive with other flags.
+// 在call结束之后，*src_addr 和 *addrlen 会被传入信息的端口赋值
+```
+
+最后一个
+
+```c
+if (sendto(servSocket, buf, strlen(buf), 0, (struct sockaddr *)&remaddr, sizeof(remaddr)) < 0){
+			fprintf(stderr, "Error in sendto\n");
+			exit(1);
+		}
+```
+
+很好理解了，fd在小于0就是错误，剩下的参数和上面的recvfrom一样的
+
 ref:
 
 https://www.gta.ufrj.br/ensino/eel878/sockets/sockaddr_inman.html
@@ -277,3 +306,5 @@ https://man7.org/linux/man-pages/man2/socket.2.html
 https://stackoverflow.com/questions/5815675/what-is-sock-dgram-and-sock-stream
 
 https://man7.org/linux/man-pages/man2/bind.2.html
+
+https://www.ibm.com/docs/en/zos/2.1.0?topic=functions-recvfrom-receive-messages-socket
