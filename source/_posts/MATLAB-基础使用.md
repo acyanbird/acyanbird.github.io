@@ -170,7 +170,74 @@ d = elements.Density
 
 
 
+##### Element wise 乘法
+
 ```matlab
 C = A.*B
 ```
 
+
+
+##### for 循环
+
+```matlab
+for index = values
+   statements
+end
+
+以 -0.2 为步长递增，并显示值。
+
+for v = 1.0:-0.2:0.0
+   disp(v)
+end
+
+     1
+
+    0.8000
+
+    0.6000
+
+    0.4000
+
+    0.2000
+
+     0
+
+```
+
+
+
+##### .*
+
+单独一个 * 是矩阵乘法，这个是按照元素相乘
+
+```matlab
+A = [1 0 3];
+B = [2 3 7];
+C = A.*B
+C = 1×3
+
+     2     0    21
+```
+
+
+
+```matlab
+x(x==999) = 1
+```
+
+将所有 x 里等于 999 的值替换成 1
+
+
+
+##### Function
+
+```matlab
+function [y1,...,yN] = myfun(x1,...,xM)
+```
+
+input: x1,...,xM
+
+output: y1, ... , yN
+
+都可以是 vector
