@@ -360,6 +360,8 @@ void *thread_code(void *arg) {
 
 这个 func 必须返回一个指向 void 的指针，参数值一个指向 void 的指针（我相信是 thread 的运行地址？）
 
+void *thread_code 代表的是返回值是指针，void (\*thread_code) 才是，thread_code是指向返回值是 void 的函数的指针
+
 ```c
 int pthread_create(pthread_t *thread, const pthread_attr_t *attr,
                    void *(*start_routine) (void *), void *arg);
@@ -376,6 +378,8 @@ for (i = 0; i < 10; i++) {
 ```
 
 第一个是获得这个 thread 的 id 的地址，第二个先不管，第三个是指向 **指向 func 指针** 的指针，第四个是传入的参数，是 void 指针类型，需要强制转化
+
+&threads[1] 是 addr of second element, where second element st
 
 为了避免成为孤儿进程，需要combine到主进程里面
 
@@ -394,6 +398,91 @@ for (i = 0; i < argc-1; ++i) {
 ```
 
 第一个参数是 thread 的 id（一个数组），然后下一个是储存返回值，一个指向指针的指针，跟 **argv 一致，可以存储传回的多个 val
+
+
+
+执行是 `gcc -lpthread threaded_code.c` 跟 lab 不一样
+
+
+
+**划重点，void *是通用指针类型，在转换到各种类型指针和转化回来的时候不会丢失数据**
+
+##### Mutex lock
+
+直接看代码吧
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+
+
+volatile int global_number = 0;
+// 在C语言中，volatile关键字可以用来提醒编译器它后面所定义的变量随时有可能改变，因此编译后的程序每次需要存储或读取这个变量的时候，都会直接从变量地址中读取数据
+// 多线程专用啾
+pthread_mutex_t muxlock = PTHREAD_MUTEX_INITIALIZER;
+
+void * thread_code(void *arg) {
+  pthread_mutex_lock(&muxlock);
+  global_number = global_number + 1;
+  pthread_mutex_unlock(&muxlock);
+  // 在增加的时候
+  return NULL;
+}
+
+int main(void) {
+  pthread_t threads[10];
+  int i;
+  for (i = 0; i < 10; i++) {
+    pthread_create(&threads[i], NULL, &thread_code, NULL);
+  }
+  for (i = 0; i < 10; ++i) {
+    void *rv;
+    pthread_join(threads[i], &rv); 
+  }
+  printf("This value should be 10: %d\n", global_number);
+  return EXIT_SUCCESS;
+}
+```
+
+https://stackoverflow.com/questions/34524/what-is-a-mutex
+
+这个解释的比较清楚，是允许某个进程说话的橡皮鸭子（
+
+[临界区](https://zh.wikipedia.org/wiki/临界区)内部，通过[互斥锁](https://zh.wikipedia.org/wiki/互斥锁)（mutex）保证只有一个线程可以访问，因此临界区内的变量不需要是volatile的；而在临界区外部，被多个线程访问的变量应为volatile，这也符合了volatile的原意：防止编译器[缓存](https://zh.wikipedia.org/wiki/缓存)（cache）了被多个线程并发用到的变量。
+
+嗯嗯这是 volatile 的使用
+
+```c
+pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_init(&mutex2, NULL);
+```
+
+这两个语句是等效的
+
+##### 多线程 server
+
+这个主要改得是 server
+
+```c
+void *memset(void *str, int c, size_t n)
+```
+
+- **str** − This is a pointer to the block of memory to fill.
+- **c** − This is the value to be set. The value is passed as an int, but the function fills the block of memory using the unsigned char conversion of this value.
+- **n** − This is the number of bytes to be set to the value.
+
+大概是 memory set, 将 void 这块block 用 c 的值填满，c 将会变成 unsigned char，然后一共有 n 个
+
+```c
+listen(servSocket,BACKLOG);
+```
+
+一共可以排队等待 backlog 个client
+
+
+
+我去这个是真的猛，还要包括 head 文件使用
 
 
 

@@ -36,5 +36,30 @@ Either a null pointer, or a pointer to a **sockaddr** structure where the addres
       }
   ```
 
-  
+- [ ] 为什么 sum 不用转回到 void *?如果添加转回似乎没有变化
 
+```c
+void *sum_runner(void *limit){
+  int i;
+  int *limit1=(int *)limit;
+  int *sum=(int*)malloc(sizeof(int));
+  for(i=1; i <= *limit1; i++){
+    *sum+=i;
+  }
+  return((void *)sum);
+}
+```
+
+why don't need sum = 0 first?
+
+- [ ] ```c
+  int *limit=(int *)malloc((argc-1)*sizeof(int));
+  ```
+
+应该是 -1 才对吧？
+
+- [ ] ```c
+  pthread_create(&tid,NULL,handle_conn,(void *)sock_ptr);
+  ```
+
+what is tid? it is not signed before, it's signed here? thread addr?
