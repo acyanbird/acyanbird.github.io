@@ -291,6 +291,112 @@ if (sendto(servSocket, buf, strlen(buf), 0, (struct sockaddr *)&remaddr, sizeof(
 
 很好理解了，fd在小于0就是错误，剩下的参数和上面的recvfrom一样的
 
+
+
+##### TCP 连接
+
+`listen(servSocket,0);`
+
+前面是 serv，后面是pending的连接数，这个只能有一个连接，不接受等待
+
+
+
+`conn_sock=accept(servSocket,NULL,NULL);`
+
+把等待queue的第一个提取出来
+
+*address*
+
+Either a null pointer, or a pointer to a **sockaddr** structure where the address of the connecting socket shall be returned.
+
+不太明白什么意思……下次问问
+
+然后会创建一个新的socket连接处理这个，conn_sock 就是新的socket
+
+read，成功之后upper case，然后write回去，结束
+
+
+
+总之，从client和server一起写一下吧
+
+client server 共同
+
+创建 struct sockaddr_in ，填入 detail
+
+
+
+~~server端 bind，创建监听端口？不对，connect和bind应该有类似之处？~~
+
+TCP 和 UDP 都一样，myaddr创造struct， serve socket 是 file discriptor，两个分别赋值，然后 client 用 connect 结合，server 用 bind 结合。
+
+connect 搞定三次握手，用新的 conn_sock，不同于listen的端口传递数据。write 发送，read收到，close四次挥手。
+
+
+
+server的话先是listen创建监听端口，然后收到客户再搞出新的专属socket conn_sock，用read读取，write写回
+
+
+
+read write 都是
+
+extern ssize_t read(int __fd, void *__buf, size_t __nbytes)
+
+Read NBYTES into BUF from FD.  Return the
+number read, -1 for errors or 0 for EOF.
+
+从 fd 端口读取 nbytes 到 buf，write 也是，client是 client socket，server 是 conn_socket，果然是万物皆文件啊……感叹.jpg
+
+
+
+##### 多线程
+
+首先需要一个 func 来规定这个 thread 要执行什么代码
+
+```c
+void *thread_code(void *arg) {
+   printf("This is code being ran by thread %d\n", (long) arg);
+}
+```
+
+这个 func 必须返回一个指向 void 的指针，参数值一个指向 void 的指针（我相信是 thread 的运行地址？）
+
+```c
+int pthread_create(pthread_t *thread, const pthread_attr_t *attr,
+                   void *(*start_routine) (void *), void *arg);
+```
+
+给出的例子是
+
+```c
+pthread_t threads[10];
+int i;
+for (i = 0; i < 10; i++) {
+   pthread_create(&threads[i], NULL, &thread_code, (void *) NULL);
+}
+```
+
+第一个是获得这个 thread 的 id 的地址，第二个先不管，第三个是指向 **指向 func 指针** 的指针，第四个是传入的参数，是 void 指针类型，需要强制转化
+
+为了避免成为孤儿进程，需要combine到主进程里面
+
+```c
+int pthread_join(pthread_t thread, void **retval);
+// retval = return value
+```
+
+例子里的答案是这么用的
+
+```c
+for (i = 0; i < argc-1; ++i) {
+      pthread_join(threads[i], (void **)&ans); // the return value is stored in ans
+      printf("Sum of integers up to %d is %d\n",limit[i], *ans);
+      free(ans);
+```
+
+第一个参数是 thread 的 id（一个数组），然后下一个是储存返回值，一个指向指针的指针，跟 **argv 一致，可以存储传回的多个 val
+
+
+
 ref:
 
 https://www.gta.ufrj.br/ensino/eel878/sockets/sockaddr_inman.html
@@ -308,3 +414,7 @@ https://stackoverflow.com/questions/5815675/what-is-sock-dgram-and-sock-stream
 https://man7.org/linux/man-pages/man2/bind.2.html
 
 https://www.ibm.com/docs/en/zos/2.1.0?topic=functions-recvfrom-receive-messages-socket
+
+http://c.biancheng.net/cpp/html/3042.html
+
+https://linux.die.net/man/3/pthread_join
