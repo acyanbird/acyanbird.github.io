@@ -11,6 +11,16 @@ tags:
 
 https://zhuanlan.zhihu.com/p/72034401
 
+***阻塞赋值的执行可以认为是只有一个步骤的操作：***
+
+ 计算RHS 并更新LHS，此时不能允许有来自任何其他Verilog 语句的干扰。 所谓阻塞的概念是指在同一个always 块中，其后面的赋值语句从概念上（即使不设定延迟）是在前一句赋值语句结束后再开始赋值的。
+
+***非阻塞赋值的操作可以看作为两个步骤的过程：***
+
+1) 在赋值时刻开始时，计算非阻塞赋值RHS 表达式。
+
+2) 在赋值时刻结束时，更新非阻塞赋值LHS 表达式。
+
 是相反的呀~
 
 ##### 在一个 always 里两次赋值同一个变量
@@ -46,6 +56,9 @@ module vga_out(
     wire frame_end = (vcount == 10'd931);
 
     assign display_region = ((hcount >= 11'd384) && (hcount <= 11'd1823) && (vcount >= 10'd31) && (vcount <= 10'd930));
+    
+    // why? resolution is 640x480
+    // is 1440 * 900
     assign hsync = ((hcount >= 11'd0) && (hcount <= 11'd151));
     assign vsync = ((vcount >= 10'd0) && (vcount <= 10'd2));
         
@@ -88,6 +101,14 @@ endmodule
 `clk_wiz_0 instance_name(.clk_out1(pixclk),.clk_in1(clk));`
 
 使用左边的 IP Catalog 去 import clocking wizard, 在 customize 里面将 request hz 改成要求的 104.47，取消 locked 和 reset 功能（在同一页的最下面），
+
+
+
+**这里的分辨率是 1440 * 900 啊！不是 VGA 标准的那个啊！你驴我！**
+
+整个时钟是 106.47 MHz, 算上 VS 和 HS 是 （1903*931) 个像素一frame，除过来约等于 60，所以刷新率大概是 60
+
+
 
 
 
@@ -137,7 +158,7 @@ endmodule
 
 ```
 
-
+Testbench 不需要module输入，在这里定义好每个需要使用的变量，然后下面call一下主func就好。
 
 ##### VGA 介绍
 

@@ -63,3 +63,16 @@ why don't need sum = 0 first?
   ```
 
 what is tid? it is not signed before, it's signed here? thread addr?
+
+
+
+##### Digital
+
+反正都在 lab 里面了
+
+为什么 hsync 是 1？
+
+分辨率不合适屏幕的时候会发生什么？
+
+Any better way to make inst arguments?
+
