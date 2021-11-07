@@ -12,3 +12,4 @@ tags:
 `PATH=/tools/Xilinx/Vivado/2019.2/bin:$PATH`
 
 再次 `. ~/.bashrc` 执行就可
+

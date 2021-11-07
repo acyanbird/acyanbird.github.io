@@ -401,6 +401,10 @@ for (i = 0; i < argc-1; ++i) {
 
 
 
+![](/home/cyanbird/cs/blog/web/source/images/1679707084.jpg)
+
+
+
 执行是 `gcc -lpthread threaded_code.c` 跟 lab 不一样
 
 
