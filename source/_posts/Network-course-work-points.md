@@ -17,7 +17,7 @@ loopback interface (localhost)，ifconfig 命令出来的 lo
 
 网卡有 MAC 地址，AP 也有 IP 地址
 
-![](/home/lucia/blog/source/images/tcps.png)
+![](https://i.imgur.com/EaT2PRe.png)
 
 
 
@@ -41,7 +41,7 @@ loopback interface (localhost)，ifconfig 命令出来的 lo
 
 
 
-![](/home/lucia/blog/source/images/woshou.png)
+![](https://i.imgur.com/o3YJ7W6.png)
 
 
 
@@ -49,7 +49,7 @@ loopback interface (localhost)，ifconfig 命令出来的 lo
 
 也叫首部长度，占4个bit,它指出TCP报文段的**数据**起始处距离TCP报文段的起始处有多远。
 
-![](/home/lucia/blog/source/images/shujupi.png)
+![](https://i.imgur.com/hgs2wTR.png)
 
 由于首部中还有长度不确定的选项字段，因此数据偏移字段是必要的。
 
@@ -115,11 +115,11 @@ P168，翻了我老半天了
 
 就是攻击者通过同时发送许多 syn 连接，让服务器维持许多半开连接等待 ack
 
-![](/home/lucia/blog/source/images/Tcp_normal.svg.png)
+![](https://i.imgur.com/QNAiB51.png)
 
 normal state
 
-![](/home/lucia/blog/source/images/440px-Tcp_synflood.png)
+![](https://i.imgur.com/5PAJ7zk.png)
 
 
 
@@ -146,7 +146,7 @@ and the number of them having a unique source IP address.
 
 每当电脑在通信之前会先在网络上发一个广播（这个广播不会被转发到其他网络），问谁的IP地址是某某某。这个时候对应的电脑就会回包说是我，我的MAC地址是某某某。发送方就拿到了接收方的MAC地址，进而完成通信。
 
-![](/home/lucia/blog/source/images/v2-arp_r.jpg)
+![](https://i.imgur.com/xkFuOML.jpg)
 
 如果目标电脑在另一个网络，这个时候发送方就会在自己的网络里广播说谁的IP是192.168.1.1（我们假设它的默认网关IP是192.168.1.1），网关就会回复自己的MAC。然后，发送方就会通过网关的MAC地址给网关发一条IP报文，报文的目标IP就是接收方的IP地址，来源IP自然是发送方的IP地址。在IP网络中，如果目标在同一网络，则通过广播通信；否则，通过网关转发
 
