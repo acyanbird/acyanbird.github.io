@@ -295,6 +295,12 @@ private static void changeBee(Connection conn){
 
 #### 不可以将占位符用作 anage(?,?,?,?)，因为预编译？
 
+https://www.cxyzjd.com/article/qq_38339561/85104156
+
+PreparedStatement会为占位符?的两边自动加上单引号，这样会使得SQL语句不可执行，比如使用将表名设置为占位符，数据库执行sql语句时，表名会用单引号引起来，这样会使得sql语句执行出错或者查询不出数据
+
+所以PreparedStatement只能用来为可以加引号’的参数（如参数值）设置动态参数，即用?占位，不可用于表名、字段名等，不然怎么生成预编译的语句对象呢~ 所以sql中你必须知道你先要查询或操作那些字段。
+
 
 
 - [x] Delete your newly inserted animal.
