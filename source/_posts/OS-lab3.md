@@ -399,9 +399,7 @@ for (i = 0; i < argc-1; ++i) {
 
 第一个参数是 thread 的 id（一个数组），然后下一个是储存返回值，一个指向指针的指针，跟 **argv 一致，可以存储传回的多个 val
 
-
-
-![](/home/cyanbird/cs/blog/web/source/images/1679707084.jpg)
+![](https://i.imgur.com/YivsX0J.jpg)
 
 
 

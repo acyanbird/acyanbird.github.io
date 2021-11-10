@@ -1,4 +1,5 @@
 ---
+
 title: week 6 问题
 date: 2021-11-05 22:49:47
 categories: 学校学习
@@ -9,6 +10,8 @@ tags:
 
 
 OS：
+
+下次给我写好是哪个file的哪一行！
 
 - [ ] ```c
   conn_sock=accept(servSocket,NULL,NULL);
@@ -22,9 +25,11 @@ Either a null pointer, or a pointer to a **sockaddr** structure where the addres
 
 这个shall be returned是啥
 
-- [ ] free() 释放的是什么，里面存储的数据？还是释放了所有被占有的空间？如果是空间那么为什么这个 ans 还可以继续使用，一个 int 大小的空间是reserve的吗
+- [ ] free() 释放的是什么，里面存储的数据？还是释放了所有被占有的空间？如果是空间那么为什么这个 ans 还可以继续使用，一个 int 大小的空间是reserve的吗 
 
-- [ ] 为什么 ans 不用 malloc?
+
+
+- [ ] 为什么 ans 不用 malloc? sum_thread
 
   ```c
     int *ans;
@@ -35,6 +40,10 @@ Either a null pointer, or a pointer to a **sockaddr** structure where the addres
         free(ans);
       }
   ```
+
+
+
+
 
 - [ ] 为什么 sum 不用转回到 void *?如果添加转回似乎没有变化
 
@@ -52,11 +61,19 @@ void *sum_runner(void *limit){
 
 why don't need sum = 0 first?
 
+
+
+
+
 - [ ] ```c
   int *limit=(int *)malloc((argc-1)*sizeof(int));
   ```
 
 应该是 -1 才对吧？
+
+
+
+
 
 - [ ] ```c
   pthread_create(&tid,NULL,handle_conn,(void *)sock_ptr);
