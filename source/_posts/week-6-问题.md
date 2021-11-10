@@ -66,6 +66,38 @@ what is tid? it is not signed before, it's signed here? thread addr?
 
 
 
+thread 会分享global val，不过子进程不会
+
+so whats different between multi thread and fork?
+
+
+
+Overall speed up:
+
+1/(s+(1-s/n))
+
+**阿姆达尔定律**（英语：Amdahl's law，Amdahl's argument），一个计算机科学界的[经验法则](https://zh.wikipedia.org/wiki/經驗法則)，因[吉恩·阿姆达尔](https://zh.wikipedia.org/wiki/吉恩·阿姆達爾)而得名。它代表了[处理器](https://zh.wikipedia.org/wiki/中央處理器)[并行运算](https://zh.wikipedia.org/wiki/並行運算)之后效率提升的能力。
+
+
+
+Mapping between user and kernel thread
+
+many to one, many user to one kernel
+
+因为一个 user 需要read文件（比如），需要阻止其他用户访问，所以需要它们都在一个thread里面
+
+
+
+implement thread pool!
+
+
+
+https://stackoverflow.com/questions/14791278/threads-why-must-all-user-threads-be-mapped-to-a-kernel-thread
+
+
+
+可以复用lab里面的queue！
+
 ##### Digital
 
 反正都在 lab 里面了
