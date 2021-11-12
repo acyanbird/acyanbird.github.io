@@ -53,9 +53,28 @@ mytable.Against = Against;
 
 
 
-访问列
+使用 for - against produce 新列 GD
+
+`mytable.GD = mytable.For-mytable.Against`
 
 
+
+Create the variable 'Points' and add it to your table. The points for each team are calculated as:
+Points = Won*3 + Drawn.
+
+If you didn’t know that a win was worth 3 points and a draw was worth 1 point, how could you have
+worked this out using AX =Y?
+Hint: you need a pseudo inverse.
+
+A 是未知数，X 是 x1 x2，Y 是得分
+
+![](https://i.imgur.com/VelOFDm.jpg)
+
+
+
+##### Histogram:
+
+当 input 是一个的时候，会根据这个 input 的值的不同 output 简单的 histogram。
 
 ref:
 
