@@ -122,3 +122,110 @@ lock simultaneously.
 
 
 
+Locking and unlocking should be performed atomically
+•Atomic= non-interruptible
+
+Modern machines provide special atomic hardware instructions to implement locks
+One type atomic instructions: **test_and_set**
+
+
+
+##### test_and_set Instruction
+
+整个 test_and_set 会将锁置于 true，这样让其他 process 无法进入临界区
+
+整个过程是由硬件完成的，并非代码实现，它会返回旧值再给新值赋值 true
+
+![](https://i.imgur.com/swGeRgv.png)
+
+![](https://i.imgur.com/nKPL8k1.png)
+
+![](https://i.imgur.com/JyftOFe.png)
+
+
+
+#### Software method?
+
+硬件实现无法使用在软件编程上，所以……
+
+有以下几种工具可以使用
+
+
+
+##### Mutex Locks
+
+![](https://i.imgur.com/RCbxB04.png)
+
+![](https://i.imgur.com/zbWMT8t.png)
+
+要记住这个是硬件实现哦！
+
+这个做了什么呢？ lock func 会先检查这个mutex是否available，如果是 false（if语句）那么不可用，就把需要 lock 的线程加到 waiting list 里面去，再用 block 去沉睡……呃插补多吧线程，然后直到可用了再去上锁。
+
+unlock 的话，这个 P 是别的 process，还在 waiting list 里面的，这个 process 执行完毕之后会直接再唤醒另一个等待中的 P，然后将锁 true，那就是解锁了。
+
+
+
+看看知乎的解释： https://www.zhihu.com/question/66733477
+
+![](https://i.imgur.com/RbV7QTS.png)
+
+![](https://i.imgur.com/gi0UQxK.png)
+
+![](https://i.imgur.com/MwrTSbT.png)
+
+
+
+##### Semaphores
+
+这个是一个 int，
+
+**0** 是不可用
+
+**正整数** 是可用
+
+由硬件实现的 wait() 和 signal() 实现
+
+
+
+wait() : 查看是否是小于等于 0，是则等待，若是正整数，则 -1
+
+signal(): 增加1
+
+
+
+区别在于 semaphore 可以控制有多少进程能够同时访问同一资源，当act like mutex 的时候
+
+![](https://i.imgur.com/N0ExhRb.png)
+
+当允许多个同时访问的时候（这里是2）
+
+![](https://i.imgur.com/nk1yGBg.png)
+
+semaphore 的 pseudocode 是
+
+![](https://i.imgur.com/Vjm1rzK.png)
+
+
+
+#### synchronisation issues
+
+这里会讨论
+
+##### Deadlock
+
+A waits for B to do something. B waits for A to do something. A and B are in a deadlock.
+
+![](https://i.imgur.com/h1J6QhM.png)
+
+当 P0 和 P1 都想要 access 资源 S 和 Q，他们如果错开等待，每次都是加1，那么两个 P 永远无法 access。改变 waitcall 顺序可以解决这个问题
+
+##### Starvation
+
+一个进程永远无法访问某个资源，是 bounded waiting 的反面。优先度不够，或者多个进程等待的时候始终没被唤醒。解决方法是随机选取进程唤醒。
+
+##### Priority Inversion
+
+![](https://i.imgur.com/55rx7UV.png)
+
+优先度是 HML, L 用了 mutex，所以 H 访问失败，然后 M 访问，因为 M 不需要 mutex 所以 CPU 就让 M 先执行，导致 H 被挡在后面，解决方法是使用 priority-inheritance protocol，当两个进程 compete for lock 的时候，两个进程都根据最高的优先度计算，这里就是 L 变 H。
