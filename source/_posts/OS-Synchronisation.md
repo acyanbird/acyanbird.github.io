@@ -188,7 +188,11 @@ unlock 的话，这个 P 是别的 process，还在 waiting list 里面的，这
 
 
 
-wait() : 查看是否是小于等于 0，是则等待，若是正整数，则 -1
+wait() : 查看是否是小于等于 0，是则 -1并等待，如果是正整数就 -1
+
+比如一开始 mutex 是 1，那么-1变成 0，继续执行 critical
+
+如果是 0，证明有一个 process 正在执行，减1 变成 -1，等待那个 process 用 signal 加一变成 0，然后再执行
 
 signal(): 增加1
 
@@ -229,3 +233,73 @@ A waits for B to do something. B waits for A to do something. A and B are in a d
 ![](https://i.imgur.com/55rx7UV.png)
 
 优先度是 HML, L 用了 mutex，所以 H 访问失败，然后 M 访问，因为 M 不需要 mutex 所以 CPU 就让 M 先执行，导致 H 被挡在后面，解决方法是使用 priority-inheritance protocol，当两个进程 compete for lock 的时候，两个进程都根据最高的优先度计算，这里就是 L 变 H。
+
+
+
+#### Classic Synchronisation Problems
+
+这些问题用来判断 sync 是否成功运作
+
+##### Bounded Buffer Problem
+
+n 个 buffer，每个 hold an item，有 producer 和 consumer，producer不应该在全满的时候 produce，consumer不应该在全空的时候 consume。
+
+![](https://i.imgur.com/O0Uh8xo.png)
+
+producer 将 empty 的数量减少 1，并等待 mutex。然后 mutex 可用，执行完毕之后，归还 mutex，并且增加 full 的 buffer by 1
+
+![](https://i.imgur.com/OLCbZHf.png)
+
+
+
+这个和 producer 反过来，其他都一样的。
+
+##### Readers and Writers problem
+
+一个 dataset 有两种用户，reader 和 writer。writer 可以读写，reader 只读。同时可以允许多个 reader，但是只能有一个 writer。R 与 W 不能共存，所以如果 R 一直前来，W 需要一直等待。这个版本我们无法解决 W 饥饿的问题。
+
+rw：只允许一个 W 进入，没有 R
+
+mutex：保护 read_count 的锁
+
+![](https://i.imgur.com/NN0NnKK.png)
+
+W 只关注 rw，确认没有其他的 
+
+![](https://i.imgur.com/EspnT2Y.png)
+
+之前一个 mutex 锁去控制只有自己可以修改 RC，然后判断自己是不是唯一的读者，如果不是，那么有别的读者正在处理和作者的关系，安心读书就好~如果不是，那么就要看是否有作者正在访问，如果是就要等待作者访问完毕，顺便用mutex将其他想要访问的读者拦截，如果没有作者访问，就减一变成 0，阻挡作者访问，然后释放 mutex，让其他读者或者访问或者排队。
+
+
+
+part 2 就是退出的时候加上mutex，判断自己是不是唯一的读者，如果是就要负责操作读者这边的 rw 锁，由可能是其他的 R process 执行的减一，加回来之后，再将在线读者数减1，归还 mutex。
+
+
+
+##### Dining Philosophers Problem.
+
+饿死哲学家问题，这个实在是过于经典……
+
+In the case of 5 philosophers, the shared data:
+•Bowl of rice (data set)
+•Semaphore chopstick [5] all initialized to 1
+•two neighboring philosophers cannot eat at the same time
+
+![](https://i.imgur.com/t4685Nb.png)
+
+
+
+
+
+所以如果五个哲学家同时拿起左边的筷子，它们就会因为拿不到一双筷子饿死（大嘘
+
+
+
+解决方法？
+
+只允许 4 个哲学家同时落座
+
+只有在两边筷子都 available 的情况下才能拿起筷子，然后这个 picking 动作也要放在 critical area 里面，我检查完毕拿完筷子之前你们都不许动嗷！这个大概是服务生解法
+
+asym，奇数编号哲学家先拿起左边的筷子然后右边，偶数编号哲学家先右边再左边，这个方法真是非常哲学家
+
