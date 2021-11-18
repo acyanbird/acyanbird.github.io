@@ -9,3 +9,7 @@ tags:
 
 info bar 可 change
 
+
+
+顺便放一些碰到的稀奇古怪问题……哦那个 vga_out 不完整，现在尝试补全ing
+
