@@ -12,3 +12,13 @@ OS
 
 
 
+Waiting time is **the total time spent by the process in the ready state waiting for CPU**
+
+higher CPU utilization cuz lower response time?
+
+no
+
+
+
+progress sync: if no process in critical section, other process can enter
+=======

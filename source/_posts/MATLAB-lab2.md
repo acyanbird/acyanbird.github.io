@@ -76,6 +76,16 @@ A 是未知数，X 是 x1 x2，Y 是得分
 
 当 input 是一个的时候，会根据这个 input 的值的不同 output 简单的 histogram。
 
+histogram(titanic.Survived)
+
+直接这样输入数组，就可以 output 关于这个 single vector 的 histogram
+
+![](https://i.imgur.com/bOJdd4S.jpg)
+
+然后鼠标悬停就会 show exact values
+
+
+
 ref:
 
 https://baike.baidu.com/item/%E5%85%83%E8%83%9E%E6%95%B0%E7%BB%84/212876
