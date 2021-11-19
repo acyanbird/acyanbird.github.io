@@ -6,6 +6,10 @@ tags:
 - c语言
 ---
 
+GCC 不会符合任何一个 ISO 标准，惊不惊喜，意不意外啊
+
+
+
 PCAP exposes a domain specific language which allows you to specify packet filters. **This feature should not be used to complete the coursework. You must  implement the logic to access and process packet headers manually.** A central aim of this coursework is for you to become familiar with the network stack; marks will be deducted from solutions that rely on  external parsing or filtering logic.
 
 不可以使用 PCAP filter 逻辑，哎呀反正这是啥我也不知道
@@ -277,7 +281,9 @@ https://www.cnblogs.com/CarpenterLee/p/5994681.html
 
 算了，再放个资料 http://blog.chinaunix.net/uid-10540984-id-3070572.html 到时候再改吧，看起来要先写完 handler 才能填写 call back func
 
+
+
 ### TODO
 
 - [ ] sniff 中 while（1）的 pcap_next，用 pcap_loop 替代
-- [ ] 
+- [ ] 把几个 struct 搞定
