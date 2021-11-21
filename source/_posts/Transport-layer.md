@@ -1,13 +1,11 @@
 ---
-title: stop and wait ARQ
+title: Trasport layer
 date: 2021-11-21 16:34:53
 categories: 学校学习
 tags:
 ---
 
-Automatic Repeat Request (ARQ)
-
-
+### Automatic Repeat Request (ARQ)
 
 #### packet loss
 
@@ -52,3 +50,9 @@ Round Trip Time (RTT）
 这也关于 rsv 方的 buffer，比如有 B bits
 
 所以最多的 un ACK 是 min(𝐵, 𝐿 + 𝑅×𝑅𝑇𝑇)
+
+
+
+### Pipelined
+
+可以允许多于 1

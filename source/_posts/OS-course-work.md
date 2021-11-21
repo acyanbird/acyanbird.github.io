@@ -6,6 +6,18 @@ tags:
 - c语言
 ---
 
+目前无法读取 netinet，用 linux 下的替代
+
+ https://www.jianshu.com/p/dd1cbfa44012
+
+
+
+记得 apt pcap
+
+`sudo apt install libpcap-dev`
+
+
+
 GCC 不会符合任何一个 ISO 标准，惊不惊喜，意不意外啊
 
 
@@ -81,6 +93,8 @@ LDFLAGS := -lpthread -lpcap
 
 嗯，要用标准进程，谁知道是啥标准哈
 
+大概是一个搞多进程的库吧
+
 
 
 ### 头文件
@@ -131,6 +145,16 @@ the entire header file file
 
 
 ### PCAP
+
+https://stackoverflow.com/questions/21921020/pcap-reading-tcp-header-fields-fails-silently
+
+如果要解析 tcp ip，需要添加偏移量
+
+解析看
+
+https://www.codeleading.com/article/61202964299/
+
+
 
 在[计算机](https://zh.wikipedia.org/wiki/计算机)[网络管理](https://zh.wikipedia.org/wiki/网络管理)领域，**pcap**（全称：packet capture）是一个用于[捕获网络流量](https://zh.wikipedia.org/wiki/數據包分析器)的[应用程序接口](https://zh.wikipedia.org/wiki/应用程序接口)（API）。pcap是用[C语言](https://zh.wikipedia.org/wiki/C语言)编写的。在[类Unix系统](https://zh.wikipedia.org/wiki/类Unix系统)中透过libpcap[库](https://zh.wikipedia.org/wiki/函式庫)来实作pcap.
 
@@ -215,6 +239,16 @@ It does not return when live packet buffer timeouts occur. A value of -1 or 0 fo
 
 #### pcap_loop
 
+
+
+这个大概是这么使用的
+
+http://lihuia.com/libpcap%E6%A0%B8%E5%BF%83pcap_loop/
+
+callback 就是去 call dispatch，进而 call analysis？
+
+
+
 ```c
 int pcap_loop(pcap_t *p, int cnt, pcap_handler callback, u_char *user);
  5        /*参数说明：
@@ -282,6 +316,32 @@ https://www.cnblogs.com/CarpenterLee/p/5994681.html
 算了，再放个资料 http://blog.chinaunix.net/uid-10540984-id-3070572.html 到时候再改吧，看起来要先写完 handler 才能填写 call back func
 
 
+
+#### 如何在 ctrl c 的时候 print？
+
+https://www.runoob.com/cprogramming/c-function-signal.html
+
+在 while 之前写上
+
+```
+signal(SIGINT,sigHandle);
+```
+
+然后 `sighandle` 就是在退出之前 call 的函数，记得要在 sigHandle 里写上 exit(1) 哦
+
+要使用全局变量进行不同 IP 的记录，还有不同攻击数量，那么需要使用 mutex 锁来防止篡改。
+
+
+
+#### multi thread
+
+https://blog.csdn.net/qq_34352738/article/details/78307116
+
+任何一个线程调用 exit 都会导致结束。
+
+如果一切都是main来handle，那么就是单线程
+
+如果在执行函数之前先 create 一个线程，然后在线程要执行的函数那边将线程 kill 掉
 
 ### TODO
 
