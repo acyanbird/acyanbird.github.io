@@ -1,4 +1,5 @@
 ---
+
 title: MATLAB lab2
 date: 2021-11-12 09:41:02
 categories: 学校学习
@@ -83,6 +84,80 @@ histogram(titanic.Survived)
 ![](https://i.imgur.com/bOJdd4S.jpg)
 
 然后鼠标悬停就会 show exact values
+
+histogram2(titanic.Fare, titanic.Pclass)，三维的 histogram
+
+#### Regression Using the MATLAB App
+
+使用内置的 App 来训练，首先打开这个
+
+![](https://i.imgur.com/g38K92R.png)
+
+然后将数据集合成 table，输入 workspace 的 table，选择需要 predict 的参数
+
+![](https://i.imgur.com/eusN9N1.png)
+
+因为要 response resistace，所以 predictor 就是剩下的两个，然后选择 linear 模型
+
+![](https://i.imgur.com/Qovpkzo.png)
+
+点击旁边的training
+
+可以在左边看到误差，RMSE 是啥来着
+
+![](https://i.imgur.com/hJwdxEJ.png)
+
+然后就可以对比 predict 和实际的差
+
+![](https://i.imgur.com/ftmUekr.png)
+
+这次是要导入 carbig，要安装插件才行，然后创建 table
+
+`carstate = table(Acceleration,Cylinders,Horsepower, Displacement, MPG, Weight);`
+
+这次是 predict MPG，为了找到最合适的可以选择我全都要 （不是
+
+![](https://i.imgur.com/LosZwcI.png)
+
+然后 matlab 会标注出误差最小的
+
+#### Classification
+
+也在 regression 的旁边选择 classification
+
+![](https://i.imgur.com/p3bkc2Q.png)
+
+看 cunfusion matrix 可以得到
+
+![](https://i.imgur.com/aWpZicX.png)
+
+
+
+![](https://i.imgur.com/pD28UBn.png)
+
+
+
+![](https://i.imgur.com/ilaAYda.png)
+
+
+
+这里要导入一个 vector 里小于 20 的数字
+
+ lowmpg = mpg<20，会 produce 一个由 1 和 0 组成的 vector
+
+然后将这个加入 table，这个 table 是 newcarstate
+
+newcarstats = addvars(newcarstats, lowmpg);
+
+这个就是在最后加入
+
+因为
+
+#### lustering - Finding Patterns in Data
+
+
+
+
 
 
 

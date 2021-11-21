@@ -50,4 +50,56 @@ assign draw_b = draw_b_r;
 
 
 好吧这个 xilinx 的 init 速度不快的，所以……要等它 update 完毕之后再跑，不然
->>>>>>> 847041b567796603a475604cba3ace21e77404b3
+
+
+
+当 output 是 reg 的时候必须声明，可以在 moudle declare 里面
+
+```verilog
+module pad(
+    input        DIN, OEN ,
+    input [1:0]  PULL ,
+    inout        PAD ,
+    output reg   DOUT
+    );
+```
+
+这样才行
+
+
+
+数组定义
+
+定义是大位在前面，但是赋值的时候还是从后面开始计算的
+
+![](https://i.imgur.com/zFLo3rr.png)
+
+![](https://i.imgur.com/MJN9B0I.png)
+
+所以多个位的时候要从大到小，但是单个定位是右边是 0 这样
+
+
+
+记住 input 和 output 要定义这个range啊！
+
+
+
+注意 decalre instance 的时候 instance 名称是否正确……
+
+
+
+模块例化一定要定义 wire 去承接。
+
+
+
+如果出现问题：
+
+检查端口是否宽度正确
+
+检查是否标注 reg
+
+检查变量名是否填写正确
+
+检查是否有例化模块输入S
+
+/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.srcs/sources_1/new/ground.v
