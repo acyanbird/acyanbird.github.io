@@ -6,6 +6,16 @@ tags:
 - c语言
 ---
 
+记得要转换，不过应该大家都是大尾吧……
+
+To do this, the function `ntohs` can be used as follows.
+
+```
+#include <netinet/in.h>
+...
+unsigned short ethernet_type = ntohs(eth_header->ether_type);
+```
+
 目前无法读取 netinet，用 linux 下的替代
 
  https://www.jianshu.com/p/dd1cbfa44012
@@ -251,15 +261,18 @@ callback 就是去 call dispatch，进而 call analysis？
 
 ```c
 int pcap_loop(pcap_t *p, int cnt, pcap_handler callback, u_char *user);
- 5        /*参数说明：
- 6             功能：循环捕获数据包,不会响应pcap_open_live()函数设置的超时时间
- 7             参数 pcap_t *p: p是嗅探器会话句柄
- 8             参数 cnt：cnt用于设置所捕获数据包的个数，负数的cnt表示pcap_loop永远循环抓包，直到出现错误。
- 9             参数callback：是个回调函数指针，它的原型如下：
-10             typedef void (*pcap_handler)(u_char *user, const struct pcap_pkthdr *h,
-11                                    const u_char *bytes);
-12             参数 user：用来给回调函数传递参数的，在callback函数当中只有第一个user指针是可以留给用户使用的，
-13             如果你想给callback传递自己参数，那就只能通过pcap_loop的最后一个参数user来实现了*/
+/*参数说明：
+功能：循环捕获数据包,不会响应pcap_open_live()函数设置的超时时间
+
+参数 pcap_t *p: p是嗅探器会话句柄参数 
+
+cnt：cnt用于设置所捕获数据包的个数，负数的cnt表示pcap_loop永远循环抓包，直到出现错误。
+ 
+参数callback：是个回调函数指针，它的原型如下：typedef void (*pcap_handler)(u_char *user, const struct pcap_pkthdr *h,const u_char *bytes);
+
+参数 user：用来给回调函数传递参数的，在callback函数当中只有第一个user指针是可以留给用户使用的，
+
+如果你想给callback传递自己参数，那就只能通过pcap_loop的最后一个参数user来实现了*/
 ```
 
 所以说回调函数应该就是用来处理这个包的函数啦
