@@ -356,6 +356,78 @@ https://blog.csdn.net/qq_34352738/article/details/78307116
 
 如果在执行函数之前先 create 一个线程，然后在线程要执行的函数那边将线程 kill 掉
 
+
+
+##### 全局变量
+
+在所有 func 外面定义，在一个 c 里正常定义，其他的地方使用 extern
+
+int a;
+
+extern int a;
+
+
+
+##### 转换网络字节序
+
+ip 地址是 32 位，所以要转换成 long 才行，端口可以是 short
+
+`printf("send ip addr is %u\n", ntohl(ip_head->saddr));`
+
+`printf("Dest port is %d\n", ntohs(tcp_head->dest));`
+
+
+
+不过转换过来的 long int 仍然需要转换才能 print 成日常的样子
+
+整数IP地址 unsigned int IP_Addr = 1713350848 转化为二进制为：01100110-00011111-10101000-11000000 根据8位划分得到结果为102-31-168-192，由于网络字节倒序的问题，实际IP为192.168.31.102
+
+
+
+整体是这样
+
+```c
+void print_ip(unsigned int ip)
+{
+    unsigned char bytes[4];
+    bytes[0] = ip & 0xFF;
+    bytes[1] = (ip >> 8) & 0xFF;
+    bytes[2] = (ip >> 16) & 0xFF;
+    bytes[3] = (ip >> 24) & 0xFF;   
+    printf("%d.%d.%d.%d\n", bytes[3], bytes[2], bytes[1], bytes[0]);        
+}
+```
+
+然后这样 0xFF 就是 1111，每次都截取最后八个二进制，这就是一部分，然后使用位移将上一截弄成最后一截，再节选最后一截然后 print 出来。
+
+
+
+#### SYN Flooding Attack
+
+https://pcapplusplus.github.io/v1808/Documentation/a01467.html
+
+在这里看 flag，然后 6 个 flag 都查一次
+
+然后创建数组存储，但是注意不能在全局变量中使用 malloc 这样的，因为这需要被执行，全局变量只能是固定的
+
+`data = (unsigned int *) calloc(10, sizeof (unsigned int ));`
+
+像这个样子，先创建大小为 10 的数组，他会 init 成 0
+
+全局变量记录数组大小和当前数目，如果相等了就扩大一个
+
+`data= (unsigned int *) realloc(data, dataSize*sizeof(unsigned int ));`
+
+注意，realloc 第二个参数也是和 malloc 一致的，需要乘以这个 type
+
+
+
+##### ARP poison
+
+python 找不到包，用 pip 不可以，需要
+
+`sudo apt-get install python3-scapy` 和 sudo 权限才能 run
+
 ### TODO
 
 - [ ] sniff 中 while（1）的 pcap_next，用 pcap_loop 替代

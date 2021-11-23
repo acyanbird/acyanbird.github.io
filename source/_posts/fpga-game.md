@@ -9,10 +9,11 @@ tags:
 
 info bar 可 change
 
-
-
-<<<<<<< HEAD
 顺便放一些碰到的稀奇古怪问题……哦那个 vga_out 不完整，现在尝试补全ing
+
+
+
+注意！最顶层的 module 才和板子交互，不是 vga_out 和板子交互！所以要输出的端口需要在最顶层定义！
 
 =======
 问题出现，不可以使用 assign 去传递 draw 和 draw_r，但是为什么 curr_x 可以？
