@@ -6,6 +6,32 @@ tags:
 - c语言
 ---
 
+tcp 头部长度是 ihl 
+
+Internet Header Length is the length of the internet header **in 32 bit  words**.
+
+所以整个头部的长度是 `ip_head->ihl*4`不需要 ntohs 转换，格式就是 unsigned char
+
+```c
+struct tcphdr *tcp_head = (struct tcphdr *) (packet + sizeof(struct ethhdr) + ip_head->ihl*4);
+```
+
+这个是 tcp 偏移位置
+
+
+
+在回调函数里面需要用 fflush（stdout）强制输出！我也不知道为啥，结束之后问问看吧。
+
+https://www.zhihu.com/question/30267881
+
+for 第三个 ++i 会比 i++ 更快一些其他没有区别，放心使用
+
+ctrl 加上鼠标左键直接跳转原定义！
+
+**const**是一个**C**语言（ANSI **C**）的关键字，具有着举足轻重的地位。 它限定一个变量不允许被改变，产生静态作用。 使用**const**在一定程度上可以提高程序的安全性和可靠性。
+
+
+
 记得要转换，不过应该大家都是大尾吧……
 
 To do this, the function `ntohs` can be used as follows.
@@ -257,6 +283,20 @@ http://lihuia.com/libpcap%E6%A0%B8%E5%BF%83pcap_loop/
 
 callback 就是去 call dispatch，进而 call analysis？
 
+`pcap_loop(pcap_handle, -1, dispatch, verbose);` 
+
+第一个是 pcap 正在执行的指针，第二个是 0 或者 -1 就是无限循环，第三个是抓到的包传输给哪一个函数处理，第四个是用户传入的参数，data type 是 u_char，传入之后就是
+
+```c
+void dispatch(unsigned char *userdata, struct pcap_pkthdr *header,const unsigned char *packet)
+```
+
+所以 verbose 作为 userdata 被传入，因此在 call 下一个的时候就需要转换
+
+`analyse(header, packet, (int)userdata);` 反正都是 int 警告一下也没有问题了嘛（摊爪
+
+
+
 
 
 ```c
@@ -428,7 +468,32 @@ python 找不到包，用 pip 不可以，需要
 
 `sudo apt-get install python3-scapy` 和 sudo 权限才能 run
 
+直接看 ARP 包的协议，就是 proto，如果它定义是 ARP 直接标注
+
+
+
+##### Blacklisted URLs
+
+
+
+HTTP 看这里 https://segmentfault.com/a/1190000019788537
+
+首先试着 print 一下好了，反正先看到是输出到 80 的，然后算出数据长度
+
+```c
+int hdatalen = ntohl(header->len) - ETH_HLEN - ntohs(ip_head->tot_len) - 20;    // min tcp head is 20
+```
+
+header 是整个包的长度，减去 14 eth head 长度，减去 ip head 长度，减去最小 tcp 长度，然后再循环打印
+
+
+
+
+
+#### 函数重复
+
+不能在两个 c 里面定义一个函数，如果要在另一个文件里面使用，那么将这个函数包括在 head 里面，再 include 过去.
+
 ### TODO
 
-- [ ] sniff 中 while（1）的 pcap_next，用 pcap_loop 替代
-- [ ] 把几个 struct 搞定
+- [ ] 多线程
