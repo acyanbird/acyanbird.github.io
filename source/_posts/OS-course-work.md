@@ -6,6 +6,16 @@ tags:
 - c语言
 ---
 
+#### 头文件
+
+其实头文件和 .c 没有关系，你去 include 只是非常简单的复制粘贴罢了（
+
+所以有这个和 .c 相同的 .h 大概价值就是让其他的 .c 程序也可以使用这个程序定义的函数，所以如果有一些头文件会被所有的程序包括，就可以定义一个 common.h 来记录，加上 common.c 就是用来实现 common.h 里你想让其他函数也使用的函数，因为 declare 了头部其他文件中的函数就可以使用了呢
+
+
+
+#### 小 points
+
 tcp 头部长度是 ihl 
 
 Internet Header Length is the length of the internet header **in 32 bit  words**.
