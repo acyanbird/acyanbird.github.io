@@ -6,16 +6,6 @@ tags:
 - c语言
 ---
 
-#### 头文件
-
-其实头文件和 .c 没有关系，你去 include 只是非常简单的复制粘贴罢了（
-
-所以有这个和 .c 相同的 .h 大概价值就是让其他的 .c 程序也可以使用这个程序定义的函数，所以如果有一些头文件会被所有的程序包括，就可以定义一个 common.h 来记录，加上 common.c 就是用来实现 common.h 里你想让其他函数也使用的函数，因为 declare 了头部其他文件中的函数就可以使用了呢
-
-
-
-#### 小 points
-
 tcp 头部长度是 ihl 
 
 Internet Header Length is the length of the internet header **in 32 bit  words**.
@@ -491,12 +481,14 @@ HTTP 看这里 https://segmentfault.com/a/1190000019788537
 首先试着 print 一下好了，反正先看到是输出到 80 的，然后算出数据长度
 
 ```c
-int hdatalen = ntohl(header->len) - ETH_HLEN - ntohs(ip_head->tot_len) - 20;    // min tcp head is 20
+int hdatalen = header->len - ETH_HLEN - ip_head->ihl*4 - 20;
 ```
 
 header 是整个包的长度，减去 14 eth head 长度，减去 ip head 长度，减去最小 tcp 长度，然后再循环打印
 
 
+
+嗯，检查 整个
 
 
 

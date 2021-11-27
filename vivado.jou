@@ -2,349 +2,41 @@
 # Vivado v2019.2 (64-bit)
 # SW Build 2708876 on Wed Nov  6 21:39:14 MST 2019
 # IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
-# Start of session at: Fri Nov 19 20:31:48 2021
-# Process ID: 62331
-# Current directory: /home/cyanbird/cs/blog/web
+# Start of session at: Thu Nov 25 12:45:06 2021
+# Process ID: 9986
+# Current directory: /home/lucia/blog
 # Command line: vivado
-# Log file: /home/cyanbird/cs/blog/web/vivado.log
-# Journal file: /home/cyanbird/cs/blog/web/vivado.jou
+# Log file: /home/lucia/blog/vivado.log
+# Journal file: /home/lucia/blog/vivado.jou
 #-----------------------------------------------------------
 start_gui
-open_project /home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.xpr
+open_project /home/lucia/lab5/lab5.xpr
 update_compile_order -fileset sources_1
-file mkdir /home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.srcs/sources_1/new
-close [ open /home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.srcs/sources_1/new/top.v w ]
-add_files /home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.srcs/sources_1/new/top.v
-update_compile_order -fileset sources_1
-update_compile_order -fileset sources_1
+set_property -dict [list CONFIG.Enable_A {Use_ENA_Pin}] [get_ips info]
+generate_target all [get_files  /home/lucia/lab5/lab5.srcs/sources_1/ip/info/info.xci]
+catch { config_ip_cache -export [get_ips -all info] }
+export_ip_user_files -of_objects [get_files /home/lucia/lab5/lab5.srcs/sources_1/ip/info/info.xci] -no_script -sync -force -quiet
+reset_run info_synth_1
+launch_runs -jobs 8 info_synth_1
+export_simulation -of_objects [get_files /home/lucia/lab5/lab5.srcs/sources_1/ip/info/info.xci] -directory /home/lucia/lab5/lab5.ip_user_files/sim_scripts -ip_user_files_dir /home/lucia/lab5/lab5.ip_user_files -ipstatic_source_dir /home/lucia/lab5/lab5.ip_user_files/ipstatic -lib_map_path [list {modelsim=/home/lucia/lab5/lab5.cache/compile_simlib/modelsim} {questa=/home/lucia/lab5/lab5.cache/compile_simlib/questa} {ies=/home/lucia/lab5/lab5.cache/compile_simlib/ies} {xcelium=/home/lucia/lab5/lab5.cache/compile_simlib/xcelium} {vcs=/home/lucia/lab5/lab5.cache/compile_simlib/vcs} {riviera=/home/lucia/lab5/lab5.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+set_property -dict [list CONFIG.Enable_A {Always_Enabled}] [get_ips info]
+generate_target all [get_files  /home/lucia/lab5/lab5.srcs/sources_1/ip/info/info.xci]
+catch { config_ip_cache -export [get_ips -all info] }
+export_ip_user_files -of_objects [get_files /home/lucia/lab5/lab5.srcs/sources_1/ip/info/info.xci] -no_script -sync -force -quiet
+reset_run info_synth_1
+launch_runs -jobs 8 info_synth_1
+export_simulation -of_objects [get_files /home/lucia/lab5/lab5.srcs/sources_1/ip/info/info.xci] -directory /home/lucia/lab5/lab5.ip_user_files/sim_scripts -ip_user_files_dir /home/lucia/lab5/lab5.ip_user_files -ipstatic_source_dir /home/lucia/lab5/lab5.ip_user_files/ipstatic -lib_map_path [list {modelsim=/home/lucia/lab5/lab5.cache/compile_simlib/modelsim} {questa=/home/lucia/lab5/lab5.cache/compile_simlib/questa} {ies=/home/lucia/lab5/lab5.cache/compile_simlib/ies} {xcelium=/home/lucia/lab5/lab5.cache/compile_simlib/xcelium} {vcs=/home/lucia/lab5/lab5.cache/compile_simlib/vcs} {riviera=/home/lucia/lab5/lab5.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
 reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
+launch_runs impl_1 -to_step write_bitstream -jobs 8
 wait_on_run impl_1
 open_hw_manager
 connect_hw_server -allow_non_jtag
 open_hw_target
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
+set_property PROGRAM.FILE {/home/lucia/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
 current_hw_device [get_hw_devices xc7a100t_0]
 refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7a100t_0] 0]
 set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
 set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-close [ open /home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.srcs/sources_1/new/ground.v w ]
-add_files /home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.srcs/sources_1/new/ground.v
-update_compile_order -fileset sources_1
-update_compile_order -fileset sources_1
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run impl_1 -prev_step 
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-close [ open /home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.srcs/sources_1/new/ready.v w ]
-add_files /home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.srcs/sources_1/new/ready.v
-close [ open /home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.srcs/sources_1/new/ending.v w ]
-add_files /home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.srcs/sources_1/new/ending.v
-update_compile_order -fileset sources_1
-update_compile_order -fileset sources_1
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run impl_1 -prev_step 
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run impl_1 -prev_step 
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run impl_1 -prev_step 
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run impl_1 -prev_step 
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-close [ open /home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.srcs/sources_1/new/display.v w ]
-add_files /home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.srcs/sources_1/new/display.v
-close [ open /home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.srcs/sources_1/new/leftbar.v w ]
-add_files /home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.srcs/sources_1/new/leftbar.v
-close [ open /home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.srcs/sources_1/new/rightbar.v w ]
-add_files /home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.srcs/sources_1/new/rightbar.v
-update_compile_order -fileset sources_1
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-update_compile_order -fileset sources_1
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-update_compile_order -fileset sources_1
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-close [ open /home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.srcs/sources_1/new/bird.v w ]
-add_files /home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.srcs/sources_1/new/bird.v
-update_compile_order -fileset sources_1
-close [ open /home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.srcs/sources_1/new/fail.v w ]
-add_files /home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.srcs/sources_1/new/fail.v
-update_compile_order -fileset sources_1
-update_compile_order -fileset sources_1
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-update_compile_order -fileset sources_1
-update_compile_order -fileset sources_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
-program_hw_devices [get_hw_devices xc7a100t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
-set_property PROGRAM.FILE {/home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
+set_property PROGRAM.FILE {/home/lucia/lab5/lab5.runs/impl_1/game_top.bit} [get_hw_devices xc7a100t_0]
 program_hw_devices [get_hw_devices xc7a100t_0]
 refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]

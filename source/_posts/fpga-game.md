@@ -13,6 +13,8 @@ info bar 可 change
 
 
 
+740 display 宽度，柱子宽度是 180，柱子之间间隔 190，上下间隔
+
 注意！最顶层的 module 才和板子交互，不是 vga_out 和板子交互！所以要输出的端口需要在最顶层定义！
 
 =======
@@ -23,6 +25,10 @@ assign draw_g = draw_g_r;
 assign draw_b = draw_b_r;
 
 这样不可以，会无法显示
+
+
+
+一定要记住如果 output 是 reg那就 declare reg！
 
 
 
@@ -104,3 +110,13 @@ module pad(
 检查是否有例化模块输入S
 
 /home/cyanbird/study/warwick/year2/ES2E3DigitalSystem/lab/lab5/lab5.srcs/sources_1/new/ground.v
+
+
+
+只有 135 个块可以放图片……省着点来吧。一个 ghost 是 3，info 是 48
+
+
+
+https://stackoverflow.com/questions/34011576/generating-random-numbers-in-verilog
+
+生成随机数，生成柱子
