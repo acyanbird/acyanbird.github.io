@@ -59,3 +59,13 @@ select * from tab1 left join tab2 on (tab1.size = tab2.size and tab2.name='AAA')
 
 https://www.w3school.com.cn/sql/sql_view.asp
 
+
+
+还有 natrual join
+
+https://www.postgresqltutorial.com/postgresql-natural-join/
+
+A natural join can be an [inner join](https://www.postgresqltutorial.com/postgresql-inner-join/), [left join](https://www.postgresqltutorial.com/postgresql-left-join/), or right join. If you do not specify a join explicitly e.g., `INNER JOIN`, `LEFT JOIN`, `RIGHT JOIN`, PostgreSQL will use the `INNER JOIN` by default.
+
+所以 natrual join 是自动根据名字相同的列执行 JOIN，如果有名字相同的列，根据不同 join 来选择，然后这个列两个表相同的合并
+

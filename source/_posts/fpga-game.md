@@ -95,7 +95,7 @@ module pad(
 
 
 
-模块例化一定要定义 wire 去承接。
+模块例化一定要定义 wire 去承接，即使只有这两个模块使用 top 完全不使用，也必须 declare wire。
 
 
 
@@ -115,8 +115,14 @@ module pad(
 
 只有 135 个块可以放图片……省着点来吧。一个 ghost 是 3，info 是 48
 
+可以在双色图片里面导入黑白，然后根据 1 和 0 赋值颜色，大大大省空间！
+
 
 
 https://stackoverflow.com/questions/34011576/generating-random-numbers-in-verilog
 
 生成随机数，生成柱子
+
+
+
+IP 生成的名字不可以和现有文件一致，不然会出现包含错误
