@@ -126,3 +126,54 @@ https://stackoverflow.com/questions/34011576/generating-random-numbers-in-verilo
 
 
 IP 生成的名字不可以和现有文件一致，不然会出现包含错误
+
+
+
+#### 写文档
+
+插入代码的时候使用 program listing，要 ctrl+shift+v 才能保持换行符
+
+然后要 configure 一下 list
+
+https://tex.stackexchange.com/questions/231658/lyx-code-tag-with-highlighting-for-c
+
+这个设置改一下名字凑合着用吧，有时间认真学习一下。反正以后也得写 paper 早晚要学呗。
+
+```
+language=Verilog
+keywordstyle={\color{blue}}
+commentstyle={\color{magenta}\itshape}
+emphstyle={\color{red}}
+breaklines=true
+basicstyle={\ttfamily}
+stringstyle={\color{green}}
+identifierstyle={\color{cyan}}
+```
+
+保存一下，圣诞假让诺兰设计一个好看点的 version 来
+
+
+
+要引用相同文档中的内容最好使用 set label 在需要的地方，然后需要引用的时候选择 insert cross refernce。这样修改就不会影响了
+
+显示中文要在 document setting language 那里选择，然后 utf8，还需要 cjk
+
+```
+sudo apt-get install latex-cjk-all
+```
+
+不行啊，可能是版本太老了
+
+https://wiki.lyx.org/LyX/LyXOnUbuntu
+
+装个新版本
+
+不管了！图片引用，绝对位置
+
+![](https://i.imgur.com/1KLFbtH.png)
+
+先右键灰色的 figure，然后选择 here definitely
+
+![Imgur](https://i.imgur.com/KvQqCEB.png)
+
+ 页宽也可以在 margin 这里调整
