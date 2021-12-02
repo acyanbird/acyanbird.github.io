@@ -9,6 +9,3 @@ tags:
 
 http://quanzhan.applemei.com/webStack/TlRVeE53PT0=
 
-As2O3NaC
-
-remote-45.dcs.warwick.ac.uk
