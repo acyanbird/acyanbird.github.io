@@ -244,3 +244,5 @@ select * from iscancel(?,?,?)
 https://www.postgresqltutorial.com/postgresql-row_number/
 
 partition by gigid, order 
+
+使用 lead 和 lag 来记录，lag 访问之前一列，lead 访问
