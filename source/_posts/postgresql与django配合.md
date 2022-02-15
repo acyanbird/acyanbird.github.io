@@ -21,7 +21,7 @@ https://pythondjango.cn/django/basics/12-databases/#%E5%A6%82%E4%BD%95%E4%BD%BF%
 # 创建名为myapp的数据库
 CREATE DATABASE mydb; 
 # 创建用户名和密码
-CREATE USER myuser WITH ENCRYPTED PASSWORD 'mypass'; 
+CREATE USER myuser WITH  PASSWORD 'mypass'; 
 # 给创建的用户授权
 GRANT ALL PRIVILEGES ON DATABASE mydb TO myuser;
 
@@ -63,3 +63,7 @@ DATABASES = {
 一定要全部小写啊！！！！！！！！
 
 啊不对，如果你密码用的是大写也必须大写，人家应该是看你 md5 的！还有不要 encrypt，with password 就好了
+
+
+
+如何连接到psql，先转到 postgres `sudo su postgres` 然后连接哈
