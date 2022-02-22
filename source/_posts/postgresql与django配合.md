@@ -11,7 +11,7 @@ https://pythondjango.cn/django/basics/12-databases/#%E5%A6%82%E4%BD%95%E4%BD%BF%
 
 先看一下它有没有启动
 
-`systemctl status postgresq`
+`systemctl status postgresql`
 
 没有就 start 一下要停就 stop，这个看具体设定了嗯
 
