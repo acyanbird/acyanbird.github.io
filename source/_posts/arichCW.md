@@ -23,3 +23,13 @@ https://wci.llnl.gov/simulation/computer-codes/visit/executables
 
 然后直接输入 visit 就可以运行，出现了找不到 py 的问题，我是 ubuntu 20 所以安装 `sudo apt install python-is-python3` 就可以启动了
 
+
+
+使用 visit 的话，左边 open file 打开 silo 的那个文件夹，记得 visit 要在 ACACGS 的目录下打开这样好找。然后下面的 plot, add - volume x_nodal or p_nodal.
+
+ 先使用 AVX 搞 ddot waxpby sparsemv
+
+
+
+补充一下，不能自动从 deployment 那里下载新增文件，所以直接在 tool - deployment - browse remote host  打开下载文件
+

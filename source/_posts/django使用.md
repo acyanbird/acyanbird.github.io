@@ -45,3 +45,28 @@ path('polls/', include('polls.urls')),
 
 
 
+得了一切都很麻烦，从 model 开始做吧，model 其实就是写数据库，这次是三个模型
+
+https://docs.djangoproject.com/zh-hans/4.0/topics/db/examples/many_to_one/
+
+```python
+class Article(models.Model):
+    headline = models.CharField(max_length=100)
+    pub_date = models.DateField()
+    reporter = models.ForeignKey(Reporter, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.headline
+
+    class Meta:
+        ordering = ['headline']
+```
+
+
+
+总是忍不住要打分号……anyway，meta不知道是啥意思，反正内容这样就可以了
+
+去记录时间可以用 datetimefield `dateRecorded = models.DateTimeField()`
+
+使用 TimeStampedModel 它会自动维系 created and modified field，使用它替代原来的 model
+
