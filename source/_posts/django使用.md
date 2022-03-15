@@ -60,15 +60,11 @@ class Article(models.Model):
 
 使用 TimeStampedModel 它会自动维系 created and modified field，使用它替代原来的 model
 
-
-
 ##### serializer
 
 嘛，要来回传送数据所以要互相转换，这里是用新建了一个 serializer py 文件的方式
 
 https://www.liujiangblog.com/course/django/171
-
-
 
 [1 - Serialization - Django REST framework](https://www.django-rest-framework.org/tutorial/1-serialization/#using-modelserializers)
 
@@ -83,8 +79,6 @@ class SnippetSerializer(serializers.ModelSerializer):
 
 这个返回的话就是根据 model snippet 返回的 json
 
-
-
 ```python
 # blog/serializers.py
 class ArticleSerializer(serializers.ModelSerializer):
@@ -94,18 +88,13 @@ class ArticleSerializer(serializers.ModelSerializer):
         model = Article
         fields = '__all__'
         read_only_fields = ('id', 'author', 'create_date')
-
 ```
 
 回复是
 
 ![](https://pythondjango.cn/django/rest-framework/4-DRF-serializer-advanced.assets/6.png)
 
-
-
 然后可以在上面复写 read-only
-
-
 
 ```python
 class UserFeedbackSerializer(serializers.ModelSerializer):
@@ -142,16 +131,11 @@ class UserFeedbackSerializer(serializers.ModelSerializer):
 
 先写 comment，然后是 milestone，然后 pla，comment 和 milestone 回复 pla
 
-
-
 metadata 里面是包含什么，记得要有 created, id,  modified, 这是本来就有的，还要搭配什么必须有，好像可以用 `__all__` ? 不管了
-
-
 
 ##### 设置 type
 
 ```python
-
     class YearInSchool(models.TextChoices):
         FRESHMAN = 'FR', _('Freshman')
         SOPHOMORE = 'SO', _('Sophomore')
@@ -187,17 +171,85 @@ class Student(models.Model):
         choices=YEAR_IN_SCHOOL_CHOICES,
         default=FRESHMAN,
     )
-
 ```
-
-
 
 FRESHMEN 这些是常量，给这些值赋予常量方便之后引用？
 
 `_('personal')` 翻译，象征需要有相应钩子
 
-
-
 ##### view
 
-这里是使用了 apiview 还有啥……
+这里是使用了 apiview 还有啥……modelview,这个是最高抽象，让我看看怎么用
+
+[Generic views - Django REST framework中文站点](https://q1mi.github.io/Django-REST-framework-documentation/api-guide/generic-views_zh/)
+
+继承 mixin 或者后面的 [ModelViewSet](https://q1mi.github.io/Django-REST-framework-documentation/api-guide/viewsets_zh/#modelviewset) 来enable 基本的创建，修改等等活，引用 serializer 
+
+草，要查找大概要用 #### [`filter_queryset(self, queryset)`](https://www.django-rest-framework.org/api-guide/generic-views/#filter_querysetself-queryset) 让我康康哪个继承了
+
+##### test case
+
+使用 test 开头的测试 func，然后 snake_case， setUp 和 tearDown 在开始和结束的时候放去 set data，然后用 `assertEqual` 来测试是否一致.
+
+```python
+class TestCommentMentor(TestCase):
+    """
+    testing for comment
+    """ 
+    def test_create(self):
+        """
+        test mentor create comment
+        """
+
+        data = {
+            "content" : "Test data"
+        }
+
+        serializer = CommentMentorSerializer()
+        result = serializer.create(data)
+
+        self.assertEqual(result.content, data['content'])
+```
+
+先设置 data，再引入 serializer，然后创建或者 update，再对比是否一致,update 的话先在 func 里面 create 再 update
+
+create 直接用 model 去 create
+
+```python
+    def test_update(self):
+        """
+        Test updating replies for a user feedback.
+        """
+        data = {
+            "content": "Updated Content",
+        }
+
+        update_request = APIRequestFactory().post('fakepath')
+        update_request.user = self.other_admin
+        force_authenticate(update_request, user=self.other_admin)
+
+        reply = UserFeedbackReply.objects.create(
+            feedback=self.feedback,
+            content="Initial Content",
+            admin=self.admin
+        )
+
+        serializer = UserFeedbackReplyAdminSerializer(instance=reply, context={
+            "request": update_request,
+        })
+
+        serializer.update(reply, data)
+
+        self.assertEqual(reply.admin, self.other_admin)
+        self.assertEqual(reply.content, data['content'])
+```
+
+` python -m unittest test_serializers.py `
+
+测试
+
+传入的 fk 如果是直接关联到实力就要用实例关联 qwq
+
+
+
+#### view

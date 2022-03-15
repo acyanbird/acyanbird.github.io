@@ -72,13 +72,7 @@ https://www.jetbrains.com/help/clion/remote-projects-support.html?keymap=seconda
 
 使用 debug 可以找到问题了，如果不行就重启罢（无慈悲
 
-
-
 如果看 log 的话在 help 里面 show log in file 那里。
-
-
-
-
 
 `vmovapd (%rax),%ymm0` 这个时候 segmentation fualt，访问 x ptr 的时候……出现了问题，访问方式出现了错误？
 
@@ -90,4 +84,71 @@ https://www.jetbrains.com/help/clion/remote-projects-support.html?keymap=seconda
 
 这样加起来就可以了
 
- 
+[Basics of SIMD Programming](http://ftp.cvut.cz/kernel/people/geoff/cell/ps3-linux-docs/CellProgrammingTutorial/BasicsOfSIMDProgramming.html)
+
+看这里，其实 array 和 vector 是可以互相转换的，直接改写类型就好了，像这里的 [simd-sample/simd_float.c at master · sonots/simd-sample · GitHub](https://github.com/sonots/simd-sample/blob/master/simd_float.c)
+
+还有 smaple code 
+
+```c
+int a[8] __attribute__((aligned(16))) = { 1, 2, 3, 4, 5, 6, 7, 8 };
+
+__vector signed int *va = (__vector signed int *) a;
+/* va[0] = { 1, 2, 3, 4}, va[1] = { 5, 6, 7, 8 } */
+
+vb = vec_add(va[0], va[1]);
+```
+
+#### DEBUG !
+
+在 flag 里面加入 -g 获得更多
+
+p var 打印变量
+
+horizontal add in vector 
+
+```c
+__m256d x1, x2;
+// calculate 4 two-element horizontal sums:
+// lower 64 bits contain x1[0] + x1[1]
+// next 64 bits contain x2[0] + x2[1]
+// next 64 bits contain x1[2] + x1[3]
+// next 64 bits contain x2[2] + x2[3]
+__m256d sum = _mm256_hadd_pd(x1, x2);
+// extract upper 128 bits of result
+__m128d sum_high = _mm256_extractf128_pd(sum1, 1);
+// add upper 128 bits of sum to its lower 128 bits
+__m128d result = _mm_add_pd(sum_high, _mm256_castpd256_pd128(sum));
+// lower 64 bits of result contain the sum of x1[0], x1[1], x1[2], x1[3]
+// upper 64 bits of result contain the sum of x2[0], x2[1], x2[2], x2[3]
+```
+
+`_mm256_extractf128_pd` 是提取低位，如果是 1 那就高位
+
+`_mm256_castpd256_pd128` 是转换到 128，因为直接切掉高位所以没有延迟
+
+`fmadd` 是 512 的指令，残念，请用 add 吧
+
+不要使用 clion 的功能了！命令行不香吗！
+
+
+
+### openmp
+
+atmoic 不是什么都可以用的
+
+[c - Invalid form of pragma atomic - Stack Overflow](https://stackoverflow.com/questions/56800439/invalid-form-of-pragma-atomic)
+
+只有这些可以
+
+```c
+x++;
+x--;
+++x;
+--x;
+x binop= expr;
+x = x binop expr;
+x = expr binop x;
+```
+
+嘛反正就这样了，我摆！
