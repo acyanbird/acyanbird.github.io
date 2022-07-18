@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.1.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"acyanbird.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Network interfaces  Is that AP?  Internet access points, interconnection between a computer and a network. network interface card(NIC), 这个计算机的网卡，也可能是虚拟的，localhost 就是虚拟网卡用来测试网络应用。 loopback interface (l">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Network course work points">
+<meta property="og:url" content="https://acyanbird.github.io/2021/11/07/Network-course-work-points/index.html">
+<meta property="og:site_name" content="Nighthawk&#39;s nest">
+<meta property="og:description" content="Network interfaces  Is that AP?  Internet access points, interconnection between a computer and a network. network interface card(NIC), 这个计算机的网卡，也可能是虚拟的，localhost 就是虚拟网卡用来测试网络应用。 loopback interface (l">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.imgur.com/EaT2PRe.png">
+<meta property="og:image" content="https://i.imgur.com/o3YJ7W6.png">
+<meta property="og:image" content="https://i.imgur.com/hgs2wTR.png">
+<meta property="og:image" content="https://i.imgur.com/QNAiB51.png">
+<meta property="og:image" content="https://i.imgur.com/5PAJ7zk.png">
+<meta property="og:image" content="https://i.imgur.com/xkFuOML.jpg">
+<meta property="article:published_time" content="2021-11-07T21:06:54.000Z">
+<meta property="article:modified_time" content="2022-07-18T19:26:28.131Z">
+<meta property="article:author" content="山奈">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/EaT2PRe.png">
+
+<link rel="canonical" href="https://acyanbird.github.io/2021/11/07/Network-course-work-points/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Network course work points | Nighthawk's nest</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Nighthawk's nest</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://acyanbird.github.io/2021/11/07/Network-course-work-points/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ava.jpg">
+      <meta itemprop="name" content="山奈">
+      <meta itemprop="description" content="You must have a blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nighthawk's nest">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Network course work points
+        </h1>
+
+        <div class="post-meta">
+	  
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-11-07 21:06:54" itemprop="dateCreated datePublished" datetime="2021-11-07T21:06:54+00:00">2021-11-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-07-18 19:26:28" itemprop="dateModified" datetime="2022-07-18T19:26:28+00:00">2022-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E6%A0%A1%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学校学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="Network-interfaces"><a href="#Network-interfaces" class="headerlink" title="Network interfaces"></a>Network interfaces</h3><ul>
+<li><input disabled type="checkbox"> Is that AP?</li>
+</ul>
+<p>Internet access points, interconnection between a computer and a network.</p>
+<p>network interface card(NIC), 这个计算机的网卡，也可能是虚拟的，localhost 就是虚拟网卡用来测试网络应用。</p>
+<p>loopback interface (localhost)，ifconfig 命令出来的 lo</p>
+<p>网卡有 MAC 地址，AP 也有 IP 地址</p>
+<p><img src="https://i.imgur.com/EaT2PRe.png"></p>
+<p>具体可以看 <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/7b83a0070588">https://www.jianshu.com/p/7b83a0070588</a></p>
+<p>因为我觉得每一个都很有用，所以全部复制来就太过分了吧，自己康</p>
+<p>重点写以前没见过的</p>
+<p><strong>确认号(ack)</strong></p>
+<p><strong>ack</strong>：确认序号，***<u style="box-sizing: border-box;">即确认字节的序号</u>*<strong>，更确切地说，是</strong>发送确认的一端**所期望收到的下一个序号。</p>
+<p>所谓的<em><strong>发送确认的一端*<strong>就是将确认信息发出的一端。比如第二次握手的</strong>S</strong>端就是</em>*发送确认的一端**。</p>
+<p>确认序号为上次接收的最后一个字节序号加1.只有确认标志位(<strong>ACK</strong>)为1的时候，确认序号才有效。</p>
+<p><img src="https://i.imgur.com/o3YJ7W6.png"></p>
+<p><strong>数据偏移</strong></p>
+<p>也叫首部长度，占4个bit,它指出TCP报文段的<strong>数据</strong>起始处距离TCP报文段的起始处有多远。</p>
+<p><img src="https://i.imgur.com/hgs2wTR.png"></p>
+<p>由于首部中还有长度不确定的选项字段，因此数据偏移字段是必要的。</p>
+<h5 id="几个特殊码"><a href="#几个特殊码" class="headerlink" title="几个特殊码"></a>几个特殊码</h5><p><strong>紧急URG（urgent）</strong></p>
+<p>当URG&#x3D;1时，表明紧急指针字段有效。</p>
+<p>它告诉系统此报文段中有紧急数据，应尽快发送（相当于高优先级的数据），而不要按原来的排队顺序来传送。</p>
+<p><strong>确认ACK（acknowledgment）</strong></p>
+<p>仅当ACK &#x3D; 1时确认号字段才有效，当ACK &#x3D; 0时确认号无效。TCP规定，在连接建立后所有的传送的报文段都必须把ACK置为1。</p>
+<p><strong>同步SYN（synchronization）</strong></p>
+<p>在连接建立时用来同步序号。当<strong>SYN&#x3D;1</strong>而<strong>ACK&#x3D;0</strong>时，表明这是一个<strong>连接请求报文段</strong>。对方若同意建立连接，则应在响应的报文段中使SYN&#x3D;1和ACK&#x3D;1。</p>
+<p>因此<strong>SYN&#x3D;1</strong>就表示这是一个连接请求或连接接受报文。</p>
+<p><strong>终止FIN（finis，意思是“完”“终”）</strong></p>
+<p>用来释放一个连接。当FIN&#x3D;1时，表明此报文段的发送发的数据已发送完毕，并要求释放运输连接。</p>
+<p><strong>窗口</strong></p>
+<p>占2字节。窗口值是(0，216 -1)之间的整数。</p>
+<p>窗口指的是发送本报文段的一方的接受窗口（而不是自己的发送窗口）,窗口大小是给对方用的。</p>
+<p>窗口值告诉对方：从本报文段首部中的确认号算起，接收方目前允许对方一次发送的数据量（以字节为单位）。</p>
+<h5 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h5><p>长度可变，最长可达40个字节。当没有使用“选项”时，TCP的首部长度是20字节。</p>
+<p>最大报文段长度</p>
+<p>最大报文段长度(MSS:Maximum Segment Size)表示TCP传往另一端的最大块数据的长度。当一个连接建立时，连接的双方都要通告各自的MSS。</p>
+<h3 id="SYN-Attack"><a href="#SYN-Attack" class="headerlink" title="SYN Attack"></a>SYN Attack</h3><p>P168，翻了我老半天了</p>
+<p>就是攻击者通过同时发送许多 syn 连接，让服务器维持许多半开连接等待 ack</p>
+<p><img src="https://i.imgur.com/QNAiB51.png"></p>
+<p>normal state</p>
+<p><img src="https://i.imgur.com/5PAJ7zk.png"></p>
+<p>Coursework asks you count the total number of SYN packets<br>and the number of them having a unique source IP address.</p>
+<p>使用 syn cookie 来记录之前的信息，保证不受攻击 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/SYN_cookie">https://zh.wikipedia.org/wiki/SYN_cookie</a></p>
+<h3 id="ARP-cache-poisoning-attack"><a href="#ARP-cache-poisoning-attack" class="headerlink" title="ARP cache poisoning attack"></a>ARP cache poisoning attack</h3><p>首先来回答</p>
+<h4 id="How-MAC-addresses-work"><a href="#How-MAC-addresses-work" class="headerlink" title="How MAC addresses work?"></a>How MAC addresses work?</h4><p> <a target="_blank" rel="noopener" href="https://www.zhihu.com/question/21546408">https://www.zhihu.com/question/21546408</a></p>
+<p>看这个很棒的唷</p>
+<p>首先，每一台设备都有一个IP地址。通信双方使用IP地址进行通信。但问题来了，网络层工作在链路层之上。要想通信，还得需要MAC地址。怎样才能得到目标的MAC地址呢？这就需要用到ARP协议。</p>
+<p>每当电脑在通信之前会先在网络上发一个广播（这个广播不会被转发到其他网络），问谁的IP地址是某某某。这个时候对应的电脑就会回包说是我，我的MAC地址是某某某。发送方就拿到了接收方的MAC地址，进而完成通信。</p>
+<p><img src="https://i.imgur.com/xkFuOML.jpg"></p>
+<p>如果目标电脑在另一个网络，这个时候发送方就会在自己的网络里广播说谁的IP是192.168.1.1（我们假设它的默认网关IP是192.168.1.1），网关就会回复自己的MAC。然后，发送方就会通过网关的MAC地址给网关发一条IP报文，报文的目标IP就是接收方的IP地址，来源IP自然是发送方的IP地址。在IP网络中，如果目标在同一网络，则通过广播通信；否则，通过网关转发</p>
+<p>如何判断在同一网段？通过 IP 和子网掩码，将 mask 转换成 2 进制，然后做 AND 操作，如果一致就是在同一个网段</p>
+<p>ARP 欺骗就好说了，直接在询问地址的时候返回自己的地址，完成欺骗，好吧其实复杂一点的</p>
+<p><strong>简单案例分析</strong>：</p>
+<p>这里用一个最简单的案例来说明ARP欺骗的核心步骤。假设在一个LAN里，只有三台主机A、B、C，且C是攻击者。</p>
+<ol>
+<li>攻击者聆听局域网上的MAC地址。它只要收到两台主机洪泛的ARP Request，就可以进行欺骗活动。</li>
+<li>主机A、B都洪泛了ARP Request.攻击者现在有了两台主机的IP、MAC地址，开始攻击。</li>
+<li>攻击者发送一个ARP Reply给主机B，把此包protocol header里的sender IP设为A的IP地址，sender mac设为攻击者自己的MAC地址。</li>
+<li>主机B收到ARP Reply后，更新它的ARP表，把主机A的MAC地址（IP_A, MAC_A）改为（IP_A, MAC_C）。</li>
+<li>当主机B要发送数据包给主机A时，它根据ARP表来封装数据包的Link报头，把目的MAC地址设为MAC_C，而非MAC_A。</li>
+<li>当交换机收到B发送给A的数据包时，根据此包的目的MAC地址（MAC_C）而把数据包转发给攻击者C。</li>
+<li>攻击者收到数据包后，可以把它存起来后再发送给A，达到偷听效果。攻击者也可以篡改数据后才发送数据包给A，造成伤害。</li>
+</ol>
+<p>最理想的防制方法是网上内的每台计算机的ARP一律改用静态的方式，不过这在大型的网上是不可行的，因为需要经常更新每台计算机的ARP表。</p>
+<p>另外一种方法，例如[DHCP snooping](<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/DHCP">https://baike.baidu.com/item/DHCP</a> snooping)，网上设备可借由<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/DHCP">DHCP</a>保留网络上各计算机的MAC地址，在伪造的ARP数据包发出时即可侦测到。此方式已在一些厂牌的网上设备产品所支持。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/11/07/digital-lab-5/" rel="prev" title="digital system lab 5">
+      <i class="fa fa-chevron-left"></i> digital system lab 5
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/11/07/hexo-%E9%83%A8%E7%BD%B2%E5%88%B0-github-%E5%9B%BE%E7%89%87%E6%97%A0%E6%B3%95%E6%98%BE%E7%A4%BA/" rel="next" title="hexo 部署到 github 图片无法显示">
+      hexo 部署到 github 图片无法显示 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Network-interfaces"><span class="nav-number">1.</span> <span class="nav-text">Network interfaces</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%87%A0%E4%B8%AA%E7%89%B9%E6%AE%8A%E7%A0%81"><span class="nav-number">1.0.1.</span> <span class="nav-text">几个特殊码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%80%89%E9%A1%B9"><span class="nav-number">1.0.2.</span> <span class="nav-text">选项</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SYN-Attack"><span class="nav-number">2.</span> <span class="nav-text">SYN Attack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ARP-cache-poisoning-attack"><span class="nav-number">3.</span> <span class="nav-text">ARP cache poisoning attack</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#How-MAC-addresses-work"><span class="nav-number">3.1.</span> <span class="nav-text">How MAC addresses work?</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="山奈"
+      src="/images/ava.jpg">
+  <p class="site-author-name" itemprop="name">山奈</p>
+  <div class="site-description" itemprop="description">You must have a blog!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">山奈</span>
+</div>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

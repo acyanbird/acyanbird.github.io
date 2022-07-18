@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.1.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"acyanbird.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="一边写 docker 一边写 django 吧，欠债还钱啊。首先对照官方文档，它们已经不那么 shit 了 https:&#x2F;&#x2F;docs.djangoproject.com&#x2F;zh-hans&#x2F;4.0&#x2F;intro&#x2F;tutorial01&#x2F; 参照这个，manage.py 上面的那一层目录可以随意重命名 叮咚，init.py 的妙用 https:&#x2F;&#x2F;www.jianshu.com&#x2F;p&#x2F;73f7fbf75183">
+<meta property="og:type" content="article">
+<meta property="og:title" content="django使用">
+<meta property="og:url" content="https://acyanbird.github.io/2022/01/19/django%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="Nighthawk&#39;s nest">
+<meta property="og:description" content="一边写 docker 一边写 django 吧，欠债还钱啊。首先对照官方文档，它们已经不那么 shit 了 https:&#x2F;&#x2F;docs.djangoproject.com&#x2F;zh-hans&#x2F;4.0&#x2F;intro&#x2F;tutorial01&#x2F; 参照这个，manage.py 上面的那一层目录可以随意重命名 叮咚，init.py 的妙用 https:&#x2F;&#x2F;www.jianshu.com&#x2F;p&#x2F;73f7fbf75183">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pythondjango.cn/django/rest-framework/4-DRF-serializer-advanced.assets/6.png">
+<meta property="article:published_time" content="2022-01-19T20:16:29.000Z">
+<meta property="article:modified_time" content="2022-07-18T19:26:28.131Z">
+<meta property="article:author" content="山奈">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pythondjango.cn/django/rest-framework/4-DRF-serializer-advanced.assets/6.png">
+
+<link rel="canonical" href="https://acyanbird.github.io/2022/01/19/django%E4%BD%BF%E7%94%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>django使用 | Nighthawk's nest</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Nighthawk's nest</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://acyanbird.github.io/2022/01/19/django%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ava.jpg">
+      <meta itemprop="name" content="山奈">
+      <meta itemprop="description" content="You must have a blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nighthawk's nest">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          django使用
+        </h1>
+
+        <div class="post-meta">
+	  
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-01-19 20:16:29" itemprop="dateCreated datePublished" datetime="2022-01-19T20:16:29+00:00">2022-01-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-07-18 19:26:28" itemprop="dateModified" datetime="2022-07-18T19:26:28+00:00">2022-07-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>一边写 docker 一边写 django 吧，欠债还钱啊。首先对照官方文档，它们已经不那么 shit 了</p>
+<p><a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/4.0/intro/tutorial01/">https://docs.djangoproject.com/zh-hans/4.0/intro/tutorial01/</a></p>
+<p>参照这个，manage.py 上面的那一层目录可以随意重命名</p>
+<p>叮咚，<strong>init</strong>.py 的妙用</p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/73f7fbf75183">https://www.jianshu.com/p/73f7fbf75183</a></p>
+<p>方便导入多个的时候执行</p>
+<p>app 负责具体功能实现，project 本身装载，然而最高层的 url.py 才是标记哪里到哪里的，视图大概是会体现什么？</p>
+<p>函数 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/4.0/ref/urls/#django.urls.include"><code>include()</code></a> 允许引用其它 URLconfs。每当 Django 遇到 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/4.0/ref/urls/#django.urls.include"><code>include()</code></a> 时，它会截断与此项匹配的 URL 的部分，并将剩余的字符串发送到 URLconf 以供进一步处理。</p>
+<p>所以只要包含了就行？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">path(&#x27;polls/&#x27;, include(&#x27;polls.urls&#x27;)),</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/4.0/ref/urls/#django.urls.path"><code>path()</code></a> 参数： <code>route</code><a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/4.0/intro/tutorial01/#path-argument-route">¶</a></p>
+<p><code>route</code> 是一个匹配 URL 的准则（类似正则表达式）。当 Django 响应一个请求时，它会从 <code>urlpatterns</code> 的第一项开始，按顺序依次匹配列表中的项，直到找到匹配的项。</p>
+<p>这些准则不会匹配 GET 和 POST 参数或域名。例如，URLconf 在处理请求 <code>https://www.example.com/myapp/</code> 时，它会尝试匹配 <code>myapp/</code> 。处理请求 <code>https://www.example.com/myapp/?page=3</code> 时，也只会尝试匹配 <code>myapp/</code>。</p>
+<p><a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/4.0/ref/urls/#django.urls.path"><code>path()</code></a> 参数： <code>view</code><a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/4.0/intro/tutorial01/#path-argument-view">¶</a></p>
+<p>当 Django 找到了一个匹配的准则，就会调用这个特定的视图函数，并传入一个 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/4.0/ref/request-response/#django.http.HttpRequest"><code>HttpRequest</code></a> 对象作为第一个参数，被“捕获”的参数以关键字参数的形式传入。稍后，我们会给出一个例子</p>
+<p>得了一切都很麻烦，从 model 开始做吧，model 其实就是写数据库，这次是三个模型</p>
+<p><a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/4.0/topics/db/examples/many_to_one/">https://docs.djangoproject.com/zh-hans/4.0/topics/db/examples/many_to_one/</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Article</span>(models.Model):</span><br><span class="line">    headline = models.CharField(max_length=<span class="number">100</span>)</span><br><span class="line">    pub_date = models.DateField()</span><br><span class="line">    reporter = models.ForeignKey(Reporter, on_delete=models.CASCADE)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__str__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> self.headline</span><br><span class="line"></span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Meta</span>:</span><br><span class="line">        ordering = [<span class="string">&#x27;headline&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>总是忍不住要打分号……anyway，meta不知道是啥意思，反正内容这样就可以了</p>
+<p>去记录时间可以用 datetimefield <code>dateRecorded = models.DateTimeField()</code></p>
+<p>使用 TimeStampedModel 它会自动维系 created and modified field，使用它替代原来的 model</p>
+<h5 id="serializer"><a href="#serializer" class="headerlink" title="serializer"></a>serializer</h5><p>嘛，要来回传送数据所以要互相转换，这里是用新建了一个 serializer py 文件的方式</p>
+<p><a target="_blank" rel="noopener" href="https://www.liujiangblog.com/course/django/171">https://www.liujiangblog.com/course/django/171</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.django-rest-framework.org/tutorial/1-serialization/#using-modelserializers">1 - Serialization - Django REST framework</a></p>
+<p>看看这个……那么这里要直接使用隔壁 model 的定义</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SnippetSerializer</span>(serializers.ModelSerializer):</span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Meta</span>:</span><br><span class="line">        model = Snippet</span><br><span class="line">        fields = [<span class="string">&#x27;id&#x27;</span>, <span class="string">&#x27;title&#x27;</span>, <span class="string">&#x27;code&#x27;</span>, <span class="string">&#x27;linenos&#x27;</span>, <span class="string">&#x27;language&#x27;</span>, <span class="string">&#x27;style&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>这个返回的话就是根据 model snippet 返回的 json</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># blog/serializers.py</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ArticleSerializer</span>(serializers.ModelSerializer):</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Meta</span>:</span><br><span class="line">        model = Article</span><br><span class="line">        fields = <span class="string">&#x27;__all__&#x27;</span></span><br><span class="line">        read_only_fields = (<span class="string">&#x27;id&#x27;</span>, <span class="string">&#x27;author&#x27;</span>, <span class="string">&#x27;create_date&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>回复是</p>
+<p><img src="https://pythondjango.cn/django/rest-framework/4-DRF-serializer-advanced.assets/6.png"></p>
+<p>然后可以在上面复写 read-only</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">UserFeedbackSerializer</span>(serializers.ModelSerializer):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Serializer for user feedbacks.&quot;&quot;&quot;</span></span><br><span class="line">    reply = UserFeedbackReplySerializer(</span><br><span class="line">        read_only=<span class="literal">True</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Meta</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Metadata for user feedback serializer.&quot;&quot;&quot;</span></span><br><span class="line">        model = UserFeedback</span><br><span class="line">        fields = (<span class="string">&#x27;id&#x27;</span>, <span class="string">&#x27;content&#x27;</span>, <span class="string">&#x27;reply&#x27;</span>, <span class="string">&#x27;type&#x27;</span>, <span class="string">&#x27;created&#x27;</span>, <span class="string">&#x27;modified&#x27;</span>)</span><br><span class="line">        extra_kwargs = &#123;</span><br><span class="line">            <span class="string">&#x27;content&#x27;</span>: &#123;<span class="string">&#x27;required&#x27;</span>: <span class="literal">True</span>&#125;,</span><br><span class="line">            <span class="string">&#x27;type&#x27;</span>: &#123;<span class="string">&#x27;required&#x27;</span>: <span class="literal">True</span>&#125;,</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">create</span>(<span class="params">self, validated_data</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Create a feedback based on provided data and data from the serializer context.&quot;&quot;&quot;</span></span><br><span class="line">        request = self.context.get(<span class="string">&quot;request&quot;</span>)</span><br><span class="line">        user = request.user</span><br><span class="line">        feedback = UserFeedback.objects.create(</span><br><span class="line">            content=validated_data[<span class="string">&#x27;content&#x27;</span>],</span><br><span class="line">            <span class="built_in">type</span>=validated_data[<span class="string">&#x27;type&#x27;</span>],</span><br><span class="line">            user=user</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> feedback</span><br></pre></td></tr></table></figure>
+
+<p>现在要做的是 create plan of action，参考那边的 create reply</p>
+<p>先要创造不包含任何的，comment？</p>
+<p>先写 comment，然后是 milestone，然后 pla，comment 和 milestone 回复 pla</p>
+<p>metadata 里面是包含什么，记得要有 created, id,  modified, 这是本来就有的，还要搭配什么必须有，好像可以用 <code>__all__</code> ? 不管了</p>
+<h5 id="设置-type"><a href="#设置-type" class="headerlink" title="设置 type"></a>设置 type</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">YearInSchool</span>(models.TextChoices):</span><br><span class="line">    FRESHMAN = <span class="string">&#x27;FR&#x27;</span>, _(<span class="string">&#x27;Freshman&#x27;</span>)</span><br><span class="line">    SOPHOMORE = <span class="string">&#x27;SO&#x27;</span>, _(<span class="string">&#x27;Sophomore&#x27;</span>)</span><br><span class="line">    JUNIOR = <span class="string">&#x27;JR&#x27;</span>, _(<span class="string">&#x27;Junior&#x27;</span>)</span><br><span class="line">    SENIOR = <span class="string">&#x27;SR&#x27;</span>, _(<span class="string">&#x27;Senior&#x27;</span>)</span><br><span class="line">    GRADUATE = <span class="string">&#x27;GR&#x27;</span>, _(<span class="string">&#x27;Graduate&#x27;</span>)</span><br><span class="line"></span><br><span class="line">year_in_school = models.CharField(</span><br><span class="line">    max_length=<span class="number">2</span>,</span><br><span class="line">    choices=YearInSchool.choices,</span><br><span class="line">    default=YearInSchool.FRESHMAN,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>‘FR’, ‘SO’ 是实际值，Freshmen 是人可读形式，展开来是这样</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Student</span>(models.Model):</span><br><span class="line">    FRESHMAN = <span class="string">&#x27;FR&#x27;</span></span><br><span class="line">    SOPHOMORE = <span class="string">&#x27;SO&#x27;</span></span><br><span class="line">    JUNIOR = <span class="string">&#x27;JR&#x27;</span></span><br><span class="line">    SENIOR = <span class="string">&#x27;SR&#x27;</span></span><br><span class="line">    GRADUATE = <span class="string">&#x27;GR&#x27;</span></span><br><span class="line">    YEAR_IN_SCHOOL_CHOICES = [</span><br><span class="line">        (FRESHMAN, <span class="string">&#x27;Freshman&#x27;</span>),</span><br><span class="line">        (SOPHOMORE, <span class="string">&#x27;Sophomore&#x27;</span>),</span><br><span class="line">        (JUNIOR, <span class="string">&#x27;Junior&#x27;</span>),</span><br><span class="line">        (SENIOR, <span class="string">&#x27;Senior&#x27;</span>),</span><br><span class="line">        (GRADUATE, <span class="string">&#x27;Graduate&#x27;</span>),</span><br><span class="line">    ]</span><br><span class="line">    year_in_school = models.CharField(</span><br><span class="line">        max_length=<span class="number">2</span>,</span><br><span class="line">        choices=YEAR_IN_SCHOOL_CHOICES,</span><br><span class="line">        default=FRESHMAN,</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+
+<p>FRESHMEN 这些是常量，给这些值赋予常量方便之后引用？</p>
+<p><code>_(&#39;personal&#39;)</code> 翻译，象征需要有相应钩子</p>
+<h5 id="view"><a href="#view" class="headerlink" title="view"></a>view</h5><p>这里是使用了 apiview 还有啥……modelview,这个是最高抽象，让我看看怎么用</p>
+<p><a target="_blank" rel="noopener" href="https://q1mi.github.io/Django-REST-framework-documentation/api-guide/generic-views_zh/">Generic views - Django REST framework中文站点</a></p>
+<p>继承 mixin 或者后面的 <a target="_blank" rel="noopener" href="https://q1mi.github.io/Django-REST-framework-documentation/api-guide/viewsets_zh/#modelviewset">ModelViewSet</a> 来enable 基本的创建，修改等等活，引用 serializer </p>
+<p>草，要查找大概要用 #### <a target="_blank" rel="noopener" href="https://www.django-rest-framework.org/api-guide/generic-views/#filter_querysetself-queryset"><code>filter_queryset(self, queryset)</code></a> 让我康康哪个继承了</p>
+<h5 id="test-case"><a href="#test-case" class="headerlink" title="test case"></a>test case</h5><p>使用 test 开头的测试 func，然后 snake_case， setUp 和 tearDown 在开始和结束的时候放去 set data，然后用 <code>assertEqual</code> 来测试是否一致.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">TestCommentMentor</span>(<span class="title class_ inherited__">TestCase</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    testing for comment</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span> </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test_create</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        test mentor create comment</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="string">&quot;content&quot;</span> : <span class="string">&quot;Test data&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        serializer = CommentMentorSerializer()</span><br><span class="line">        result = serializer.create(data)</span><br><span class="line"></span><br><span class="line">        self.assertEqual(result.content, data[<span class="string">&#x27;content&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+<p>先设置 data，再引入 serializer，然后创建或者 update，再对比是否一致,update 的话先在 func 里面 create 再 update</p>
+<p>create 直接用 model 去 create</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">test_update</span>(<span class="params">self</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Test updating replies for a user feedback.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    data = &#123;</span><br><span class="line">        <span class="string">&quot;content&quot;</span>: <span class="string">&quot;Updated Content&quot;</span>,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    update_request = APIRequestFactory().post(<span class="string">&#x27;fakepath&#x27;</span>)</span><br><span class="line">    update_request.user = self.other_admin</span><br><span class="line">    force_authenticate(update_request, user=self.other_admin)</span><br><span class="line"></span><br><span class="line">    reply = UserFeedbackReply.objects.create(</span><br><span class="line">        feedback=self.feedback,</span><br><span class="line">        content=<span class="string">&quot;Initial Content&quot;</span>,</span><br><span class="line">        admin=self.admin</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    serializer = UserFeedbackReplyAdminSerializer(instance=reply, context=&#123;</span><br><span class="line">        <span class="string">&quot;request&quot;</span>: update_request,</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    serializer.update(reply, data)</span><br><span class="line"></span><br><span class="line">    self.assertEqual(reply.admin, self.other_admin)</span><br><span class="line">    self.assertEqual(reply.content, data[<span class="string">&#x27;content&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+<p><code>python -m unittest test_serializers.py</code></p>
+<p>测试</p>
+<p>传入的 fk 如果是直接关联到实力就要用实例关联 qwq</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/01/19/docker%E4%BD%BF%E7%94%A8/" rel="prev" title="docker使用">
+      <i class="fa fa-chevron-left"></i> docker使用
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/01/21/postgresql%E4%B8%8Edjango%E9%85%8D%E5%90%88/" rel="next" title="postgresql与django配合">
+      postgresql与django配合 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#serializer"><span class="nav-number">1.</span> <span class="nav-text">serializer</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE-type"><span class="nav-number">2.</span> <span class="nav-text">设置 type</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#view"><span class="nav-number">3.</span> <span class="nav-text">view</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#test-case"><span class="nav-number">4.</span> <span class="nav-text">test case</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="山奈"
+      src="/images/ava.jpg">
+  <p class="site-author-name" itemprop="name">山奈</p>
+  <div class="site-description" itemprop="description">You must have a blog!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">山奈</span>
+</div>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

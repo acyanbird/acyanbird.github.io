@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.1.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"acyanbird.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="哎呀，其实这次是 network lab 了 UDP 连接这一次是一个 serv 和一个 client 这一个是关于 server 的 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OS lab3">
+<meta property="og:url" content="https://acyanbird.github.io/2021/11/02/OS-lab3/index.html">
+<meta property="og:site_name" content="Nighthawk&#39;s nest">
+<meta property="og:description" content="哎呀，其实这次是 network lab 了 UDP 连接这一次是一个 serv 和一个 client 这一个是关于 server 的 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.imgur.com/YivsX0J.jpg">
+<meta property="article:published_time" content="2021-11-02T13:17:55.000Z">
+<meta property="article:modified_time" content="2022-07-18T19:26:28.131Z">
+<meta property="article:author" content="山奈">
+<meta property="article:tag" content="OSLab">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/YivsX0J.jpg">
+
+<link rel="canonical" href="https://acyanbird.github.io/2021/11/02/OS-lab3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>OS lab3 | Nighthawk's nest</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Nighthawk's nest</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://acyanbird.github.io/2021/11/02/OS-lab3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ava.jpg">
+      <meta itemprop="name" content="山奈">
+      <meta itemprop="description" content="You must have a blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nighthawk's nest">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OS lab3
+        </h1>
+
+        <div class="post-meta">
+	  
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-11-02 13:17:55" itemprop="dateCreated datePublished" datetime="2021-11-02T13:17:55+00:00">2021-11-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-07-18 19:26:28" itemprop="dateModified" datetime="2022-07-18T19:26:28+00:00">2022-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E6%A0%A1%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学校学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>哎呀，其实这次是 network lab 了</p>
+<h4 id="UDP-连接"><a href="#UDP-连接" class="headerlink" title="UDP 连接"></a>UDP 连接</h4><p>这一次是一个 serv 和一个 client</p>
+<p>这一个是关于 server 的</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">        demo-udp-03: udp-recv: a simple udp server</span></span><br><span class="line"><span class="comment">	receive udp messages</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">        usage:  udp-recv</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;netdb.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span>  <span class="comment">// required for the socket(), recvfrom(), sendto()</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;arpa/inet.h&gt;</span>   <span class="comment">// required for htons()</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ctype.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BUFSIZE 2048</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PORTNO 8888</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">myaddr</span>;</span>	<span class="comment">/* struct variable to store the address of server */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">remaddr</span>;</span>	<span class="comment">/* struct variable to store the address of client */</span></span><br><span class="line">	<span class="type">socklen_t</span> addrlen = <span class="keyword">sizeof</span>(remaddr);		<span class="comment">/* length of addresses */</span></span><br><span class="line">	<span class="type">int</span> recvlen;			<span class="comment">/* # of bytes received */</span></span><br><span class="line">	<span class="type">int</span> servSocket;				<span class="comment">/* file descriptor for the server socket */</span></span><br><span class="line">	<span class="type">int</span> msgcnt = <span class="number">0</span>;			<span class="comment">/* count # of messages we received */</span></span><br><span class="line">	<span class="type">char</span> buf[BUFSIZE];	<span class="comment">/* receive buffer to store the received message */</span></span><br><span class="line">	<span class="type">int</span> i;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> port_num=(<span class="type">unsigned</span> <span class="type">short</span>) PORTNO;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">/* create a UDP socket, if not successful, exit with error message.</span></span><br><span class="line"><span class="comment">	The first argument AF_INET of socket() specifies that the socket</span></span><br><span class="line"><span class="comment">	is going to use IPv4 addresses, the next argument SOCK_DGRAM specifies </span></span><br><span class="line"><span class="comment">	that the type of the socket is UDP, the last argument is for protocol family</span></span><br><span class="line"><span class="comment">	and is set to 0 in most applications. see the man page of socket(). */</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> ((servSocket = socket(AF_INET, SOCK_DGRAM, <span class="number">0</span>)) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,<span class="string">&quot;cannot create socket\n&quot;</span>);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/* Fill up the different fields of the struct variable myaddr with relevant information so</span></span><br><span class="line"><span class="comment">	   that it can be used as a valid address for the server socket */</span></span><br><span class="line"></span><br><span class="line">	myaddr.sin_family = AF_INET;    <span class="comment">// this field sets the address type to IPv4</span></span><br><span class="line">	myaddr.sin_addr.s_addr = inet_addr(<span class="string">&quot;127.0.0.1&quot;</span>); <span class="comment">// this field sets the IP address, we use the IP address of the loopback interface, see the man page of inet_addr()</span></span><br><span class="line">	myaddr.sin_port = htons(port_num);  <span class="comment">// we use port number 2021, see the man page of htons()</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">/* bind the socket to the specific IP address and port above. This gives the server</span></span><br><span class="line"><span class="comment">	a specific IP and port number which can be used by clients to</span></span><br><span class="line"><span class="comment">	connect to the server. Note that the socket() call assigns a random port number to the socket</span></span><br><span class="line"><span class="comment">	but we want to use a specific port number at the server, that&#x27;s why bind() is required on the server side.*/</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (bind(servSocket, (<span class="keyword">struct</span> sockaddr *)&amp;myaddr, <span class="keyword">sizeof</span>(myaddr)) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Error: bind failed\n&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/* now loop, receiving data and printing what we received */</span></span><br><span class="line">	<span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;waiting on port %d\n&quot;</span>, port_num);</span><br><span class="line"></span><br><span class="line">		<span class="comment">/*See the man page of recvfrom() system call. It receives data from the servSocket</span></span><br><span class="line"><span class="comment">		 and writes it into the buf; at most BUFSIZE bytes are read at a time. The number of</span></span><br><span class="line"><span class="comment">		 bytes actually read from servSocket is returned. After this call the struct remaddr</span></span><br><span class="line"><span class="comment">		 is filled in with the source address of the message (in this case it is the client address).</span></span><br><span class="line"><span class="comment">		 The call blocks the server process until some data is received*/</span></span><br><span class="line"></span><br><span class="line">		recvlen = recvfrom(servSocket, buf, BUFSIZE, <span class="number">0</span>, (<span class="keyword">struct</span> sockaddr *)&amp;remaddr, &amp;addrlen);</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">if</span> (recvlen &gt; <span class="number">0</span>) &#123;  <span class="comment">// print the data if recvlen &gt; 0</span></span><br><span class="line">			buf[recvlen]=<span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;received message: \&quot;%s\&quot; (%d bytes)\n&quot;</span>, buf, recvlen);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;uh oh - error reading the message!\n&quot;</span>);</span><br><span class="line">		</span><br><span class="line"></span><br><span class="line">	    <span class="comment">/* convert the received message to upper case */</span></span><br><span class="line">		<span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;<span class="built_in">strlen</span>(buf);i++)&#123;</span><br><span class="line">			buf[i]=<span class="built_in">toupper</span>(buf[i]);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">/* see the man page sendto(). It sends data to remaddr. The data is first written from</span></span><br><span class="line"><span class="comment">		buf to the servSocket which then tells the UDP to send the data to the address specified by remaddr.*/</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">if</span> (sendto(servSocket, buf, <span class="built_in">strlen</span>(buf), <span class="number">0</span>, (<span class="keyword">struct</span> sockaddr *)&amp;remaddr, <span class="keyword">sizeof</span>(remaddr)) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">			<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Error in sendto\n&quot;</span>);</span><br><span class="line">			<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">/* never exits */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="struct-sockaddr"><a href="#struct-sockaddr" class="headerlink" title="struct sockaddr"></a>struct sockaddr</h5><p>第一个是 </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> &#123;</span></span><br><span class="line">    <span class="type">short</span>            sin_family;   <span class="comment">// e.g. AF_INET</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span>   sin_port;     <span class="comment">// e.g. htons(3490)</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">in_addr</span>   <span class="title">sin_addr</span>;</span>     <span class="comment">// see struct in_addr, below</span></span><br><span class="line">    <span class="type">char</span>             sin_zero[<span class="number">8</span>];  <span class="comment">// zero this if you want to</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">in_addr</span> &#123;</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> s_addr;  <span class="comment">// load with inet_aton()</span></span><br><span class="line">&#125;;</span><br><span class="line">bind(servSocket, (<span class="keyword">struct</span> sockaddr *)&amp;myaddr, <span class="keyword">sizeof</span>(myaddr)</span><br></pre></td></tr></table></figure>
+
+<p>这里使用了前三个 var，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">myaddr</span>;</span>	<span class="comment">/* struct variable to store the address of server */</span></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">myaddr.sin_family = AF_INET;    <span class="comment">// this field sets the address type to IPv4</span></span><br><span class="line">myaddr.sin_addr.s_addr = inet_addr(<span class="string">&quot;127.0.0.1&quot;</span>); <span class="comment">// this field sets the IP address, we use the IP address of the loopback interface, see the man page of inet_addr()</span></span><br><span class="line">myaddr.sin_port = htons(port_num);  <span class="comment">// we use port number 2021, see the man page of htons()</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>第一个 <code>AF_INET</code> 是明确协议，<code>AF_INET</code>（又称 <code>PF_INET</code>）是 <code>IPv4</code> 网络协议的套接字类型，<code>AF_INET6</code> 则是<code> IPv6</code> 的；而 AF_UNIX 则是 Unix 系统本地通信。</p>
+<p>第二个明确地址，因为 sockaddr_in 是双层的引用，所以这边也要引用两次……为什么呢？</p>
+<p>inet_addr则是下一个</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">in_addr_t</span> <span class="title function_">inet_addr</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *cp)</span>;</span><br><span class="line"><span class="type">char</span> *<span class="title function_">inet_ntoa</span><span class="params">(<span class="keyword">struct</span> in_addr in)</span>;</span><br><span class="line"></span><br><span class="line">myaddr.sin_addr.s_addr = inet_addr(<span class="string">&quot;127.0.0.1&quot;</span>); </span><br><span class="line"><span class="comment">//这里使用的 cp 就是按照 IPV4 的协议走，这个是将IPV4地址转换</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>第三个是端口设置</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">myaddr.sin_port = htons(port_num);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 如果是小尾端存储的机器，转换成大尾端</span></span><br><span class="line"></span><br><span class="line">The <span class="title function_">htons</span><span class="params">()</span> function converts the <span class="type">unsigned</span> <span class="type">short</span> integer hostshort from host byte order to network byte order. </span><br></pre></td></tr></table></figure>
+
+<p>至于为什么要转换order呢？ 网络字节是大端字节顺序，如果机器是小端字节，那就要 change</p>
+<p>CSAPP 说过有小尾端和大尾端</p>
+<p>在Linux和Windows网络编程时需要用到htons和htonl函数，用来将主机字节顺序转换为网络字节顺序。</p>
+<p>在Intel机器下，执行以下程序<br>int main()<br>{<br>printf(“%d &#x2F;n”,htons(16));<br>return 0;<br>}</p>
+<p>得到的结果是4096，初一看感觉很怪。</p>
+<p>解释如下，数字16的16进制表示为0x0010，数字4096的16进制表示为0x1000。 由于Intel机器是小尾端，存储数字16时实际顺序为1000，存储4096时实际顺序为0010。因此在发送网络包时为了报文中数据为0010，需要经过htons进行字节转换。如果用IBM等大尾端机器，则没有这种字节顺序转换，但为了程序的可移植性，也最好用这个函数。</p>
+<p>另外用注意，数字所占位数小于或等于一个字节（8 bits）时，不要用htons转换。这是因为对于主机来说，大小尾端的最小单位为字节(byte)。</p>
+<p>不记得大小尾看这里 <a target="_blank" rel="noopener" href="https://blog.csdn.net/chy555chy/article/details/51966160">https://blog.csdn.net/chy555chy/article/details/51966160</a> ，简单来说就是数据的高字节保存在内存的高地址中，而数据的低字节保存在内存的低地址，还是相反，只有在 byte 下面会工作哦~</p>
+<h5 id="socket-AF-INET-SOCK-DGRAM-0"><a href="#socket-AF-INET-SOCK-DGRAM-0" class="headerlink" title="socket(AF_INET, SOCK_DGRAM, 0)"></a>socket(AF_INET, SOCK_DGRAM, 0)</h5><p>这个的代码是</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ((servSocket = socket(AF_INET, SOCK_DGRAM, <span class="number">0</span>)) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,<span class="string">&quot;cannot create socket\n&quot;</span>);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line"><span class="comment">// 检测连接是否成功</span></span><br></pre></td></tr></table></figure>
+
+<p>原型是</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">socket</span><span class="params">(<span class="type">int</span> domain, <span class="type">int</span> type, <span class="type">int</span> protocol)</span>;    </span><br></pre></td></tr></table></figure>
+
+<p>domain: 通讯标准（大概吧），之前是AF_INET所以就继续</p>
+<p>type:  specifies the communication semantics，通讯语义？TCP 使用 sock_dtream,UDP 使用 sock_dgram 居多，一个可靠双工，一个就送一次</p>
+<p>TCP (<code>SOCK_STREAM</code>) is a connection-based protocol.  The  connection is established and the two parties have a conversation until  the connection is terminated by one of the parties or by a network  error.</p>
+<p>两边维持通信，直到一方关闭或者遇到错误</p>
+<p>UDP (<code>SOCK_DGRAM</code>) is a datagram-based protocol.  You send one datagram and get one reply and then the connection terminates.送一次，得到回复，关闭</p>
+<p>protocol：制定应该使用哪一个协议，通常来说一个 domain 只有一个协议，所以设置为 0 就可以</p>
+<p>它会返回一个文件描述符，如果成功打开的话是个非负整数，具体请看：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_26222859/article/details/52068615">https://blog.csdn.net/qq_26222859/article/details/52068615</a></p>
+<p>跟stream不一样，它是整数而不是指针（当真）？这也是使用文件最常用的方式</p>
+<h5 id="bind-servSocket-struct-sockaddr-amp-myaddr-sizeof-myaddr"><a href="#bind-servSocket-struct-sockaddr-amp-myaddr-sizeof-myaddr" class="headerlink" title="bind(servSocket, (struct sockaddr *)&amp;myaddr, sizeof(myaddr)"></a>bind(servSocket, (struct sockaddr *)&amp;myaddr, sizeof(myaddr)</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">bind</span><span class="params">(<span class="type">int</span> sockfd, <span class="type">const</span> <span class="keyword">struct</span> sockaddr *addr,</span></span><br><span class="line"><span class="params">         <span class="type">socklen_t</span> addrlen)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>嗯，下面这个是使用</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (bind(servSocket, (<span class="keyword">struct</span> sockaddr *)&amp;myaddr, <span class="keyword">sizeof</span>(myaddr)) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">&quot;Error: bind failed\n&quot;</span>);</span><br><span class="line">   <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>When a socket is created with socket(2), it exists in a name space (address family) but has no address assigned to it.  bind() assigns the address specified by addr to the socket referred to by the file descriptor sockfd.  addrlen specifies the size, in bytes, of the address structure pointed to by addr.</p>
+<p>当socket创造的时候，name space(坑）有了，但是要用 bind 去赋值，第一个是socket返回的文件描述符，然后是myaddr的地址，强行转换成指向struct sockaddr的指针，最后是它的大小。返回的还是文件描述符，所以</p>
+<p>下一个是收听端口了</p>
+<p><code>recvlen = recvfrom(servSocket, buf, BUFSIZE, 0, (struct sockaddr *)&amp;remaddr, &amp;addrlen);</code></p>
+<p>原型函数是</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ssize_t</span> <span class="title function_">recvfrom</span><span class="params">(<span class="type">int</span> sockfd, <span class="type">void</span> *buf, <span class="type">size_t</span> len, <span class="type">int</span> flags,</span></span><br><span class="line"><span class="params">                 <span class="keyword">struct</span> sockaddr *src_addr, <span class="type">socklen_t</span> *addrlen)</span>;</span><br><span class="line"><span class="comment">/*fd:file discriptor</span></span><br><span class="line"><span class="comment">*buf 指向存储接收变量的指针*/</span></span><br><span class="line"><span class="type">char</span> buf[BUFSIZE];</span><br><span class="line"><span class="comment">// 接下来是buf大小</span></span><br><span class="line"><span class="comment">// flag 各种报错？0就是默认吧，没问题的啦</span></span><br><span class="line"><span class="comment">// A parameter that can be set to 0, MSG_CONNTERM, MSG_PEEK, MSG_OOB, or MSG_WAITALL. The MSG_CONNTERM flag is mutually exclusive with other flags.</span></span><br><span class="line"><span class="comment">// 在call结束之后，*src_addr 和 *addrlen 会被传入信息的端口赋值</span></span><br></pre></td></tr></table></figure>
+
+<p>最后一个</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (sendto(servSocket, buf, <span class="built_in">strlen</span>(buf), <span class="number">0</span>, (<span class="keyword">struct</span> sockaddr *)&amp;remaddr, <span class="keyword">sizeof</span>(remaddr)) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">			<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Error in sendto\n&quot;</span>);</span><br><span class="line">			<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure>
+
+<p>很好理解了，fd在小于0就是错误，剩下的参数和上面的recvfrom一样的</p>
+<h5 id="TCP-连接"><a href="#TCP-连接" class="headerlink" title="TCP 连接"></a>TCP 连接</h5><p><code>listen(servSocket,0);</code></p>
+<p>前面是 serv，后面是pending的连接数，这个只能有一个连接，不接受等待</p>
+<p><code>conn_sock=accept(servSocket,NULL,NULL);</code></p>
+<p>把等待queue的第一个提取出来</p>
+<p><em>address</em></p>
+<p>Either a null pointer, or a pointer to a <strong>sockaddr</strong> structure where the address of the connecting socket shall be returned.</p>
+<p>不太明白什么意思……下次问问</p>
+<p>然后会创建一个新的socket连接处理这个，conn_sock 就是新的socket</p>
+<p>read，成功之后upper case，然后write回去，结束</p>
+<p>总之，从client和server一起写一下吧</p>
+<p>client server 共同</p>
+<p>创建 struct sockaddr_in ，填入 detail</p>
+<p><del>server端 bind，创建监听端口？不对，connect和bind应该有类似之处？</del></p>
+<p>TCP 和 UDP 都一样，myaddr创造struct， serve socket 是 file discriptor，两个分别赋值，然后 client 用 connect 结合，server 用 bind 结合。</p>
+<p>connect 搞定三次握手，用新的 conn_sock，不同于listen的端口传递数据。write 发送，read收到，close四次挥手。</p>
+<p>server的话先是listen创建监听端口，然后收到客户再搞出新的专属socket conn_sock，用read读取，write写回</p>
+<p>read write 都是</p>
+<p>extern ssize_t read(int __fd, void *__buf, size_t __nbytes)</p>
+<p>Read NBYTES into BUF from FD.  Return the<br>number read, -1 for errors or 0 for EOF.</p>
+<p>从 fd 端口读取 nbytes 到 buf，write 也是，client是 client socket，server 是 conn_socket，果然是万物皆文件啊……感叹.jpg</p>
+<h5 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h5><p>首先需要一个 func 来规定这个 thread 要执行什么代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> *<span class="title function_">thread_code</span><span class="params">(<span class="type">void</span> *arg)</span> &#123;</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">&quot;This is code being ran by thread %d\n&quot;</span>, (<span class="type">long</span>) arg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个 func 必须返回一个指向 void 的指针，参数值一个指向 void 的指针（我相信是 thread 的运行地址？）</p>
+<p>void *thread_code 代表的是返回值是指针，void (*thread_code) 才是，thread_code是指向返回值是 void 的函数的指针</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">pthread_create</span><span class="params">(<span class="type">pthread_t</span> *thread, <span class="type">const</span> <span class="type">pthread_attr_t</span> *attr,</span></span><br><span class="line"><span class="params">                   <span class="type">void</span> *(*start_routine) (<span class="type">void</span> *), <span class="type">void</span> *arg)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>给出的例子是</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">pthread_t</span> threads[<span class="number">10</span>];</span><br><span class="line"><span class="type">int</span> i;</span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">   pthread_create(&amp;threads[i], <span class="literal">NULL</span>, &amp;thread_code, (<span class="type">void</span> *) <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第一个是获得这个 thread 的 id 的地址，第二个先不管，第三个是指向 <strong>指向 func 指针</strong> 的指针，第四个是传入的参数，是 void 指针类型，需要强制转化</p>
+<p>&amp;threads[1] 是 addr of second element, where second element st</p>
+<p>为了避免成为孤儿进程，需要combine到主进程里面</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">pthread_join</span><span class="params">(<span class="type">pthread_t</span> thread, <span class="type">void</span> **retval)</span>;</span><br><span class="line"><span class="comment">// retval = return value</span></span><br></pre></td></tr></table></figure>
+
+<p>例子里的答案是这么用的</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; argc<span class="number">-1</span>; ++i) &#123;</span><br><span class="line">      pthread_join(threads[i], (<span class="type">void</span> **)&amp;ans); <span class="comment">// the return value is stored in ans</span></span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">&quot;Sum of integers up to %d is %d\n&quot;</span>,limit[i], *ans);</span><br><span class="line">      <span class="built_in">free</span>(ans);</span><br></pre></td></tr></table></figure>
+
+<p>第一个参数是 thread 的 id（一个数组），然后下一个是储存返回值，一个指向指针的指针，跟 **argv 一致，可以存储传回的多个 val</p>
+<p><img src="https://i.imgur.com/YivsX0J.jpg"></p>
+<p>执行是 <code>gcc -lpthread threaded_code.c</code> 跟 lab 不一样</p>
+<p>*<em>划重点，void <em>是通用指针类型，在转换到各种类型指针和转化回来的时候不会丢失数据</em></em></p>
+<h5 id="Mutex-lock"><a href="#Mutex-lock" class="headerlink" title="Mutex lock"></a>Mutex lock</h5><p>直接看代码吧</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">volatile</span> <span class="type">int</span> global_number = <span class="number">0</span>;</span><br><span class="line"><span class="comment">// 在C语言中，volatile关键字可以用来提醒编译器它后面所定义的变量随时有可能改变，因此编译后的程序每次需要存储或读取这个变量的时候，都会直接从变量地址中读取数据</span></span><br><span class="line"><span class="comment">// 多线程专用啾</span></span><br><span class="line"><span class="type">pthread_mutex_t</span> muxlock = PTHREAD_MUTEX_INITIALIZER;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> * <span class="title function_">thread_code</span><span class="params">(<span class="type">void</span> *arg)</span> &#123;</span><br><span class="line">  pthread_mutex_lock(&amp;muxlock);</span><br><span class="line">  global_number = global_number + <span class="number">1</span>;</span><br><span class="line">  pthread_mutex_unlock(&amp;muxlock);</span><br><span class="line">  <span class="comment">// 在增加的时候</span></span><br><span class="line">  <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">  <span class="type">pthread_t</span> threads[<span class="number">10</span>];</span><br><span class="line">  <span class="type">int</span> i;</span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    pthread_create(&amp;threads[i], <span class="literal">NULL</span>, &amp;thread_code, <span class="literal">NULL</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10</span>; ++i) &#123;</span><br><span class="line">    <span class="type">void</span> *rv;</span><br><span class="line">    pthread_join(threads[i], &amp;rv); </span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;This value should be 10: %d\n&quot;</span>, global_number);</span><br><span class="line">  <span class="keyword">return</span> EXIT_SUCCESS;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/34524/what-is-a-mutex">https://stackoverflow.com/questions/34524/what-is-a-mutex</a></p>
+<p>这个解释的比较清楚，是允许某个进程说话的橡皮鸭子（</p>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%B8%B4%E7%95%8C%E5%8C%BA">临界区</a>内部，通过<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%BA%92%E6%96%A5%E9%94%81">互斥锁</a>（mutex）保证只有一个线程可以访问，因此临界区内的变量不需要是volatile的；而在临界区外部，被多个线程访问的变量应为volatile，这也符合了volatile的原意：防止编译器<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%BC%93%E5%AD%98">缓存</a>（cache）了被多个线程并发用到的变量。</p>
+<p>嗯嗯这是 volatile 的使用</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">pthread_mutex_t</span> mutex1 = PTHREAD_MUTEX_INITIALIZER;</span><br><span class="line">pthread_mutex_init(&amp;mutex2, <span class="literal">NULL</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这两个语句是等效的</p>
+<h5 id="多线程-server"><a href="#多线程-server" class="headerlink" title="多线程 server"></a>多线程 server</h5><p>这个主要改得是 server</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> *<span class="title function_">memset</span><span class="params">(<span class="type">void</span> *str, <span class="type">int</span> c, <span class="type">size_t</span> n)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>str</strong> − This is a pointer to the block of memory to fill.</li>
+<li><strong>c</strong> − This is the value to be set. The value is passed as an int, but the function fills the block of memory using the unsigned char conversion of this value.</li>
+<li><strong>n</strong> − This is the number of bytes to be set to the value.</li>
+</ul>
+<p>大概是 memory set, 将 void 这块block 用 c 的值填满，c 将会变成 unsigned char，然后一共有 n 个</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">listen(servSocket,BACKLOG);</span><br></pre></td></tr></table></figure>
+
+<p>一共可以排队等待 backlog 个client</p>
+<p>我去这个是真的猛，还要包括 head 文件使用</p>
+<p>ref:</p>
+<p><a target="_blank" rel="noopener" href="https://www.gta.ufrj.br/ensino/eel878/sockets/sockaddr_inman.html">https://www.gta.ufrj.br/ensino/eel878/sockets/sockaddr_inman.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhidao.baidu.com/question/127548969.html">https://zhidao.baidu.com/question/127548969.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://pubs.opengroup.org/onlinepubs/009695399/functions/inet_addr.html">https://pubs.opengroup.org/onlinepubs/009695399/functions/inet_addr.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/seven407/article/details/6096702">https://blog.csdn.net/seven407/article/details/6096702</a></p>
+<p><a target="_blank" rel="noopener" href="https://man7.org/linux/man-pages/man2/socket.2.html">https://man7.org/linux/man-pages/man2/socket.2.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/5815675/what-is-sock-dgram-and-sock-stream">https://stackoverflow.com/questions/5815675/what-is-sock-dgram-and-sock-stream</a></p>
+<p><a target="_blank" rel="noopener" href="https://man7.org/linux/man-pages/man2/bind.2.html">https://man7.org/linux/man-pages/man2/bind.2.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.ibm.com/docs/en/zos/2.1.0?topic=functions-recvfrom-receive-messages-socket">https://www.ibm.com/docs/en/zos/2.1.0?topic=functions-recvfrom-receive-messages-socket</a></p>
+<p><a target="_blank" rel="noopener" href="http://c.biancheng.net/cpp/html/3042.html">http://c.biancheng.net/cpp/html/3042.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://linux.die.net/man/3/pthread_join">https://linux.die.net/man/3/pthread_join</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/OSLab/" rel="tag"># OSLab</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/11/01/digital-system-lab4/" rel="prev" title="digital system lab4">
+      <i class="fa fa-chevron-left"></i> digital system lab4
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/11/03/git-already-up-to-date-%E9%97%AE%E9%A2%98/" rel="next" title="git already up to date 问题">
+      git already up to date 问题 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#UDP-%E8%BF%9E%E6%8E%A5"><span class="nav-number">1.</span> <span class="nav-text">UDP 连接</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#struct-sockaddr"><span class="nav-number">1.1.</span> <span class="nav-text">struct sockaddr</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#socket-AF-INET-SOCK-DGRAM-0"><span class="nav-number">1.2.</span> <span class="nav-text">socket(AF_INET, SOCK_DGRAM, 0)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#bind-servSocket-struct-sockaddr-amp-myaddr-sizeof-myaddr"><span class="nav-number">1.3.</span> <span class="nav-text">bind(servSocket, (struct sockaddr *)&amp;myaddr, sizeof(myaddr)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#TCP-%E8%BF%9E%E6%8E%A5"><span class="nav-number">1.4.</span> <span class="nav-text">TCP 连接</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="nav-number">1.5.</span> <span class="nav-text">多线程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Mutex-lock"><span class="nav-number">1.6.</span> <span class="nav-text">Mutex lock</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B-server"><span class="nav-number">1.7.</span> <span class="nav-text">多线程 server</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="山奈"
+      src="/images/ava.jpg">
+  <p class="site-author-name" itemprop="name">山奈</p>
+  <div class="site-description" itemprop="description">You must have a blog!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">山奈</span>
+</div>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.1.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"acyanbird.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="读取硬盘因为我们只能在 512 bytes 下操作，但是操作系统一般会大于这个，所以 16 bits 的话可以编的地址是 0xffff，可以索引 64 kb。会将内存分为 segment，cs, ds, ss, and es, called segment registers，记录偏移值，seg 的起始地址。比如 mov ax, [0x45ef] ，data 由 ds，data segment 加">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OS写作1">
+<meta property="og:url" content="https://acyanbird.github.io/2022/06/15/OS%E5%86%99%E4%BD%9C1/index.html">
+<meta property="og:site_name" content="Nighthawk&#39;s nest">
+<meta property="og:description" content="读取硬盘因为我们只能在 512 bytes 下操作，但是操作系统一般会大于这个，所以 16 bits 的话可以编的地址是 0xffff，可以索引 64 kb。会将内存分为 segment，cs, ds, ss, and es, called segment registers，记录偏移值，seg 的起始地址。比如 mov ax, [0x45ef] ，data 由 ds，data segment 加">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.tutorialspoint.com/assets/questions/media/60192/8086_processor.jpg">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Cylinder_Head_Sector.svg/720px-Cylinder_Head_Sector.svg.png">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Hard_drive_geometry_-_English_-_2019-05-30.svg/1100px-Hard_drive_geometry_-_English_-_2019-05-30.svg.png">
+<meta property="article:published_time" content="2022-06-15T21:54:01.000Z">
+<meta property="article:modified_time" content="2022-07-18T19:26:28.131Z">
+<meta property="article:author" content="山奈">
+<meta property="article:tag" content="OSwriting">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.tutorialspoint.com/assets/questions/media/60192/8086_processor.jpg">
+
+<link rel="canonical" href="https://acyanbird.github.io/2022/06/15/OS%E5%86%99%E4%BD%9C1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>OS写作1 | Nighthawk's nest</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Nighthawk's nest</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://acyanbird.github.io/2022/06/15/OS%E5%86%99%E4%BD%9C1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ava.jpg">
+      <meta itemprop="name" content="山奈">
+      <meta itemprop="description" content="You must have a blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nighthawk's nest">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OS写作1
+        </h1>
+
+        <div class="post-meta">
+	  
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-06-15 21:54:01" itemprop="dateCreated datePublished" datetime="2022-06-15T21:54:01+00:00">2022-06-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-07-18 19:26:28" itemprop="dateModified" datetime="2022-07-18T19:26:28+00:00">2022-07-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="读取硬盘"><a href="#读取硬盘" class="headerlink" title="读取硬盘"></a>读取硬盘</h4><p>因为我们只能在 512 bytes 下操作，但是操作系统一般会大于这个，所以 16 bits 的话可以编的地址是 0xffff，可以索引 64 kb。会将内存分为 segment，cs, ds, ss, and es, called segment registers，记录偏移值，seg 的起始地址。比如 <code>mov ax, [0x45ef]</code> ，data 由 ds，data segment 加偏移，大概是 org？stack base reg, bp，ss stack segment 记录。</p>
+<p>segment 几乎完全重叠，只偏移 16 bytes。</p>
+<h5 id="如何偏移？"><a href="#如何偏移？" class="headerlink" title="如何偏移？"></a>如何偏移？</h5><p>segment *16 + 数值，因为是16进制所以直接左挪移一位</p>
+<p>比如 dx &#x3D; 0x4d, mov ax, [0x20] 则实际读取 0x4d0 + 0x20</p>
+<p>但是不能将地址给 special propose reg 传入</p>
+<p><img src="https://www.tutorialspoint.com/assets/questions/media/60192/8086_processor.jpg"></p>
+<p><a target="_blank" rel="noopener" href="https://www.tutorialspoint.com/what-are-the-cpu-general-purpose-registers">What are the CPU general purpose registers?</a></p>
+<p>在加上 seg 的份上，我们可以访问 1M 以上的地址了 (0xffff * 16 + 0xffff)</p>
+<h4 id="读取硬盘-1"><a href="#读取硬盘-1" class="headerlink" title="读取硬盘"></a>读取硬盘</h4><p>现在使用 HDD,Cylinder-Head-Sector (CHS) 用来描述目前访问对象</p>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-cn/%E6%9F%B1%E9%9D%A2-%E7%A3%81%E5%A4%B4-%E6%89%87%E5%8C%BA">柱面-磁头-扇区 - 维基百科，自由的百科全书</a></p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Cylinder_Head_Sector.svg/720px-Cylinder_Head_Sector.svg.png"></p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Hard_drive_geometry_-_English_-_2019-05-30.svg/1100px-Hard_drive_geometry_-_English_-_2019-05-30.svg.png"></p>
+<p>cylinder 是距离 outside 的距离，sector通常 512 bytes 现在，head 描述目前在哪个 track</p>
+<p>算了我想偷懒一下，我觉得我看懂了……先往下写罢，不过大概率我要滚回来补课</p>
+<p>逃课一时爽，神居火葬场。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/OSwriting/" rel="tag"># OSwriting</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/12/OS%E5%86%99%E4%BD%9C0/" rel="prev" title="OS写作0">
+      <i class="fa fa-chevron-left"></i> OS写作0
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/19/linux%E5%AE%89%E8%A3%85partition/" rel="next" title="linux安装partition">
+      linux安装partition <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%BB%E5%8F%96%E7%A1%AC%E7%9B%98"><span class="nav-number">1.</span> <span class="nav-text">读取硬盘</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%81%8F%E7%A7%BB%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">如何偏移？</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%BB%E5%8F%96%E7%A1%AC%E7%9B%98-1"><span class="nav-number">2.</span> <span class="nav-text">读取硬盘</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="山奈"
+      src="/images/ava.jpg">
+  <p class="site-author-name" itemprop="name">山奈</p>
+  <div class="site-description" itemprop="description">You must have a blog!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">山奈</span>
+</div>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

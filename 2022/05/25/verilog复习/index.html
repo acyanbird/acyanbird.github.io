@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.1.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"acyanbird.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="嘛，testbench &#96;timescale 1 ns &#x2F; 100 ps 每 #1 等待 1ns，精度是 100ps 12345678910111213outfile &#x3D; $fopen(&quot;sim_output.txt&quot;,&quot;w&quot;);verfile &#x3D; $fopen(&quot;verified.txt&quot;,&quot;r&quot;)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="verilog复习">
+<meta property="og:url" content="https://acyanbird.github.io/2022/05/25/verilog%E5%A4%8D%E4%B9%A0/index.html">
+<meta property="og:site_name" content="Nighthawk&#39;s nest">
+<meta property="og:description" content="嘛，testbench &#96;timescale 1 ns &#x2F; 100 ps 每 #1 等待 1ns，精度是 100ps 12345678910111213outfile &#x3D; $fopen(&quot;sim_output.txt&quot;,&quot;w&quot;);verfile &#x3D; $fopen(&quot;verified.txt&quot;,&quot;r&quot;)">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-05-25T17:17:58.000Z">
+<meta property="article:modified_time" content="2022-07-18T19:26:28.135Z">
+<meta property="article:author" content="山奈">
+<meta property="article:tag" content="verilog">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://acyanbird.github.io/2022/05/25/verilog%E5%A4%8D%E4%B9%A0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>verilog复习 | Nighthawk's nest</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Nighthawk's nest</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://acyanbird.github.io/2022/05/25/verilog%E5%A4%8D%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ava.jpg">
+      <meta itemprop="name" content="山奈">
+      <meta itemprop="description" content="You must have a blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nighthawk's nest">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          verilog复习
+        </h1>
+
+        <div class="post-meta">
+	  
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-25 17:17:58" itemprop="dateCreated datePublished" datetime="2022-05-25T17:17:58+00:00">2022-05-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-07-18 19:26:28" itemprop="dateModified" datetime="2022-07-18T19:26:28+00:00">2022-07-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>嘛，testbench</p>
+<p>&#96;timescale 1 ns &#x2F; 100 ps</p>
+<p>每 #1 等待 1ns，精度是 100ps</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">outfile = <span class="built_in">$fopen</span>(<span class="string">&quot;sim_output.txt&quot;</span>,<span class="string">&quot;w&quot;</span>);</span><br><span class="line">verfile = <span class="built_in">$fopen</span>(<span class="string">&quot;verified.txt&quot;</span>,<span class="string">&quot;r&quot;</span>);</span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk)</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line"><span class="keyword">if</span>(out_valid) <span class="keyword">begin</span></span><br><span class="line">  <span class="built_in">$fwrite</span>(outfile,<span class="string">&quot;%d\n&quot;</span>, result_out);</span><br><span class="line">  <span class="built_in">$fscanf</span>(verfile,<span class="string">&quot;%d\n&quot;</span>, correct); </span><br><span class="line">  <span class="keyword">if</span>(result_out !== correct)</span><br><span class="line">    <span class="built_in">$display</span>(<span class="string">&quot;Output error at %0d ns:</span></span><br><span class="line"><span class="string">              got %0d, expected %0d”,</span></span><br><span class="line"><span class="string">              $time, result_out, correct);</span></span><br><span class="line"><span class="string">end</span></span><br><span class="line"><span class="string">end </span></span><br></pre></td></tr></table></figure>
+
+<p>使用 verifile</p>
+<p>数字代表</p>
+<p>000…000:zero<br>111…111: minus one<br>100…000: −2n−1 (maximum negative)<br>011…111: 2n−1−1 (maximum positive)</p>
+<p>Two’s complement</p>
+<p>第一个是 1 就是负数，负数换二进制需要先二进制然后取反加一</p>
+<p>换成正数就加一，获得十进制之后加上负号</p>
+<p>full adder</p>
+<p>a, b, cin, to sum, cout</p>
+<p>cout &#x3D; (a &amp; b) &amp; ((a xor b)&amp;cin)</p>
+<p>sum &#x3D; (a xor b) xor cin </p>
+<p>转换！看qmp应该绝对考的</p>
+<p>fractional 是多少就乘以2的多少次方，化整，</p>
+<p>convert 2.384 to 8 bits with 6 fractional bits:  </p>
+<ol>
+<li>2.384 × 26 &#x3D; 152.576  </li>
+<li>Round to 153  </li>
+<li>Convert to 1001 1001  </li>
+<li>Result is 10.011001 &#x3D; 2.390625 (&#x3D;153&#x2F;64)  </li>
+<li>Error is 0.006625 (absolute), or 0.28% (relative)</li>
+</ol>
+<p>负数！</p>
+<p>convert –6.73 to 10 bits with 5 fractional bits:  </p>
+<ol>
+<li>–6.73 × 25 &#x3D; –215.36  </li>
+<li>Round to –215  </li>
+<li>Convert to 1100101001  </li>
+<li>Result is 11001.01001 &#x3D; –6.71875 (&#x3D;–215&#x2F;32)  </li>
+<li>Error is 0.01125 (absolute), or 0.17% (relative</li>
+</ol>
+<p>计算到二进制</p>
+<p>十进制小数的二进制表示：</p>
+<p>整数部分：除以2，取出余数，商继续除以2，直到得到0为止，将取出的余数<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E9%80%86%E5%BA%8F&spm=1001.2101.3001.7020">逆序</a>  </p>
+<p>小数部分：乘以2，然后取出整数部分，将剩下的小数部分继续乘以2，然后再取整数部分，一直取到小数部分为零为止。如果永远不为零，则按要求保留足够位数的小数，最后一位做0舍1入。将取出的整数顺序排列。</p>
+<p>如果是负数只影响整数部分，小数照常</p>
+<p>不对，小数是正常然后整数减去小数</p>
+<p>-5.75 整数是 -6 小数是 0.25</p>
+<p>(−1)sign × 1.sig × 2exp−127</p>
+<p>signed 代表使用2补表达</p>
+<p>GPIO general purpose I&#x2F;O</p>
+<p>Pulse-width modulation (PWM) sending analog</p>
+<p>Universal asynchronous rx&#x2F;tx (UART)</p>
+<p>multi bits sending, not check bits using 1 wire</p>
+<p>processor</p>
+<p>Application Specific Integrated Circuits (ASICs)</p>
+<p>需要有什么？</p>
+<p>A set of different arithmetic operations  </p>
+<p>不同运算方法<br>▶︎ Movement of data into and out of the arithmetic logic  </p>
+<p>传输结果<br>▶︎ A way of breaking down complex functions into simple steps  </p>
+<p>分解复杂 func 到简单步骤<br>▶︎ A way to “program” the circuit to carry out these steps </p>
+<p>所以由什么组成呢？</p>
+<p>There are a number of state-holding (clocked) elements:<br>▶︎Program counter register<br>▶︎Register file<br>▶︎Instruction memory</p>
+<p>pc计数，文件？命令记录</p>
+<p>TIMING!</p>
+<p>我觉得应该有计算在这里</p>
+<p>Assuming sum only output: n stage adder:<br>▶︎4 + 2(n – 2) gate delays</p>
+<p>minimum clock period, T, is given by: tcQ + tp + ts &lt; T</p>
+<p>ts setup time, input 改变钟还没有变</p>
+<p>th hold time, 保持一会儿不变</p>
+<p>T &gt; 0.6+12+0.4ns</p>
+<p>tcq，钟信号传导到产生 out 的东西的时候，clock-to-Q delay</p>
+<p>Fmax &#x3D; 1&#x2F;13ns &#x3D; 76.9MHz</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/verilog/" rel="tag"># verilog</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/06/learnNethack/" rel="prev" title="learnNethack">
+      <i class="fa fa-chevron-left"></i> learnNethack
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/08/audacity%E4%BD%BF%E7%94%A8/" rel="next" title="audacity使用">
+      audacity使用 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="山奈"
+      src="/images/ava.jpg">
+  <p class="site-author-name" itemprop="name">山奈</p>
+  <div class="site-description" itemprop="description">You must have a blog!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">山奈</span>
+</div>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

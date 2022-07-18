@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.1.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"acyanbird.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Right-click any area in the editor and select Reformat. Alternatively, press Ctrl+Alt+L. format sql 有时候需要手动导入 schema 才能 insert test 来着 嗯，本来应该在本机上安装sql的……不过还是不要搞这种操作了，先搞定 maven 的依赖。已经安装好了，所以直接 open pom">
+<meta property="og:type" content="article">
+<meta property="og:title" content="db course work">
+<meta property="og:url" content="https://acyanbird.github.io/2021/11/14/db-course-work/index.html">
+<meta property="og:site_name" content="Nighthawk&#39;s nest">
+<meta property="og:description" content="Right-click any area in the editor and select Reformat. Alternatively, press Ctrl+Alt+L. format sql 有时候需要手动导入 schema 才能 insert test 来着 嗯，本来应该在本机上安装sql的……不过还是不要搞这种操作了，先搞定 maven 的依赖。已经安装好了，所以直接 open pom">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://sbytestream.pythonanywhere.com/static/blog/How-to-fix-IntelliJ-cannot-resolve-symbol/intellij-project-settings.png">
+<meta property="article:published_time" content="2021-11-14T17:51:07.000Z">
+<meta property="article:modified_time" content="2022-07-18T19:26:28.131Z">
+<meta property="article:author" content="山奈">
+<meta property="article:tag" content="sql">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://sbytestream.pythonanywhere.com/static/blog/How-to-fix-IntelliJ-cannot-resolve-symbol/intellij-project-settings.png">
+
+<link rel="canonical" href="https://acyanbird.github.io/2021/11/14/db-course-work/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>db course work | Nighthawk's nest</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Nighthawk's nest</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://acyanbird.github.io/2021/11/14/db-course-work/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ava.jpg">
+      <meta itemprop="name" content="山奈">
+      <meta itemprop="description" content="You must have a blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nighthawk's nest">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          db course work
+        </h1>
+
+        <div class="post-meta">
+	  
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-11-14 17:51:07" itemprop="dateCreated datePublished" datetime="2021-11-14T17:51:07+00:00">2021-11-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-07-18 19:26:28" itemprop="dateModified" datetime="2022-07-18T19:26:28+00:00">2022-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E6%A0%A1%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学校学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Right-click any area in the editor and select Reformat. Alternatively, press Ctrl+Alt+L.</p>
+<p>format sql</p>
+<p>有时候需要手动导入 schema 才能 insert test 来着</p>
+<p>嗯，本来应该在本机上安装sql的……不过还是不要搞这种操作了，先搞定 maven 的依赖。已经安装好了，所以直接 open pom.xml 就可以，intelliJ 会自己搞定的</p>
+<p>刚开始 symbol java cannot solve，打开 File Menu -&gt; Project Structure，将 JDK 改成 11</p>
+<p><img src="http://sbytestream.pythonanywhere.com/static/blog/How-to-fix-IntelliJ-cannot-resolve-symbol/intellij-project-settings.png"></p>
+<p>一些命令</p>
+<p><code>mvn -q exec:java@gig</code></p>
+<p>quiet mode，only produce error</p>
+<p>exec:java 应该是compile的意思，然后后面是项目名字？大概吧</p>
+<p>好了现在搞定远程 ssh 开发了，本地电脑通过 git 同步，和 DCS 就通过 ssh</p>
+<p>唉之前写的那一些搞丢了吗qwq糟糕糟糕，不过没事继续写吧……</p>
+<p>如果 mapping 的文件和远程不一致，先手动上传整个文件一次，然后就可以使用快捷键上传了。当然请记得检查是否真的上传了……</p>
+<p>对照学校要求检查了一遍，现在就要搞定不能跨越时间的问题了</p>
+<p><a target="_blank" rel="noopener" href="https://www.postgresql.org/docs/current/functions-datetime.html">https://www.postgresql.org/docs/current/functions-datetime.html</a></p>
+<p>这里查看 time 可以使用的 func，我的想法是使用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">date_part` ( `text`, `timestamp` ) → `double precision</span><br></pre></td></tr></table></figure>
+
+<p>Get timestamp subfield (equivalent to <code>extract</code>); see <a target="_blank" rel="noopener" href="https://www.postgresql.org/docs/current/functions-datetime.html#FUNCTIONS-DATETIME-EXTRACT">Section 9.9.1</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">date_part(&#x27;hour&#x27;, timestamp &#x27;2001-02-16 20:38:40&#x27;) → 20</span><br></pre></td></tr></table></figure>
+
+<p>提取开场时间的 hour 和 minute，变成分钟再加上持续时间，看是否超过 24*60</p>
+<p><a target="_blank" rel="noopener" href="https://www.postgresql.org/docs/current/ddl-constraints.html#DDL-CONSTRAINTS-CHECK-CONSTRAINTS">https://www.postgresql.org/docs/current/ddl-constraints.html#DDL-CONSTRAINTS-CHECK-CONSTRAINTS</a></p>
+<p>涉及到多个条目的 check 要写在最下面</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE products (</span><br><span class="line">    product_no integer,</span><br><span class="line">    name text,</span><br><span class="line">    price numeric CHECK (price &gt; 0),</span><br><span class="line">    discounted_price numeric CHECK (discounted_price &gt; 0),</span><br><span class="line">    CHECK (price &gt; discounted_price)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>但是 check 似乎不能直接使用 func，需要一个 view？</p>
+<p>SELECT date_part(‘hour’,ontime), date_part(‘minute’,ontime) FROM act_gig as hour where actid &#x3D; 2 and gigid &#x3D; 50;</p>
+<p>这样可以弄出 hour 和 min，但是怎么指定同一个呢……</p>
+<p> SELECT date_part(‘hour’,ontime)*60+date_part(‘minute’,ontime)+duration as last FROM act_gig as hour where actid &#x3D; 2 and gigid &#x3D; 50;</p>
+<p>这样就可以算了！</p>
+<p><a target="_blank" rel="noopener" href="https://www.sqlshack.com/how-to-use-sql-check-constraints/">https://www.sqlshack.com/how-to-use-sql-check-constraints/</a></p>
+<p>淦，create func 好怪哦，要用 $$ 围起来</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CREATE FUNCTION one() RETURNS integer AS $$</span><br><span class="line">    SELECT 1 AS result;</span><br><span class="line">$$ LANGUAGE SQL;</span><br></pre></td></tr></table></figure>
+
+<p>划掉，其实原始是可以的……</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> act_gig</span><br><span class="line">(</span><br><span class="line">    actID    <span class="type">INTEGER</span>        <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">REFERENCES</span> act (actID),</span><br><span class="line">    gigID    <span class="type">INTEGER</span>        <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">REFERENCES</span> gig (gigID),</span><br><span class="line">    actfee   <span class="type">NUMERIC</span>(<span class="number">10</span>, <span class="number">3</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">    ontime   <span class="type">TIMESTAMP</span>      <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">    duration <span class="type">INTEGER</span>        <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">    <span class="keyword">CHECK</span> ((date_part(<span class="string">&#x27;hour&#x27;</span>, ontime) <span class="operator">*</span> <span class="number">60</span> <span class="operator">+</span> date_part(<span class="string">&#x27;minute&#x27;</span>, ontime) <span class="operator">+</span> duration) <span class="operator">&lt;</span> <span class="number">1440</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>是我没有上传成功……哼唧</p>
+<h4 id="java-编写"><a href="#java-编写" class="headerlink" title="java 编写"></a>java 编写</h4><p>测试 .&#x2F;run.sh test 1</p>
+<p>测试 option 1，以此类推</p>
+<p>需要内置 data</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ ./run.sh reset tests/testbig.sql &amp;&amp; ./run.sh test 1</span><br><span class="line">$ ./run.sh reset tests/testbig.sql &amp;&amp; ./run.sh test 5</span><br><span class="line">$ ./run.sh reset tests/testbig.sql &amp;&amp; ./run.sh test 6</span><br><span class="line">$ ./run.sh reset tests/testsmall.sql &amp;&amp; ./run.sh test 7</span><br><span class="line">$ ./run.sh reset tests/testsmall.sql &amp;&amp; ./run.sh test 8</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="task-1"><a href="#task-1" class="headerlink" title="task 1"></a>task 1</h5><p>line-up, using gig id, find all act on gig, line up by start time.</p>
+<p>show actname, start time, end time</p>
+<p>CAST can change format of the values</p>
+<p><a target="_blank" rel="noopener" href="https://www.w3schools.com/sql/func_sqlserver_cast.asp">https://www.w3schools.com/sql/func_sqlserver_cast.asp</a></p>
+<p>CAST(<em>expression</em>   AS <em>datatype(length)</em>)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> act.actname                                                            <span class="keyword">AS</span> &quot;Act Name&quot;,</span><br><span class="line">       <span class="built_in">CAST</span>(act_gig.ontime <span class="keyword">AS</span> <span class="type">TIME</span>)                                           <span class="keyword">AS</span> &quot;On Time&quot;,</span><br><span class="line">       <span class="built_in">CAST</span>(act_gig.ontime <span class="keyword">AS</span> <span class="type">TIME</span>) <span class="operator">+</span> make_interval(mins <span class="operator">=</span><span class="operator">&gt;</span> act_gig.duration) <span class="keyword">AS</span> &quot;Off Time&quot;</span><br><span class="line"><span class="keyword">from</span> act_gig</span><br><span class="line">         <span class="keyword">left</span> <span class="keyword">join</span> act <span class="keyword">on</span> act_gig.actid <span class="operator">=</span> act.actid</span><br><span class="line"><span class="keyword">WHERE</span> gigid <span class="operator">=</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> act_gig.ontime;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>first one like this,  place holder at gigid</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u013159040/article/details/45605637">https://blog.csdn.net/u013159040/article/details/45605637</a></p>
+<p>how to output 2d array</p>
+<p>task 2:</p>
+<p>首先会读到很多 array，先加上 gig，然后再加上 gig_act，如果其中有一个失败了，那就删除所有。用一个 array 存储正在添加和添加完成的，一共会有 act 相关 array + 2 （包括 gig，ticket）三个 act_gig，然后一个 for 循环删除剩下的走你</p>
+<p>删除 id 最大的</p>
+<p><code>delete from gig where gigid in (select max(gigid) from gig);</code></p>
+<p>可以跑得通，但是需要先 del 掉所有关联外键。先 del 所有 gig_act, then is ticket, last is gig</p>
+<p>using successAct to count how many act is successful added, and for loop to del</p>
+<p><a target="_blank" rel="noopener" href="http://sqlines.com/postgresql/datatypes/serial">http://sqlines.com/postgresql/datatypes/serial</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO teams VALUES (DEFAULT, &#x27;Manchester City&#x27;);</span><br></pre></td></tr></table></figure>
+
+<p>serial input value is default.</p>
+<p><a target="_blank" rel="noopener" href="https://jdbc.postgresql.org/documentation/head/8-date-time.html">https://jdbc.postgresql.org/documentation/head/8-date-time.html</a></p>
+<p>传入时间使用 setobject</p>
+<p>因为自己传入的不会自动 serial 下去，所以使用</p>
+<p><code>INSERT INTO gig VALUES ((select max(gigid) from gig)+1, 6, &#39;TESTING&#39;, &#39;2018-12-11 19:00:00&#39;, &#39;GoingAhead&#39;);</code></p>
+<p>总之你还是手动查看吧，先看增和删是否成功</p>
+<p>啊要先查询 venue 才行……这个不会是空</p>
+<p><a target="_blank" rel="noopener" href="https://bbs.csdn.net/topics/300206461">https://bbs.csdn.net/topics/300206461</a></p>
+<p>可以写个 bool 判断是否成功插入，不对，这个要看</p>
+<p><a target="_blank" rel="noopener" href="https://www.letianbiji.com/jdbc/jdbc-execute-executequery-executeupdate.html">https://www.letianbiji.com/jdbc/jdbc-execute-executequery-executeupdate.html</a></p>
+<p>executeQuery for SELECT，返回 ResultSet，失败大概是 null，executeUpdate for 其他,返回影响行数，失败是 0</p>
+<p>execute 通用，返回 bool，true 是 ResultSet, false 是返回 int</p>
+<p>对于 CREATE TABLE 或 DROP TABLE 等不操作行的语句，executeUpdate 的返回值总为零。</p>
+<p>fail constrain 是报错，加个 try catch 就好</p>
+<h5 id="option-3"><a href="#option-3" class="headerlink" title="option 3"></a>option 3</h5><p>这个会预订不存在的 gig 场次，或者其他什么报错，没事啦都写好 FK 了</p>
+<p>如果不存在就报错，所以直接 try 就可以了</p>
+<h5 id="option-4"><a href="#option-4" class="headerlink" title="option 4"></a>option 4</h5><p>这个是要写个 function 去 call 了说实话……</p>
+<p><code>AS</code> starts the definition of the method</p>
+<p>SELECT max(ontime) FROM (SELECT * FROM act_gig WHERE gigid&#x3D;14) AS sa;</p>
+<p>这样可以找到</p>
+<p>SELECT actid FROM act_gig WHERE gigid&#x3D;14 ORDER BY ontime DESC LIMIT 1</p>
+<p>这样更方便，limit 是只可以显示 1 个</p>
+<p>选择先去挑序列，然后逐个传入，call func 是</p>
+<p><a target="_blank" rel="noopener" href="https://www.postgresqltutorial.com/postgresql-jdbc/call-postgresql-stored-function/">https://www.postgresqltutorial.com/postgresql-jdbc/call-postgresql-stored-function/</a></p>
+<p>select * from iscancel(?,?,?) </p>
+<h5 id="option-5"><a href="#option-5" class="headerlink" title="option 5"></a>option 5</h5><p>创造了一大堆 view 去完成，效率什么的完全不考虑了，写出来就成</p>
+<h5 id="check"><a href="#check" class="headerlink" title="check"></a>check</h5><p>啊，似乎光写 constrain 不行，可以使用 row num 来排序，然后查看上下两场的排序就可以啦！</p>
+<p><a target="_blank" rel="noopener" href="https://www.postgresqltutorial.com/postgresql-row_number/">https://www.postgresqltutorial.com/postgresql-row_number/</a></p>
+<p>partition by gigid, order </p>
+<p>使用 lead 和 lag 来记录，lag 访问之前一列，lead 访问</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/sql/" rel="tag"># sql</a>
+              <a href="/tags/java/" rel="tag"># java</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/11/14/java-%E5%85%B3%E8%81%94%E7%9F%A5%E8%AF%86/" rel="prev" title="java 关联知识">
+      <i class="fa fa-chevron-left"></i> java 关联知识
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/11/14/db-lab4/" rel="next" title="db lab4">
+      db lab4 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#java-%E7%BC%96%E5%86%99"><span class="nav-number">1.</span> <span class="nav-text">java 编写</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#task-1"><span class="nav-number">1.1.</span> <span class="nav-text">task 1</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#option-3"><span class="nav-number">1.2.</span> <span class="nav-text">option 3</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#option-4"><span class="nav-number">1.3.</span> <span class="nav-text">option 4</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#option-5"><span class="nav-number">1.4.</span> <span class="nav-text">option 5</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#check"><span class="nav-number">1.5.</span> <span class="nav-text">check</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="山奈"
+      src="/images/ava.jpg">
+  <p class="site-author-name" itemprop="name">山奈</p>
+  <div class="site-description" itemprop="description">You must have a blog!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">山奈</span>
+</div>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.1.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"acyanbird.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="这个是给予很多个点寻找最接近这个点的 func，Y &#x3D; AP，当他们是 matrix（看笔记） matlab： P &#x3D; A&#x2F;Y example： 12345678910111213141516171819202122232425% data points for X-axisx &#x3D; [0:0.1:1.0]&amp;#x27;;% create the model that w">
+<meta property="og:type" content="article">
+<meta property="og:title" content="matlab lab1">
+<meta property="og:url" content="https://acyanbird.github.io/2021/11/10/matlab-lab1/index.html">
+<meta property="og:site_name" content="Nighthawk&#39;s nest">
+<meta property="og:description" content="这个是给予很多个点寻找最接近这个点的 func，Y &#x3D; AP，当他们是 matrix（看笔记） matlab： P &#x3D; A&#x2F;Y example： 12345678910111213141516171819202122232425% data points for X-axisx &#x3D; [0:0.1:1.0]&amp;#x27;;% create the model that w">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-11-10T12:51:35.000Z">
+<meta property="article:modified_time" content="2022-07-18T19:26:28.135Z">
+<meta property="article:author" content="山奈">
+<meta property="article:tag" content="MATLAB">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://acyanbird.github.io/2021/11/10/matlab-lab1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>matlab lab1 | Nighthawk's nest</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Nighthawk's nest</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://acyanbird.github.io/2021/11/10/matlab-lab1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ava.jpg">
+      <meta itemprop="name" content="山奈">
+      <meta itemprop="description" content="You must have a blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nighthawk's nest">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          matlab lab1
+        </h1>
+
+        <div class="post-meta">
+	  
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-11-10 12:51:35" itemprop="dateCreated datePublished" datetime="2021-11-10T12:51:35+00:00">2021-11-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-07-18 19:26:28" itemprop="dateModified" datetime="2022-07-18T19:26:28+00:00">2022-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E6%A0%A1%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学校学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这个是给予很多个点寻找最接近这个点的 func，Y &#x3D; AP，当他们是 matrix（看笔记）</p>
+<p>matlab： P &#x3D; A&#x2F;Y</p>
+<p>example：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% data points for X-axis</span></span><br><span class="line">x = [<span class="number">0</span>:<span class="number">0.1</span>:<span class="number">1.0</span>]&#x27;;</span><br><span class="line"><span class="comment">% create the model that we will </span></span><br><span class="line"><span class="keyword">try</span> and estimate</span><br><span class="line">y = <span class="number">2</span>*x + <span class="number">3</span>;</span><br><span class="line"><span class="comment">% add some noise to y to make it </span></span><br><span class="line">more difficult realistic</span><br><span class="line">ynoise = y + <span class="number">0.1</span>*<span class="built_in">randn</span>(<span class="number">11</span>,<span class="number">1</span>);</span><br><span class="line"><span class="comment">% let&#x27;s look at our data</span></span><br><span class="line"><span class="built_in">figure</span>;</span><br><span class="line"><span class="built_in">plot</span>(x,ynoise,<span class="string">&#x27;b+&#x27;</span>);</span><br><span class="line">axis([<span class="number">0</span> <span class="number">1</span> <span class="number">0</span> <span class="number">5</span>])</span><br><span class="line"><span class="comment">% 代表 x 和 y 的取值，x 0-1，y 0-5</span></span><br><span class="line"></span><br><span class="line"><span class="comment">% create matrix A</span></span><br><span class="line">A = [x <span class="built_in">ones</span>(<span class="number">11</span>,<span class="number">1</span>)];</span><br><span class="line"><span class="comment">% perform least squares using </span></span><br><span class="line">backslash operator</span><br><span class="line">P = A\ynoise;</span><br><span class="line"><span class="comment">% get predicted y values </span></span><br><span class="line">using fitted model</span><br><span class="line">yfit = A*P;</span><br><span class="line"><span class="comment">% plot using red line</span></span><br><span class="line"><span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">plot</span>(x,yfit,’r’);</span><br></pre></td></tr></table></figure>
+
+<p>𝑦 &#x3D; 𝑎𝑥^3+ 𝑏𝑥^2+ 𝑐𝑥 + 𝑑</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% create some random data points</span></span><br><span class="line">m_data = <span class="number">1000</span>;</span><br><span class="line">x = <span class="built_in">rand</span>(m_data,<span class="number">1</span>)*<span class="number">2</span><span class="number">-1</span>;</span><br><span class="line"><span class="comment">% create 1000*1 vector with rand,0-1 之间取值</span></span><br><span class="line"><span class="comment">% create the model and add noise</span></span><br><span class="line">y = x<span class="number">-0.3</span>*x.^<span class="number">3</span> + (<span class="built_in">rand</span>(m_data,<span class="number">1</span>)-</span><br><span class="line"><span class="number">1</span>)*<span class="number">0.1</span>;</span><br><span class="line"><span class="comment">% .^ power of matrix,matrix x 的三次方</span></span><br><span class="line"><span class="comment">% plot a graph of datapoints (blue) </span></span><br><span class="line">and label </span><br><span class="line"><span class="built_in">figure</span>; <span class="built_in">plot</span>(x,y,<span class="string">&#x27;b+&#x27;</span>);</span><br><span class="line">xlabel(<span class="string">&#x27;spring extension&#x27;</span>); </span><br><span class="line">ylabel(<span class="string">&#x27;Force&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">% form A matrix (data matrix)</span></span><br><span class="line">A = [x.^<span class="number">3</span> x.^<span class="number">2</span> x <span class="built_in">ones</span>(m_data,<span class="number">1</span>) ];</span><br><span class="line"><span class="comment">% estimate the parameters using </span></span><br><span class="line">backslash operator</span><br><span class="line">P = A\y</span><br><span class="line"><span class="comment">% obtain predicted y values from </span></span><br><span class="line">model: yfit</span><br><span class="line">yfit = A*P;</span><br><span class="line"><span class="comment">%plot the predicted y values on </span></span><br><span class="line">the same graph</span><br><span class="line"><span class="built_in">hold</span> on; <span class="built_in">plot</span>(x,yfit,<span class="string">&#x27;r+&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="Using-MATLAB-to-Find-x-in-Ax-x3D-y"><a href="#Using-MATLAB-to-Find-x-in-Ax-x3D-y" class="headerlink" title="Using MATLAB to Find x in Ax &#x3D;y"></a>Using MATLAB to Find x in Ax &#x3D;y</h4><p>For the case where A is a square matrix, we calculate the inverse using: P &#x3D; inv(A)</p>
+<p>To calculate a left-pseudo inverse: P &#x3D; inv(A’*A)*A’<br> To calculate a right-pseudo inverse: P &#x3D; A’<em>inv(A</em>A’)</p>
+<p>总之找 Ax &#x3D; y 的时候的 x, x &#x3D; A\y</p>
+<p>[v,d] &#x3D; eig(A)</p>
+<p> eigenvectors in v and the eigenvalues in d，获得俩 matrix，V 是vector集和，d 是对角线的 eigen value</p>
+<h5 id="sum-of-squared-errors-SSE"><a href="#sum-of-squared-errors-SSE" class="headerlink" title="sum of squared errors (SSE)"></a>sum of squared errors (SSE)</h5><p>SE &#x3D;(ˆY−Y)T(ˆY−Y)</p>
+<p>err &#x3D; yhat - Resistance<br>SSE &#x3D; (err)’*(err)</p>
+<h5 id="mean-absolute-error-MAE"><a href="#mean-absolute-error-MAE" class="headerlink" title="mean absolute error (MAE)"></a>mean absolute error (MAE)</h5><p>which is the mean absolute distance between the predicted and actual values</p>
+<p>absoluteErr &#x3D; abs(err);<br>MAE &#x3D; mean(absoluteErr);</p>
+<h5 id="寻找矩阵最大值"><a href="#寻找矩阵最大值" class="headerlink" title="寻找矩阵最大值"></a>寻找矩阵最大值</h5><p>一个 matrix C，第一个max返回行向量，每一个列的最大值，第二个max找到这些中的最大值，</p>
+<p>[row col] &#x3D; find(C&#x3D;&#x3D;(max(max(C))))</p>
+<p>Find 函数，在 3×3 矩阵中查找非零元素。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">X = [<span class="number">1</span> <span class="number">0</span> <span class="number">2</span>; <span class="number">0</span> <span class="number">1</span> <span class="number">1</span>; <span class="number">0</span> <span class="number">0</span> <span class="number">4</span>]</span><br><span class="line">X = <span class="number">3</span>×<span class="number">3</span></span><br><span class="line"></span><br><span class="line">     <span class="number">1</span>     <span class="number">0</span>     <span class="number">2</span></span><br><span class="line">     <span class="number">0</span>     <span class="number">1</span>     <span class="number">1</span></span><br><span class="line">     <span class="number">0</span>     <span class="number">0</span>     <span class="number">4</span></span><br><span class="line">k = <span class="built_in">find</span>(X)</span><br><span class="line">k = <span class="number">5</span>×<span class="number">1</span></span><br><span class="line"></span><br><span class="line">     <span class="number">1</span></span><br><span class="line">     <span class="number">5</span></span><br><span class="line">     <span class="number">7</span></span><br><span class="line">     <span class="number">8</span></span><br><span class="line">     <span class="number">9</span></span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+
+<p>返回的是从左上角向右数的每一个非零元素的位置</p>
+<p>对 <code>X</code> 使用逻辑 <code>not</code> 运算符以查找零值。k2 &#x3D; find(~X)</p>
+<p>所以 find(C&#x3D;&#x3D;1,5) 就是在 C matrix 里面寻找前五个等于 1 的值，返回它的位置</p>
+<p>寻找某个matrix中大于特定数值的 element 的个数</p>
+<p>比如寻找 A 里大于 10 的个数</p>
+<p>sum(sum(A&gt;10))</p>
+<p>A&gt;10 将会 produce 0 1 组成的matrix，然后一个 sum 会 return 每一个列的和，再来一个就获得了所有 1 的个数。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MATLAB/" rel="tag"># MATLAB</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/11/09/C-%E8%AF%AD%E8%A8%80-threadpool-serv/" rel="prev" title="C 语言 threadpool serv">
+      <i class="fa fa-chevron-left"></i> C 语言 threadpool serv
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/11/12/MATLAB-lab2/" rel="next" title="MATLAB lab2">
+      MATLAB lab2 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Using-MATLAB-to-Find-x-in-Ax-x3D-y"><span class="nav-number">1.</span> <span class="nav-text">Using MATLAB to Find x in Ax &#x3D;y</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#sum-of-squared-errors-SSE"><span class="nav-number">1.1.</span> <span class="nav-text">sum of squared errors (SSE)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#mean-absolute-error-MAE"><span class="nav-number">1.2.</span> <span class="nav-text">mean absolute error (MAE)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AF%BB%E6%89%BE%E7%9F%A9%E9%98%B5%E6%9C%80%E5%A4%A7%E5%80%BC"><span class="nav-number">1.3.</span> <span class="nav-text">寻找矩阵最大值</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="山奈"
+      src="/images/ava.jpg">
+  <p class="site-author-name" itemprop="name">山奈</p>
+  <div class="site-description" itemprop="description">You must have a blog!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">山奈</span>
+</div>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
