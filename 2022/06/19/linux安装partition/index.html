@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"acyanbird.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="嘛想要彻底搞明白分区什么的，然后发现你只需要好好阅读鸟哥的 linux 私房菜，哼，哼！ DiskSpace - Community Help Wiki non-GPT disk,    Name Size    swap size of RAM   &#x2F; the rest of the disk   If the disk is GPT type (this can be checked">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux安装partition">
+<meta property="og:url" content="https://acyanbird.github.io/2022/06/19/linux%E5%AE%89%E8%A3%85partition/index.html">
+<meta property="og:site_name" content="Nighthawk&#39;s nest">
+<meta property="og:description" content="嘛想要彻底搞明白分区什么的，然后发现你只需要好好阅读鸟哥的 linux 私房菜，哼，哼！ DiskSpace - Community Help Wiki non-GPT disk,    Name Size    swap size of RAM   &#x2F; the rest of the disk   If the disk is GPT type (this can be checked">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/GUID_Partition_Table_Scheme.svg/480px-GUID_Partition_Table_Scheme.svg.png">
+<meta property="article:published_time" content="2022-06-19T23:15:24.000Z">
+<meta property="article:modified_time" content="2023-03-13T02:39:58.671Z">
+<meta property="article:author" content="山奈">
+<meta property="article:tag" content="OS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/GUID_Partition_Table_Scheme.svg/480px-GUID_Partition_Table_Scheme.svg.png">
+
+<link rel="canonical" href="https://acyanbird.github.io/2022/06/19/linux%E5%AE%89%E8%A3%85partition/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>linux安装partition | Nighthawk's nest</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Nighthawk's nest</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://acyanbird.github.io/2022/06/19/linux%E5%AE%89%E8%A3%85partition/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ava.jpg">
+      <meta itemprop="name" content="山奈">
+      <meta itemprop="description" content="You must have a blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nighthawk's nest">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          linux安装partition
+        </h1>
+
+        <div class="post-meta">
+	  
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-06-19 23:15:24" itemprop="dateCreated datePublished" datetime="2022-06-19T23:15:24+00:00">2022-06-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-13 02:39:58" itemprop="dateModified" datetime="2023-03-13T02:39:58+00:00">2023-03-13</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>嘛想要彻底搞明白分区什么的，然后发现你只需要好好阅读鸟哥的 linux 私房菜，哼，哼！</p>
+<p><a target="_blank" rel="noopener" href="https://help.ubuntu.com/community/DiskSpace">DiskSpace - Community Help Wiki</a></p>
+<p><strong>non-GPT</strong> disk,</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Size</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>swap</td>
+<td>size of RAM</td>
+</tr>
+<tr>
+<td>&#x2F;</td>
+<td>the rest of the disk</td>
+</tr>
+</tbody></table>
+<p>If the disk is <strong>GPT</strong> type (this can be checked via the “sudo parted -l” command), you must<br>also add a BIOS-Boot or an EFI partition depending on the boot mode of<br>your BIOS.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Size</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BIOS-boot or EFI</td>
+<td>see below</td>
+</tr>
+<tr>
+<td>swap</td>
+<td>size of RAM</td>
+</tr>
+<tr>
+<td>&#x2F;</td>
+<td>the rest of the disk</td>
+</tr>
+</tbody></table>
+<p>On some computers, a separate &#x2F;boot partition may also be required.</p>
+<p><code>sudo parted -l</code> 查看分区格式。</p>
+<p>从这里开始，如果是 GTP 分区需要 \boot，MBR 不需要，需要和内存一样大小的 swap。</p>
+<p>MBR 是巨硬以前的协议，在磁盘的第一个sector记录分类。一个磁盘只能分四份，最多一个是扩展分区其他是主要分区。扩展分区不能直接存储，需要格式化成逻辑分区，扩展分区里面可以有多个逻辑分区。</p>
+<p>因为寻址问题，MBR 最大支持 2.2 TB，因此 GPT 作为新一代进行替代。</p>
+<p>LBT&#x3D; Logic Block Address</p>
+<p>MBR 和 GPT 的第一个 512 字节（对就是你写 BIOS 的那个）都分成两块，446字节Master Boot Record 处理引导程序分区表，64字节记录分区状态，所以 MBR 只有四份。</p>
+<p>GPT 446 字节一致，在原本分区的 64 字节中仅存储特殊标志符，代表硬盘是 GPT 格式。剩下 LBA 存储分区，每个 LBA 512 字节（byte），存储四个分区，每个分区 64 位，一共可引导存储 8ZB 大小。 GPT 没有主分区，扩展分区，逻辑分区的区别。</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/GUID_Partition_Table_Scheme.svg/480px-GUID_Partition_Table_Scheme.svg.png"></p>
+<p>后34LBA 是LBA 1 到 34的备份。</p>
+<h5 id="UEFI-和-BIOS-区别？"><a href="#UEFI-和-BIOS-区别？" class="headerlink" title="UEFI 和 BIOS 区别？"></a>UEFI 和 BIOS 区别？</h5><p>UEFI 是用来替代 BIOS 的，BIOS 支持 16位，使用汇编。UEFI unified extensible firmware interface，用 C 编写支持CPU保护模式（坑）。Secure mode？为了防止被引导到恶意OS，只允许被认证的 OS 启动，不过通常需要关闭因为它们不认证 Linux。</p>
+<p><strong>主板寻找并启动硬盘系统的方式</strong>有两种，就是 传统模式（Legacy）<strong>和 UEFI模式</strong></p>
+<p>通常情况下，这两种启动方式和<strong>硬盘的两种分区模式MBR和GPT</strong>相对应</p>
+<p><strong>传统模式（Legacy） 和 MBR格式的硬盘 相对应</strong></p>
+<p><strong>UEFI模式 和 GPT格式硬盘 相对应</strong></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/262069479">https://zhuanlan.zhihu.com/p/262069479</a></p>
+<p>所以，EFI 或者 boot？</p>
+<p>传统模式，BIOS-Boot partition</p>
+<p><strong>BIOS-Boot partition:</strong></p>
+<ul>
+<li>Mount point: none</li>
+<li>Type: no filesystem</li>
+<li>Description:<br> the BIOS-boot partition contains GRUB 2’s core. It is necessary if you<br>install Ubuntu on a GPT disk, and if the firmware (BIOS) is set up in<br>Legacy (not EFI) mode. It must be located at the start of a GPT disk,<br>and have a “bios_grub” flag.</li>
+<li>Size: 1MB.</li>
+</ul>
+<p>我想大概是因为 legacy 总会在硬盘头找引导，所以需要在那里指引。</p>
+<p>2011 年后电脑多半采用这种引导</p>
+<p><strong>EFI partition:</strong></p>
+<ul>
+<li><p>Mount point: &#x2F;boot&#x2F;efi (no need to set up this mount point as the installer will do it automatically)</p>
+</li>
+<li><p>Type: FAT (generally FAT32)</p>
+</li>
+<li><p>Description:<br> the EFI partition (also called ESP) contains some boot files. It is<br>necessary if the firmware (BIOS) is set up to boot the HDD in EFI mode<br>(which is default on more and more modern, &gt; year 2011 computers). It<br> must be located at the start of a GPT disk, and have a “boot” flag.</p>
+</li>
+<li><p>Size: 100~250MB</p>
+</li>
+</ul>
+<p>我需要看看这个的具体资料</p>
+<p>EFI，在 UEFI 启动后会load ESP EFI system partition来启动操作系统或者其他固件，所以一定要有。哦该死，这就是另一个开头 512 ？</p>
+<p>An ESP contains the <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Boot_loader" title="Boot loader">boot loaders</a> or <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Kernel_image" title="Kernel image">kernel images</a> for all installed operating systems (which are contained in other partitions), <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Device_driver" title="Device driver">device driver</a> files for hardware devices present in a computer and used by the <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Firmware" title="Firmware">firmware</a> at boot time, system utility programs that are intended to be run<br>before an operating system is booted, and data files such as error logs.</p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/EFI_system_partition">EFI system partition - Wikipedia</a></p>
+<p><strong>如果分了多个盘，你需要设置 home 分区，来使用另一个盘。\ 运行操作系统，最小 8G ，最好15G，可以给30到50G。如果满了会卡。</strong></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/OS/" rel="tag"># OS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/15/OS%E5%86%99%E4%BD%9C1/" rel="prev" title="OS写作1">
+      <i class="fa fa-chevron-left"></i> OS写作1
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/20/Ubuntu%E6%B5%8B%E8%AF%95%EF%BC%81%E5%8A%A0%E6%B2%B9%EF%BC%81/" rel="next" title="Ubuntu测试！加油！">
+      Ubuntu测试！加油！ <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#UEFI-%E5%92%8C-BIOS-%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">UEFI 和 BIOS 区别？</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="山奈"
+      src="/images/ava.jpg">
+  <p class="site-author-name" itemprop="name">山奈</p>
+  <div class="site-description" itemprop="description">You must have a blog!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">山奈</span>
+</div>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

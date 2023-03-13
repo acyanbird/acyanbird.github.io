@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"acyanbird.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="来了！这次是翻回去！ 下载安装 · Project V 官方网站 参照这个！糟糕，国内服务器没法下载……还是下载好zip然后上传服务器然后解压安装罢 等下，我思考了一下，感觉还是socks 5 吧？又不用躲墙，当然是越快越好啊 那么回国之前我再配制，再见">
+<meta property="og:type" content="article">
+<meta property="og:title" content="v2ray搭建">
+<meta property="og:url" content="https://acyanbird.github.io/2022/08/13/v2ray%E6%90%AD%E5%BB%BA/index.html">
+<meta property="og:site_name" content="Nighthawk&#39;s nest">
+<meta property="og:description" content="来了！这次是翻回去！ 下载安装 · Project V 官方网站 参照这个！糟糕，国内服务器没法下载……还是下载好zip然后上传服务器然后解压安装罢 等下，我思考了一下，感觉还是socks 5 吧？又不用躲墙，当然是越快越好啊 那么回国之前我再配制，再见">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-13T23:30:40.000Z">
+<meta property="article:modified_time" content="2023-03-13T02:39:58.671Z">
+<meta property="article:author" content="山奈">
+<meta property="article:tag" content="v2ray">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://acyanbird.github.io/2022/08/13/v2ray%E6%90%AD%E5%BB%BA/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>v2ray搭建 | Nighthawk's nest</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Nighthawk's nest</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://acyanbird.github.io/2022/08/13/v2ray%E6%90%AD%E5%BB%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ava.jpg">
+      <meta itemprop="name" content="山奈">
+      <meta itemprop="description" content="You must have a blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nighthawk's nest">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          v2ray搭建
+        </h1>
+
+        <div class="post-meta">
+	  
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-08-13 23:30:40" itemprop="dateCreated datePublished" datetime="2022-08-13T23:30:40+00:00">2022-08-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-13 02:39:58" itemprop="dateModified" datetime="2023-03-13T02:39:58+00:00">2023-03-13</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>来了！这次是翻回去！</p>
+<p><a target="_blank" rel="noopener" href="https://www.v2ray.com/chapter_00/install.html">下载安装 · Project V 官方网站</a></p>
+<p>参照这个！糟糕，国内服务器没法下载……还是下载好zip然后上传服务器然后解压安装罢</p>
+<p>等下，我思考了一下，感觉还是socks 5 吧？又不用躲墙，当然是越快越好啊</p>
+<p>那么回国之前我再配制，再见</p>
+<p>哦，vmess支持不加密啊，那没事了，我回来了</p>
+<p>因为服务器位于国内所以需要手动安装，将东西复制到指定位置</p>
+<p>systemd 和 systemctl? ctl 是操作 md 的工具，用ctl罢。</p>
+<p>手动安装看了再多，那就看自动脚本到底干了什么，照着做就可以了</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/v2fly/fhs-install-v2ray/blob/master/install-release.sh">fhs-install-v2ray&#x2F;install-release.sh at master · v2fly&#x2F;fhs-install-v2ray · GitHub</a></p>
+<p>安装到 &#x2F;usr&#x2F;local&#x2F;bin 里面,记得现在要位于展开的目录下面，就是直接ls能看到v2ray,v2ctl 的地方</p>
+<p>install 命令和 cp 类似，但是能够具体到权限 mode</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo install -m 755 v2* /usr/local/bin/</span><br></pre></td></tr></table></figure>
+
+<p>data path 是 &#x2F;usr&#x2F;local&#x2F;share&#x2F;v2ray，那么把geoip.dat 和 geosite.dat 安装在这里</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 没有文件夹先创建</span></span><br><span class="line">sudo <span class="built_in">mkdir</span> /usr/local/share/v2ray</span><br></pre></td></tr></table></figure>
+
+<p>配制文档一开始是这样的</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;log&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;api&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;dns&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;routing&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;policy&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;inbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;outbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;transport&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;stats&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;reverse&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;fakedns&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;browserForwarder&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;observatory&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>当然你可以留空，直接往里面填就是了，具体介绍看这里</p>
+<p><a target="_blank" rel="noopener" href="https://www.v2fly.org/config/overview.html#%E6%A6%82%E8%BF%B0">配置文件格式 | V2Fly.org</a></p>
+<p>默认路径是 <code>/usr/local/etc/v2ray</code></p>
+<p> 不存在就创建文件夹</p>
+<p><code>sudo mkdir /usr/local/etc/v2ray/</code></p>
+<p>查看 nobody 在哪个 group 里面</p>
+<p><code>id nobody</code></p>
+<p>如果是 nogroup，那就</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">install -d -m 700 -o nobody -g nogroup /var/log/v2ray/</span><br><span class="line">install -m 600 -o nobody -g nogroup /dev/null /var/log/v2ray/access.log</span><br><span class="line">install -m 600 -o nobody -g nogroup /dev/null /var/log/v2ray/error.log</span><br></pre></td></tr></table></figure>
+
+<p>否则，group 也是 nobody</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">install -d -m 700 -o nobody -g nobody /var/log/v2ray/</span><br><span class="line">install -m 600 -o nobody -g nobody /dev/null /var/log/v2ray/access.log</span><br><span class="line">install -m 600 -o nobody -g nobody /dev/null /var/log/v2ray/error.log</span><br></pre></td></tr></table></figure>
+
+<p>dev&#x2F;null是一个特殊<strong>文件</strong>，而不是<a target="_blank" rel="noopener" href="https://zh.m.wikipedia.org/wiki/%E7%9B%AE%E5%BD%95_(%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F)" title="目录 (文件系统)">目录</a></p>
+<p>它丢弃一切写入其中的数据（但报告写入操作成功），读取它则会立即得到一个<a target="_blank" rel="noopener" href="https://zh.m.wikipedia.org/wiki/%E6%AA%94%E6%A1%88%E7%B5%90%E5%B0%BE" title="档案结尾">EOF</a><a target="_blank" rel="noopener" href="https://zh.m.wikipedia.org/zh-hans//dev/null#cite_note-uxman-1">[1]</a>。</p>
+<p>下一步就是配制 service 文件了，<a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html">Systemd 入门教程：命令篇 - 阮一峰的网络日志</a></p>
+<p>具体介绍可以看那边，systemd 取代 initd 成为了第一个进程，因为它……更全面智能！</p>
+<p>Systemd 默认从目录<code>/etc/systemd/system/</code>读取配置文件。但是，里面存放的大部分文件都是符号链接，指向目录<code>/usr/lib/systemd/system/</code>，真正的配置文件存放在那个目录。</p>
+<p>不过 v2ray 是直接扔到 etc 那里的，至于 service 文件是啥呢，拆开看看就知道啦</p>
+<p>v2ray.service:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=V2Ray Service</span><br><span class="line">Documentation=https://www.v2fly.org/</span><br><span class="line">After=network.target nss-lookup.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">User=nobody</span><br><span class="line">CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE</span><br><span class="line">AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE</span><br><span class="line">NoNewPrivileges=<span class="literal">true</span></span><br><span class="line">ExecStart=/usr/local/bin/v2ray -config /usr/local/etc/v2ray/config.json</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartPreventExitStatus=23</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+
+<p>这个就是告诉 systemd 该怎么启动它，以及一些必要的信息</p>
+<p>配置文件的后缀名，就是该 Unit 的种类，比如<code>sshd.socket</code>。如果省略，Systemd 默认后缀名为<code>.service</code>，所以<code>sshd</code>会被理解成<code>sshd.service</code></p>
+<p>Unit 一共分成12种。</p>
+<blockquote>
+<ul>
+<li>Service unit：系统服务</li>
+<li>Target unit：多个 Unit 构成的一个组</li>
+<li>Device Unit：硬件设备</li>
+<li>Mount Unit：文件系统的挂载点</li>
+<li>Automount Unit：自动挂载点</li>
+<li>Path Unit：文件或路径</li>
+<li>Scope Unit：不是由 Systemd 启动的外部进程</li>
+<li>Slice Unit：进程组</li>
+<li>Snapshot Unit：Systemd 快照，可以切回某个快照</li>
+<li>Socket Unit：进程间通信的 socket</li>
+<li>Swap Unit：swap 文件</li>
+<li>Timer Unit：定时器</li>
+</ul>
+</blockquote>
+<p>不过你看这个就直接缺省了。</p>
+<p>我猜 .d 就是一个重复文件的意思……如果要删除的话得手动删除掉所有安装的文件</p>
+<p>论安装脚本的重要性……我决定还是，嗯，不然自己写一个罢</p>
+<p>好耶？</p>
+<p>总之，把这俩 service 全部挪移过去</p>
+<p>到展开 zip 的那里</p>
+<p><code>sudo install -m 644 ./systemd/system/v2* /etc/systemd/system/</code></p>
+<p>然后理论上来说就 set 好了，你只要在 <code>/usr/local/etc/v2ray/config.json</code></p>
+<p>写上正确的配置文件就可以</p>
+<p>那么把这里的俩范例，哦这里还有一个 config.json，但是这是给翻墙用的不合适，不用拿过去了</p>
+<p>好吧，这俩基本上都不太好用了……这边的 routing 是给翻墙分流用的，但是回来的话我们就全手动，不用这个了，所以还是从头写吧。</p>
+<p><a target="_blank" rel="noopener" href="https://www.v2fly.org/guide/start.html#%E6%9C%8D%E5%8A%A1%E5%99%A8">新手上路 | V2Fly.org</a></p>
+<p>来自这里的服务器端比较简洁合适</p>
+<p>行吧，这个参数比较多我需要研究一下，今儿配制不完了，先睡。</p>
+<p>睡醒了</p>
+<p>一般需要修改的就是 inbound 和 outbound，inbound 是输入，比如客户端需要代理，用 socks 协议位于 1080 端口，那么 inbound 就是 socks 1080。outbound 使用 vmess 和服务器沟通，服务器的 inbound 就是 vmess。</p>
+<p>客户端的 out 是接受由服务器传来的 data（此面对互联网？），in 才是对着比如浏览器输出。服务器 out 是自由的，in 就是客户端的信息了。</p>
+<p>所以服务器的 out 是 free，in 是 vmess</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;inbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="number">65500</span><span class="punctuation">,</span> <span class="comment">// 服务器监听端口</span></span><br><span class="line">      <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;vmess&quot;</span><span class="punctuation">,</span>    <span class="comment">// 主传入协议</span></span><br><span class="line">      <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;clients&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;b831381d-6324-4d53-ad4f-8cda48b30811&quot;</span><span class="punctuation">,</span>  <span class="comment">// 用户 ID，客户端与服务器必须相同</span></span><br><span class="line">            <span class="attr">&quot;email&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sample@sample.com&quot;</span>  <span class="comment">// 区别用户流量</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">]</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;outbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;freedom&quot;</span><span class="punctuation">,</span>  <span class="comment">// 主传出协议</span></span><br><span class="line">      <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>像这个样子就可以了，其他的设置因为是回翻所以不需要，当然端口记得修改并打开，vps 服务器一般 ufw 是关闭的，那么去设置那边打开就可了。uuid请自己生成一个</p>
+<p><code>cat /proc/sys/kernel/random/uuid</code></p>
+<p>使用 v2ray 内置的 test 检查</p>
+<p>v2ray -test -config (config文件的路径)</p>
+<p>客户端的真的累死我了</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;inbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="number">1090</span><span class="punctuation">,</span>  <span class="comment">// Port of socks5 proxy. Point your browser to use this port.</span></span><br><span class="line">    <span class="attr">&quot;listen&quot;</span><span class="punctuation">:</span> <span class="string">&quot;127.0.0.1&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;socks&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;udp&quot;</span><span class="punctuation">:</span> <span class="keyword">true</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;outbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;vmess&quot;</span><span class="punctuation">,</span>  <span class="comment">// 主传出协议</span></span><br><span class="line">      <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;vnext&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;address&quot;</span><span class="punctuation">:</span> <span class="string">&quot;服务器地址&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> 服务器端口<span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;users&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;uuid，与服务器端相同&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;security&quot;</span><span class="punctuation">:</span> <span class="string">&quot;none&quot;</span>    <span class="comment">// security 选择</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>那么添加 inbound，新增俩端口应该够用了。</p>
+<p>socks 的话也差不多，加一个配制，然后复制一份 service 文件，将 config 修改成那个文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo -i</span><br><span class="line"><span class="built_in">cd</span> /etc/systemd/system</span><br><span class="line"><span class="built_in">cp</span> v2ray.service v2raysocks.service</span><br></pre></td></tr></table></figure>
+
+<p>修改</p>
+<p><code>ExecStart=/usr/local/bin/v2ray -config /usr/local/etc/v2ray/config.json</code></p>
+<p>这一行的 config 路径，指向新的配制文件</p>
+<p>然后就可以 <code>systemctl start v2raysocks.service</code></p>
+<p>开始用啦</p>
+<p>然后什么是 service 呢？ <a target="_blank" rel="noopener" href="https://wizardforcel.gitbooks.io/vbird-linux-basic-4e/content/148.html">17.1鸟哥的 Linux 私房菜</a></p>
+<p>a service is a program or application in Linux that runs or expects to run in the background.</p>
+<p>正在或者打算运行的程序。</p>
+<h4 id="直接开始用"><a href="#直接开始用" class="headerlink" title="直接开始用"></a>直接开始用</h4><p>使用 <a target="_blank" rel="noopener" href="https://github.com/v2fly/fhs-install-v2ray">GitHub - v2fly&#x2F;fhs-install-v2ray: Bash script for installing V2Ray in operating systems such as Debian &#x2F; CentOS &#x2F; Fedora &#x2F; openSUSE that support systemd</a> 直接安装了之后该怎么办</p>
+<p>systemctl start v2ray 之后 systemctl status v2ray，就可以看到具体用的是哪个 config 文件。</p>
+<p>创建 group groupadd v2ray 创建 user useradd v2 改密码 passwd v2 把用户加到组里</p>
+<p>没有 sudo 啊，只用 visudo 把用户加入 &#x2F;etc&#x2F;sudoers 里面，不然会出错</p>
+<p>开机自启动？ 选择 systemctl enable 就是开机自启动了。想要两份连接的话，复制一份 &#x2F;etc&#x2F;systemd&#x2F;system&#x2F; 里的 v2ray.service ，修改下面的</p>
+<p><code>ExecStart=/usr/local/bin/v2ray -config /usr/local/etc/v2ray/config.json</code></p>
+<p>制作新的 config，然后 systemctl enable systemctl start 就可以了</p>
+<p>我使用 swtichy omega 代理</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/FelisCatus/SwitchyOmega/wiki/GFWList">GFWList · FelisCatus&#x2F;SwitchyOmega Wiki · GitHub</a></p>
+<p>这里搞来 GFWList ，跟随操作，保存 bak 文件然后导入。这边是 1090 端口运行 socks5，代理设置就好了。</p>
+<h4 id="应用走代理"><a href="#应用走代理" class="headerlink" title="应用走代理"></a>应用走代理</h4><p>应该在终端选择 export all_proxy&#x3D;”socks5:127.0.0.1:1090”, discord 的话在 alacarte 里面把启动命令修改一下。自己手写 .desktop 太痛苦了</p>
+<p>因为用的是 electron 所以可以用 chrome 的命令行参数……捏妈妈的，我试试看直接用 <strong>–proxy-server&#x3D;”socks5:&#x2F;&#x2F;proxied:1234”</strong> 这样的</p>
+<p>&#x2F;home&#x2F;lucia&#x2F;.local&#x2F;share&#x2F;Discord&#x2F;Discord –proxy-server:”socks5:127.0.0.1:1091”</p>
+<p>哈哈，这样反正能够启动就是了，也用不着在前面再加 env var</p>
+<p>所以 http_proxy 到底是什么呢，为什么支持 socks 呢？我记得这俩不是一个层的来着（</p>
+<p>给 git 加代理</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global http.proxy &quot;socks5:127.0.0.1:1091&quot;</span><br><span class="line">git config --global https.proxy &quot;socks5:127.0.0.1:1091&quot;</span><br></pre></td></tr></table></figure>
+
+<p>cat ~&#x2F;.gitconfig 检查是否写进去了</p>
+<p>hummmm，就这样好了，dnf 估计也要配置一下</p>
+<p>用 root 权限更改这个</p>
+<p><code>vi /etc/dnf/dnf.conf</code></p>
+<p>好像出问题了，再修改吧（</p>
+<p>大概是这里的 wifi 没法登陆的说</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/v2ray/" rel="tag"># v2ray</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/08/03/COSSIGWPDesign/" rel="prev" title="COSSIGWPDesign">
+      <i class="fa fa-chevron-left"></i> COSSIGWPDesign
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/08/17/nextcloud%E5%AE%89%E8%A3%85/" rel="next" title="nextcloud安装">
+      nextcloud安装 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B4%E6%8E%A5%E5%BC%80%E5%A7%8B%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">直接开始用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E8%B5%B0%E4%BB%A3%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">应用走代理</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="山奈"
+      src="/images/ava.jpg">
+  <p class="site-author-name" itemprop="name">山奈</p>
+  <div class="site-description" itemprop="description">You must have a blog!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">山奈</span>
+</div>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

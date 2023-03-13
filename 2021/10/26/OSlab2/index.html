@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"acyanbird.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="要死嘞要死嘞—— fprintf 函数其实 printf 便是 fprintf(stdout, “output”); 的简写，将字符串投向标准输出。 C 语言把所有的设备都当作文件。所以设备（比如显示器）被处理的方式与文件相同。以下三个文件会在程序执行时自动打开，以便访问键盘和屏幕。    标准文件 文件指针 设备    标准输入 stdin 键盘   标准输出 stdout 屏幕   标准错误">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OSlab2">
+<meta property="og:url" content="https://acyanbird.github.io/2021/10/26/OSlab2/index.html">
+<meta property="og:site_name" content="Nighthawk&#39;s nest">
+<meta property="og:description" content="要死嘞要死嘞—— fprintf 函数其实 printf 便是 fprintf(stdout, “output”); 的简写，将字符串投向标准输出。 C 语言把所有的设备都当作文件。所以设备（比如显示器）被处理的方式与文件相同。以下三个文件会在程序执行时自动打开，以便访问键盘和屏幕。    标准文件 文件指针 设备    标准输入 stdin 键盘   标准输出 stdout 屏幕   标准错误">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-10-26T15:32:25.000Z">
+<meta property="article:modified_time" content="2023-03-13T02:39:58.667Z">
+<meta property="article:author" content="山奈">
+<meta property="article:tag" content="c">
+<meta property="article:tag" content="OSLab">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://acyanbird.github.io/2021/10/26/OSlab2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>OSlab2 | Nighthawk's nest</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Nighthawk's nest</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://acyanbird.github.io/2021/10/26/OSlab2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ava.jpg">
+      <meta itemprop="name" content="山奈">
+      <meta itemprop="description" content="You must have a blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nighthawk's nest">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OSlab2
+        </h1>
+
+        <div class="post-meta">
+	  
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-10-26 15:32:25" itemprop="dateCreated datePublished" datetime="2021-10-26T15:32:25+00:00">2021-10-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-13 02:39:58" itemprop="dateModified" datetime="2023-03-13T02:39:58+00:00">2023-03-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E6%A0%A1%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学校学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>要死嘞要死嘞——</p>
+<h5 id="fprintf-函数"><a href="#fprintf-函数" class="headerlink" title="fprintf 函数"></a>fprintf 函数</h5><p>其实 printf 便是 fprintf(stdout, “output”); 的简写，将字符串投向标准输出。</p>
+<p>C 语言把所有的设备都当作文件。所以设备（比如显示器）被处理的方式与文件相同。以下三个文件会在程序执行时自动打开，以便访问键盘和屏幕。</p>
+<table>
+<thead>
+<tr>
+<th>标准文件</th>
+<th>文件指针</th>
+<th>设备</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>标准输入</td>
+<td>stdin</td>
+<td>键盘</td>
+</tr>
+<tr>
+<td>标准输出</td>
+<td>stdout</td>
+<td>屏幕</td>
+</tr>
+<tr>
+<td>标准错误</td>
+<td>stderr</td>
+<td>您的屏幕</td>
+</tr>
+</tbody></table>
+<p>所以相对而言的，scanf 就是从标准输入中读取，不过这个比较复杂就没有一个直接对应的函数了</p>
+<h5 id="文件操作：stream-mode"><a href="#文件操作：stream-mode" class="headerlink" title="文件操作：stream mode"></a>文件操作：stream mode</h5><p>函数    功能<br>fopen()    打开流<br>fclose()    关闭流<br>fputc()    写一个字符到流中<br>fgetc()    从流中读一个字符<br>fseek()    在流中定位到指定的字符<br>fputs()    写字符串到流<br>fgets()    从流中读一行或指定个字符<br>fprintf()    按格式输出到流<br>fscanf()    从流中按格式读取<br>feof()    到达文件尾时返回真值<br>ferror()    发生错误时返回其值<br>rewind()    复位文件定位器到文件开始处<br>remove()    删除文件<br>fread()    从流中读指定个数的字符<br>fwrite()    向流中写指定个数的字符<br>tmpfile()    生成一个临时文件流<br>tmpnam()    生成一个唯一的文件名</p>
+<p>这个就差不多是……要用的，不过其实 <code>fopen() fclose() fputs() fgets() </code>用的比较多啦</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">FILE *fp = fopen(<span class="string">&quot;文件名包括路经和后缀&quot;</span>, <span class="string">&quot;mode&quot;</span>);    <span class="comment">// 一般包括r,w,a这些，若是 fp == NULL，则打开失败</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(fgets(str,BUFSIZE,fp)!=<span class="literal">NULL</span>)&#123; <span class="comment">// read the file line by line</span></span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stdout</span>,<span class="string">&quot;%s&quot;</span>,str);         <span class="comment">// same as doing printf(&quot;%s&quot;,str);</span></span><br><span class="line">    &#125;    <span class="comment">// 读取文件内容，str存储，bufsize 读取多少，最后是文件 pointer</span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> *<span class="title function_">fgets</span><span class="params">(<span class="type">char</span> * <span class="keyword">restrict</span> str, <span class="type">int</span> size, FILE * <span class="keyword">restrict</span> stream)</span>;    <span class="comment">// fgets 原型</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">fputs</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *str, FILE *stream)</span>;</span><br><span class="line"><span class="built_in">fputs</span>(<span class="string">&quot;这是 C 语言。&quot;</span>, fp);    <span class="comment">// 这个是输出</span></span><br><span class="line"></span><br><span class="line">fclose(fp);</span><br><span class="line">fp = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 记得要 close fp 唷~也要手动将 fp 指向 NULL 才行</span></span><br></pre></td></tr></table></figure>
+
+<p><code>fputs()</code> 和 <code>fgets()</code> 来自 <code>fputc()</code> 和 <code>fgetc()</code> ，反正是 string 和 char 的区别嘛~ </p>
+<p><code>fopen()</code> 的返回值是 0，错误则是 1。</p>
+<p>上面的是 file pointer which is c lib, but file discriptor is system function in unix like. </p>
+<p><code>read() write() open()</code> 是系统功能，它们也许也是 c 实现的，但是在使用的时候的确是 call system. 其中 <a target="_blank" rel="noopener" href="http://linux.die.net/man/3/close"><code>stdin,</code></a><a target="_blank" rel="noopener" href="http://linux.die.net/man/3/close"><code>stdout</code></a>, and <a target="_blank" rel="noopener" href="http://linux.die.net/man/3/close"><code>stderr</code></a> 分别对应 0, 1, 2</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;fcntl.h&gt;</span>  <span class="comment">// for the open() function</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span> <span class="comment">// for read(), write() and close() functions</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BUFSIZE 10</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> fd1=open(<span class="string">&quot;./textfile1.txt&quot;</span>,O_RDONLY);  <span class="comment">// opens the file in read only mode and returns a file descriptor for the file</span></span><br><span class="line">    <span class="type">int</span> x;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(fd1 &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        write(<span class="number">2</span>,<span class="string">&quot;Error opening file\n&quot;</span>,<span class="keyword">sizeof</span>(<span class="string">&quot;Error opening file\n&quot;</span>)); <span class="comment">// writes the error message to stderr</span></span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">char</span> str[BUFSIZE];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Content of the opened file:\n&quot;</span>);</span><br><span class="line">    <span class="keyword">while</span>((x=read(fd1,str,BUFSIZE<span class="number">-1</span>)) &gt; <span class="number">0</span>)&#123; <span class="comment">// read() reads up to BUFSIZE-1 bytes from fd1 and stores in str</span></span><br><span class="line">                                           <span class="comment">// the number of bytes actually read is returned</span></span><br><span class="line">            str[x]=<span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">            write(<span class="number">1</span>,str,<span class="built_in">strlen</span>(str));   <span class="comment">// &#x27;1&#x27; is the file dscriptor for stdout, hence this is equivalent to printf(&quot;%s&quot;, str)</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    close(fd1);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在 discriptor 状态下 w 并非不存在会自己创造，所以需要</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> fd2 = open(name2, O_WRONLY);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(fd2 &lt; <span class="number">0</span>)&#123;    <span class="comment">// if file not exist</span></span><br><span class="line">        fd2 = open(name2, O_CREAT, <span class="number">0777</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>记住一定要在最后加入 permission 不然会错误并且不会报错的！！！是八进制所以要四位数四位数！</p>
+<h5 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h5><p>一个或多个变量的集合，格式如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">tag</span> &#123;</span> </span><br><span class="line">    member-<span class="built_in">list</span></span><br><span class="line">    member-<span class="built_in">list</span> </span><br><span class="line">    member-<span class="built_in">list</span>  </span><br><span class="line">    ...</span><br><span class="line">&#125; variable-<span class="built_in">list</span> ;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">t</span> &#123;</span>...&#125; x,y,z;</span><br><span class="line"><span class="comment">// 等价于 </span></span><br><span class="line"><span class="type">int</span> x,y,z;</span><br><span class="line"></span><br><span class="line"><span class="comment">//其中 tag 是结构标记，可选</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">B</span>;</span>    <span class="comment">//对结构体B进行不完整声明,不需要分配存储空间</span></span><br></pre></td></tr></table></figure>
+
+<p>可以使用 结构名.成员 的方式访问，不过赋值变量到结构需要添加 struct 关键字在结构名之前，例如</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">point</span> &#123;</span></span><br><span class="line">    <span class="type">int</span> x;</span><br><span class="line">    <span class="type">int</span> y;</span><br><span class="line">&#125;;    <span class="comment">//需要加上分号唷</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 结构也可以嵌套</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">rect</span> &#123;</span>    <span class="comment">// 定义一个长方形</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">point</span> <span class="title">pt1</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">point</span> <span class="title">pt2</span>;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">rect</span> <span class="title">screen</span>;</span>    <span class="comment">// 定义rect成员</span></span><br><span class="line"></span><br><span class="line">screen.pt1.x;    <span class="comment">// 这样访问多重变量</span></span><br></pre></td></tr></table></figure>
+
+<p>可以生成指向结构的指针，这样访问的速度会比直接复制结构更快</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">point</span> <span class="title">origin</span>, *<span class="title">pp</span>;</span></span><br><span class="line">pp = &amp;origin;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;origin is (%d, %d)&quot;</span>, (*pp).x, (*pp).y);</span><br></pre></td></tr></table></figure>
+
+<p>因为 . 的优先度高于 * 所以必须加括号，当然也有简写</p>
+<p><code>pp -&gt; x</code></p>
+<p>这也是等价的</p>
+<p>ref:</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38374864/article/details/72794221">https://blog.csdn.net/qq_38374864/article/details/72794221</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-input-output.html">https://www.runoob.com/cprogramming/c-input-output.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-function-fputs.html">https://www.runoob.com/cprogramming/c-function-fputs.html</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/c/" rel="tag"># c</a>
+              <a href="/tags/OSLab/" rel="tag"># OSLab</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/25/%E5%9C%A8-vscode-%E9%87%8C%E5%86%99-verilog/" rel="prev" title="在 vscode 里写 verilog">
+      <i class="fa fa-chevron-left"></i> 在 vscode 里写 verilog
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/10/26/dblab2/" rel="next" title="dblab2">
+      dblab2 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#fprintf-%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">fprintf 函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%EF%BC%9Astream-mode"><span class="nav-number">2.</span> <span class="nav-text">文件操作：stream mode</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BB%93%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text">结构</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="山奈"
+      src="/images/ava.jpg">
+  <p class="site-author-name" itemprop="name">山奈</p>
+  <div class="site-description" itemprop="description">You must have a blog!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">山奈</span>
+</div>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

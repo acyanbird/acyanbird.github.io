@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"acyanbird.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="因为要写 verilog 所以让我们升级一下 vim 来更好的打代码……说来惭愧这么多年我真的使用 vim 都是很浅薄的水准，我谢罪。 有用包管理器的方法，不过我们先原始一下……如果你要安装一个名为 foo 的插件 123mkdir -p ~&#x2F;.vim&#x2F;pack&#x2F;foocd ~&#x2F;.vim&#x2F;pack&#x2F;foounzip &#x2F;tmp&#x2F;foopack.zip  其中 mkdir -p 表示创建 parent">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vim 插件安装（未完成挖坑）">
+<meta property="og:url" content="https://acyanbird.github.io/2021/10/11/vim-%E6%8F%92%E4%BB%B6%E5%AE%89%E8%A3%85/index.html">
+<meta property="og:site_name" content="Nighthawk&#39;s nest">
+<meta property="og:description" content="因为要写 verilog 所以让我们升级一下 vim 来更好的打代码……说来惭愧这么多年我真的使用 vim 都是很浅薄的水准，我谢罪。 有用包管理器的方法，不过我们先原始一下……如果你要安装一个名为 foo 的插件 123mkdir -p ~&#x2F;.vim&#x2F;pack&#x2F;foocd ~&#x2F;.vim&#x2F;pack&#x2F;foounzip &#x2F;tmp&#x2F;foopack.zip  其中 mkdir -p 表示创建 parent">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-10-11T21:12:13.000Z">
+<meta property="article:modified_time" content="2023-03-13T02:39:58.671Z">
+<meta property="article:author" content="山奈">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://acyanbird.github.io/2021/10/11/vim-%E6%8F%92%E4%BB%B6%E5%AE%89%E8%A3%85/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>vim 插件安装（未完成挖坑） | Nighthawk's nest</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Nighthawk's nest</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://acyanbird.github.io/2021/10/11/vim-%E6%8F%92%E4%BB%B6%E5%AE%89%E8%A3%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ava.jpg">
+      <meta itemprop="name" content="山奈">
+      <meta itemprop="description" content="You must have a blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nighthawk's nest">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vim 插件安装（未完成挖坑）
+        </h1>
+
+        <div class="post-meta">
+	  
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-10-11 21:12:13" itemprop="dateCreated datePublished" datetime="2021-10-11T21:12:13+00:00">2021-10-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-13 02:39:58" itemprop="dateModified" datetime="2023-03-13T02:39:58+00:00">2023-03-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%98%E8%85%BE/" itemprop="url" rel="index"><span itemprop="name">折腾</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>因为要写 verilog 所以让我们升级一下 vim 来更好的打代码……说来惭愧这么多年我真的使用 vim 都是很浅薄的水准，我谢罪。</p>
+<p>有用包管理器的方法，不过我们先原始一下……如果你要安装一个名为 foo 的插件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/.vim/pack/foo</span><br><span class="line"><span class="built_in">cd</span> ~/.vim/pack/foo</span><br><span class="line">unzip /tmp/foopack.zip</span><br></pre></td></tr></table></figure>
+
+<p>其中 mkdir -p 表示创建 parent 目录如果需要的话，若是存在也不报错</p>
+<p>然后 vim 将会在 run 的开始检测 pack&#x2F;*&#x2F;start 中的 plugin，然后将它们加入 runtimepath 中，现在的目录看起来会是这样</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pack/foo/README.txt</span><br><span class="line">pack/foo/start/foobar/plugin/foo.vim</span><br><span class="line">pack/foo/start/foobar/syntax/some.vim</span><br><span class="line">pack/foo/opt/foodebug/plugin/debugger.vim</span><br></pre></td></tr></table></figure>
+
+<p>若是在 pack&#x2F;foo&#x2F;opt 中，则需要输入 :packadd foo 来 enable plugin。</p>
+<h5 id="现在来实战一下"><a href="#现在来实战一下" class="headerlink" title="现在来实战一下"></a>现在来实战一下</h5><p>听说 YouCompleteMe 这个挺不错的，我们按照它安装一下。这个并不是 follow manual install，so，学习另一个方式也挺好。</p>
+<p>先是需要 Vundle 来安装</p>
+<p><code>sudo git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim</code></p>
+<p>创建并填写 ~&#x2F;.vimrc 使用它提供的配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> nocompatible              <span class="string">&quot; be iMproved, required</span></span><br><span class="line"><span class="string">filetype off                  &quot;</span> required</span><br><span class="line"></span><br><span class="line"><span class="string">&quot; set the runtime path to include Vundle and initialize</span></span><br><span class="line"><span class="string">set rtp+=~/.vim/bundle/Vundle.vim</span></span><br><span class="line"><span class="string">call vundle#begin()</span></span><br><span class="line"><span class="string">&quot;</span> alternatively, pass a path <span class="built_in">where</span> Vundle should install plugins</span><br><span class="line"><span class="string">&quot;call vundle#begin(&#x27;~/some/path/here&#x27;)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&quot;</span> <span class="built_in">let</span> Vundle manage Vundle, required</span><br><span class="line">Plugin <span class="string">&#x27;VundleVim/Vundle.vim&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot; The following are examples of different formats supported.</span></span><br><span class="line"><span class="string">&quot;</span> Keep Plugin commands between vundle<span class="comment">#begin/end.</span></span><br><span class="line"><span class="string">&quot; plugin on GitHub repo</span></span><br><span class="line"><span class="string">Plugin &#x27;tpope/vim-fugitive&#x27;</span></span><br><span class="line"><span class="string">&quot;</span> plugin from http://vim-scripts.org/vim/scripts.html</span><br><span class="line"><span class="string">&quot; Plugin &#x27;L9&#x27;</span></span><br><span class="line"><span class="string">&quot;</span> Git plugin not hosted on GitHub</span><br><span class="line">Plugin <span class="string">&#x27;git://git.wincent.com/command-t.git&#x27;</span></span><br><span class="line"><span class="string">&quot; git repos on your local machine (i.e. when working on your own plugin)</span></span><br><span class="line"><span class="string">Plugin &#x27;file:///home/gmarik/path/to/plugin&#x27;</span></span><br><span class="line"><span class="string">&quot;</span> The sparkup vim script is <span class="keyword">in</span> a subdirectory of this repo called vim.</span><br><span class="line"><span class="string">&quot; Pass the path to set the runtimepath properly.</span></span><br><span class="line"><span class="string">Plugin &#x27;rstacruz/sparkup&#x27;, &#123;&#x27;rtp&#x27;: &#x27;vim/&#x27;&#125;</span></span><br><span class="line"><span class="string">&quot;</span> Install L9 and avoid a Naming conflict <span class="keyword">if</span> you<span class="string">&#x27;ve already installed a</span></span><br><span class="line"><span class="string">&quot; different version somewhere else.</span></span><br><span class="line"><span class="string">&quot; Plugin &#x27;</span>ascenator/L9<span class="string">&#x27;, &#123;&#x27;</span>name<span class="string">&#x27;: &#x27;</span>newL9<span class="string">&#x27;&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&quot; All of your Plugins must be added before the following line</span></span><br><span class="line"><span class="string">call vundle#end()            &quot; required</span></span><br><span class="line"><span class="string">filetype plugin indent on    &quot; required</span></span><br><span class="line"><span class="string">&quot; To ignore plugin indent changes, instead use:</span></span><br><span class="line"><span class="string">&quot;filetype plugin on</span></span><br><span class="line"><span class="string">&quot;</span></span><br><span class="line"><span class="string">&quot; Brief help</span></span><br><span class="line"><span class="string">&quot; :PluginList       - lists configured plugins</span></span><br><span class="line"><span class="string">&quot; :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate</span></span><br><span class="line"><span class="string">&quot; :PluginSearch foo - searches for foo; append `!` to refresh local cache</span></span><br><span class="line"><span class="string">&quot; :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal</span></span><br><span class="line"><span class="string">&quot;</span></span><br><span class="line"><span class="string">&quot; see :h vundle for more details or wiki for FAQ</span></span><br><span class="line"><span class="string">&quot; Put your non-Plugin stuff after this line</span></span><br></pre></td></tr></table></figure>
+
+<p>disable 掉不需要的 plugin，然后在这个位置填写 ycm-core&#x2F;YouCompleteMe，就是除了 Plugin ‘VundleVim&#x2F;Vundle.vim’ 剩下的全部涂掉。出现了权限问题，记得修改整个 .vim 文件夹到 777。然后要重新启动配置文件不然不起作用 :source % 或者 :so %</p>
+<p>我放弃了，这个牵扯的实在太多了</p>
+<p>plus: 上面修改的是个人的设置，我在 &#x2F;etc&#x2F;vim&#x2F;.vimrc 上进行了一些小修改，看看就知道了。</p>
+<p>ref：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/vim/vim/blob/03c3bd9fd094c1aede2e8fe3ad8fd25b9f033053/runtime/doc/repeat.txt#L515">https://github.com/vim/vim/blob/03c3bd9fd094c1aede2e8fe3ad8fd25b9f033053/runtime/doc/repeat.txt#L515</a></p>
+<p><a target="_blank" rel="noopener" href="https://opensource.com/article/20/2/how-install-vim-plugins">https://opensource.com/article/20/2/how-install-vim-plugins</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ycm-core/YouCompleteMe#linux-64-bit">https://github.com/ycm-core/YouCompleteMe#linux-64-bit</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/VundleVim/Vundle.vim#about">https://github.com/VundleVim/Vundle.vim#about</a></p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/37618447/vundle-does-not-install-vim-plugins">https://stackoverflow.com/questions/37618447/vundle-does-not-install-vim-plugins</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/10/ubuntu-xilinx-2019-2-usb-cable-%E9%A9%B1%E5%8A%A8%E5%AE%89%E8%A3%85/" rel="prev" title="ubuntu xilinx 2019.2 usb cable 驱动安装">
+      <i class="fa fa-chevron-left"></i> ubuntu xilinx 2019.2 usb cable 驱动安装
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/10/12/verilog-%E8%B0%83%E7%94%A8%E6%A8%A1%E7%BB%84/" rel="next" title="verilog 调用模组">
+      verilog 调用模组 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%8E%B0%E5%9C%A8%E6%9D%A5%E5%AE%9E%E6%88%98%E4%B8%80%E4%B8%8B"><span class="nav-number">1.</span> <span class="nav-text">现在来实战一下</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="山奈"
+      src="/images/ava.jpg">
+  <p class="site-author-name" itemprop="name">山奈</p>
+  <div class="site-description" itemprop="description">You must have a blog!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">山奈</span>
+</div>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

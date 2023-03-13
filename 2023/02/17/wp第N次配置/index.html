@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"acyanbird.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="https:&#x2F;&#x2F;www.cherryservers.com&#x2F;blog&#x2F;how-to-install-and-start-using-mariadb-on-ubuntu-20-04 总而言之先看着这个走 不要看着那边的提示安装了 client 啊（恼火 CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_">
+<meta property="og:type" content="article">
+<meta property="og:title" content="wp第N次配置">
+<meta property="og:url" content="https://acyanbird.github.io/2023/02/17/wp%E7%AC%ACN%E6%AC%A1%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:site_name" content="Nighthawk&#39;s nest">
+<meta property="og:description" content="https:&#x2F;&#x2F;www.cherryservers.com&#x2F;blog&#x2F;how-to-install-and-start-using-mariadb-on-ubuntu-20-04 总而言之先看着这个走 不要看着那边的提示安装了 client 啊（恼火 CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-17T20:01:56.000Z">
+<meta property="article:modified_time" content="2023-03-13T02:39:58.671Z">
+<meta property="article:author" content="山奈">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://acyanbird.github.io/2023/02/17/wp%E7%AC%ACN%E6%AC%A1%E9%85%8D%E7%BD%AE/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>wp第N次配置 | Nighthawk's nest</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Nighthawk's nest</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://acyanbird.github.io/2023/02/17/wp%E7%AC%ACN%E6%AC%A1%E9%85%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ava.jpg">
+      <meta itemprop="name" content="山奈">
+      <meta itemprop="description" content="You must have a blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nighthawk's nest">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          wp第N次配置
+        </h1>
+
+        <div class="post-meta">
+	  
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-17 20:01:56" itemprop="dateCreated datePublished" datetime="2023-02-17T20:01:56+00:00">2023-02-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-13 02:39:58" itemprop="dateModified" datetime="2023-03-13T02:39:58+00:00">2023-03-13</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a target="_blank" rel="noopener" href="https://www.cherryservers.com/blog/how-to-install-and-start-using-mariadb-on-ubuntu-20-04">https://www.cherryservers.com/blog/how-to-install-and-start-using-mariadb-on-ubuntu-20-04</a></p>
+<p>总而言之先看着这个走</p>
+<p>不要看着那边的提示安装了 client 啊（恼火</p>
+<p>CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;</p>
+<p>然后创建用户再授权到所有的表 </p>
+<p>CREATE USER ‘wordpressuser‘@’localhost’ IDENTIFIED BY ‘password’;</p>
+<p>GRANT ALL ON wordpress.* TO ‘wordpressuser‘@’localhost’;</p>
+<p>你知道要修改的</p>
+<p>然后安装 PHP 的一堆插件 sudo apt install php-curl php-gd php-intl php-mbstring php-soap php-xml php-xmlrpc php-zip</p>
+<p>sudo systemctl restart php8.1-fpm</p>
+<p>如果这个不存在的话，先安装</p>
+<p>可能要先设置 upstream PHP</p>
+<p>换用 Docker 方案，首先安装一下。CentOS 安装失败，希望那边没事（祈祷）</p>
+<p>按照官方文档走……好像这次没有问题了</p>
+<p><a target="_blank" rel="noopener" href="https://docs.docker.com/engine/install/ubuntu/">Install Docker Engine on Ubuntu | Docker Documentation</a></p>
+<p>总之尝试测试了也成功，所以先这样吧，然后按照digital ocean的来？</p>
+<p>找到他们提供的 Docker compose file，这个应该可以直接运行，总之看书上的意思就是配置文件 for Docker，能过跳过不少步骤</p>
+<p>使用官网提供的，之后修改一下 wp 的暴露端口，不然可能会重复</p>
+<p><a target="_blank" rel="noopener" href="https://hub.docker.com/_/wordpress">https://hub.docker.com/_/wordpress</a></p>
+<p>docker compose 默认文件名是 docker-compose.yml 所以就这么使用好了</p>
+<p>sudo docker-compose up -d 作为后台运行</p>
+<p>测试一下没问题，现在该怎么跟 nginx 结合呢</p>
+<p>需要 pass PHP 吗</p>
+<p>是要 pass 所有的 PHP 到 php-fpm，但是不知道他的 PHP 环境是否是只使用</p>
+<p>不需要，只要普通的反代就可以了</p>
+<p>可以先弄好 </p>
+<p>，然后就到时候再说了。</p>
+<p>弄坏了，可喜可贺（</p>
+<p>因为那边暴露的只是 80 端口，所以怎么设置都是不对的了，现在更改了应该回不去了，down 下来下次再说吧</p>
+<p>移除证书 acme.sh –remove –domain <domain name></domain></p>
+<h4 id="再次重新开始！！！"><a href="#再次重新开始！！！" class="headerlink" title="再次重新开始！！！"></a>再次重新开始！！！</h4><p><a target="_blank" rel="noopener" href="https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-on-ubuntu-22-04">https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-on-ubuntu-22-04</a></p>
+<p>按照这个先 set 好环境，反正安装好 PHP 就可以了</p>
+<p>然后 MySQL</p>
+<p>sudo mysql</p>
+<p>show databases</p>
+<p>drop database &lt;&gt;</p>
+<p> select user from mysql.user; 查询 user</p>
+<p>drop user &lt;&gt;@localhost;</p>
+<p>CREATE DATABASE kplwp DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;</p>
+<p>CREATE USER ‘kplwpuser‘@’localhost’ IDENTIFIED BY ‘password’;</p>
+<p>GRANT ALL ON kplwp.* TO ‘kplwpuser‘@’localhost’;</p>
+<p>反正这样创建好表格和用户</p>
+<p>然后是 nginx 提供的配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"># Upstream to abstract backend connection(s) for php</span><br><span class="line">upstream php &#123;</span><br><span class="line">        server unix:/tmp/php-cgi.socket;</span><br><span class="line">        server 127.0.0.1:9000;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">        ## Your website name goes here.</span><br><span class="line">        server_name domain.tld;</span><br><span class="line">        ## Your only path reference.</span><br><span class="line">        root /var/www/wordpress;</span><br><span class="line">        ## This should be in your http block and if it is, it&#x27;s not needed here.</span><br><span class="line">        index index.php;</span><br><span class="line"></span><br><span class="line">        location = /favicon.ico &#123;</span><br><span class="line">                log_not_found off;</span><br><span class="line">                access_log off;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        location = /robots.txt &#123;</span><br><span class="line">                allow all;</span><br><span class="line">                log_not_found off;</span><br><span class="line">                access_log off;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">                # This is cool because no php is touched for static content.</span><br><span class="line">                # include the &quot;?$args&quot; part so non-default permalinks doesn&#x27;t break when using query string</span><br><span class="line">                try_files $uri $uri/ /index.php?$args;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        location ~ \.php$ &#123;</span><br><span class="line">                #NOTE: You should have &quot;cgi.fix_pathinfo = 0;&quot; in php.ini</span><br><span class="line">                include fastcgi_params;</span><br><span class="line">                fastcgi_intercept_errors on;</span><br><span class="line">                fastcgi_pass php;</span><br><span class="line">                #The following parameter can be also included in fastcgi_params file</span><br><span class="line">                fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ &#123;</span><br><span class="line">                expires max;</span><br><span class="line">                log_not_found off;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>upstream 我应该用 </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unix:/var/run/php/php8.1-fpm.sock;</span><br></pre></td></tr></table></figure>
+
+<p>这个 php-fpm 和 php-cgi 有什么区别</p>
+<p><a target="_blank" rel="noopener" href="https://www.basezap.com/difference-php-cgi-php-fpm/">https://www.basezap.com/difference-php-cgi-php-fpm/</a></p>
+<p>反正是两个不一样的东西，替换成这个尝试一下</p>
+<p>总之下载解压一下安装包</p>
+<p>curl -LO <a target="_blank" rel="noopener" href="https://wordpress.org/latest.tar.gz">https://wordpress.org/latest.tar.gz</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wp-config-sample.php</span><br></pre></td></tr></table></figure>
+
+<p>这个弄到同样的目录 wp-config.php</p>
+<p>全部弄到 &#x2F;var&#x2F;www&#x2F;<name>&#x2F;wordpress</name></p>
+<p>sudo chown -R www-data:www-data &#x2F;var&#x2F;www&#x2F;your_domain&#x2F;wordpress&#x2F;</p>
+<p>换主</p>
+<p>然后需要加盐</p>
+<p>curl -s <a target="_blank" rel="noopener" href="https://api.wordpress.org/secret-key/1.1/salt/">https://api.wordpress.org/secret-key/1.1/salt/</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">define( &#x27;FS_METHOD&#x27;, &#x27;direct&#x27; );</span><br></pre></td></tr></table></figure>
+
+<p>这个也扔到数据库配置下面</p>
+<p>啊，因为直接解压到了 &#x2F;wordpress，所以现在被框住了……</p>
+<p>我们重新开始吧</p>
+<p>然后出现了没法换主题和卸载 plugin 问题，可能是权限问题</p>
+<p>chown -R www-data:www-data &lt;文件夹&gt;&#x2F;</p>
+<p>成功嘞！</p>
+<p>迁移到 HTTPS </p>
+<p><a target="_blank" rel="noopener" href="https://spinupwp.com/hosting-wordpress-yourself-setting-up-sites/">https://spinupwp.com/hosting-wordpress-yourself-setting-up-sites/</a></p>
+<p>两个站点</p>
+<p>nginx: [emerg] duplicate upstream “php” in &#x2F;etc&#x2F;nginx&#x2F;sites-enabled&#x2F;kplwp.conf:2</p>
+<p>重复之后出现这个，那么改名字就可以了</p>
+<p>上 HTTPS，之前也做过，监听 80 的重定向 443 的过来就好</p>
+<p>server {<br>    listen 443 ssl http2;<br>    listen [::]:443 ssl http2;</p>
+<p>server_name ashleyrich.com;</p>
+<p>ssl_certificate &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;ashleyrich.com&#x2F;fullchain.pem;<br>ssl_certificate_key &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;ashleyrich.com&#x2F;privkey.pem;</p>
+<p>access_log &#x2F;home&#x2F;ashley&#x2F;ashleyrich.com&#x2F;logs&#x2F;access.log;<br>error_log &#x2F;home&#x2F;ashley&#x2F;ashleyrich.com&#x2F;logs&#x2F;error.log;</p>
+<p>root &#x2F;home&#x2F;ashley&#x2F;ashleyrich.com&#x2F;public&#x2F;;<br>index index.php;</p>
+<p>location &#x2F; {<br>    try_files $uri $uri&#x2F; &#x2F;index.php?$args;<br>}</p>
+<p>location ~ .php$ {<br>    try_files $uri &#x3D;404;<br>    fastcgi_split_path_info ^(.+.php)(&#x2F;.+)$;<br>    fastcgi_pass unix:&#x2F;run&#x2F;php&#x2F;php8.0-fpm.sock;<br>    fastcgi_index index.php;<br>    include fastcgi_params;<br>}</p>
+<p>}</p>
+<p>server {<br>    listen 443 ssl http2;<br>    listen [::]:443 ssl http2;</p>
+<p>server_name <a target="_blank" rel="noopener" href="http://www.ashleyrich.com/">www.ashleyrich.com</a>;</p>
+<p>ssl_certificate &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;ashleyrich.com&#x2F;fullchain.pem;<br>ssl_certificate_key &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;ashleyrich.com&#x2F;privkey.pem;</p>
+<p>return 301 <a target="_blank" rel="noopener" href="https://ashleyrich.com$request_uri/">https://ashleyrich.com$request_uri</a>;</p>
+<p>}</p>
+<p>server {<br>    listen 80;<br>    listen [::]:80;</p>
+<p>server_name ashleyrich.com <a target="_blank" rel="noopener" href="http://www.ashleyrich.com/">www.ashleyrich.com</a>;</p>
+<p>return 301 <a target="_blank" rel="noopener" href="https://ashleyrich.com$request_uri/">https://ashleyrich.com$request_uri</a>;</p>
+<p>}</p>
+<p>log 放在 server 里面哈……首先下一下证书</p>
+<p>上传大小被限制，首先要修改一下 nginx ，在 PHP的location里面加上 client_max_body_size 20000m;</p>
+<p>location ~ .php$ {<br>                #NOTE: You should have “cgi.fix_pathinfo &#x3D; 0;” in php.ini<br>                include fastcgi_params;<br>                fastcgi_intercept_errors on;<br>                fastcgi_pass php;<br>                #The following parameter can be also included in fastcgi_params file<br>                fastcgi_param  SCRIPT_FILENAMEdocument_root$fastcgi_script_name;</p>
+<p>client_max_body_size 20000m;<br>    }</p>
+<p>然后改 php.ini</p>
+<p>这个是在 &#x2F;etc&#x2F;php&#x2F;8.1&#x2F;fpm&#x2F;php.ini 可以看 phpinfo 确定</p>
+<p>systemctl status php8.1-fpm 名字叫这个</p>
+<p>记得重启</p>
+<p>修改完了，那么nginx是不需要修改的看起来（</p>
+<p>似乎 wp 的话 acme 要用 webroot 模式……</p>
+<p>现在开始使用！</p>
+<p><a target="_blank" rel="noopener" href="https://www.wpbeginner.com/beginners-guide/how-to-add-navigation-menu-in-wordpress-beginners-guide/#add-menus-in-fse-themes">https://www.wpbeginner.com/beginners-guide/how-to-add-navigation-menu-in-wordpress-beginners-guide/#add-menus-in-fse-themes</a></p>
+<p>管理导航，editor，选择中之后创建新菜单，直接点击添加</p>
+<p>添加边栏</p>
+<p><a target="_blank" rel="noopener" href="https://blog.hubspot.com/website/10000-vector-icons-wordpress">https://blog.hubspot.com/website/10000-vector-icons-wordpress</a></p>
+<p>出了一些问题，使用 upstream不行，直接更改fastcgi_pass unix:&#x2F;run&#x2F;php&#x2F;php8.1-fpm.sock;</p>
+<p>不过我猜测，需要将pass 后面写作是上游的名字？</p>
+<p>更改了 wp 域名之后还需要更新 Database 的数据，否则图片请求什么的不到新的域名</p>
+<p>show databses;</p>
+<p>use databse_name;</p>
+<p>UPDATE wp_posts SET post_content &#x3D; replace( post_content, ‘acyanbird.rocks’,’acyanbird.com’) ;  </p>
+<p>UPDATE wp_comments SET comment_content &#x3D; replace(comment_content,’acyanbird.rocks’,’acyanbird.com’) ;</p>
+<p>UPDATE wp_comments SET comment_author_url &#x3D; replace(comment_author_url, UPDATE wp_comments SET comment_content &#x3D; replace(comment_content,’acyanbird.rocks’,’acyanbird.com’) ;</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/01/28/%E4%BD%BF%E7%94%A8python-venv%E7%88%AC%E8%99%AB/" rel="prev" title="使用python_venv爬虫">
+      <i class="fa fa-chevron-left"></i> 使用python_venv爬虫
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/02/21/docker%E4%BD%BF%E7%94%A8%E8%BF%99%E6%AC%A1%E8%AE%A4%E7%9C%9F%E7%9A%84/" rel="next" title="docker使用这次认真的">
+      docker使用这次认真的 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%8D%E6%AC%A1%E9%87%8D%E6%96%B0%E5%BC%80%E5%A7%8B%EF%BC%81%EF%BC%81%EF%BC%81"><span class="nav-number">1.</span> <span class="nav-text">再次重新开始！！！</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="山奈"
+      src="/images/ava.jpg">
+  <p class="site-author-name" itemprop="name">山奈</p>
+  <div class="site-description" itemprop="description">You must have a blog!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">山奈</span>
+</div>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

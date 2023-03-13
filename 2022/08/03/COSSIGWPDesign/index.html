@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"acyanbird.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="嘛，弄到香港服务器开始设置。 先update，这个yum update和apt差不多呢，不update会有问题嗯。不过这里用update就好不用upgrade 用adduser设置新用户，用root搞一切绝对是不明智之选……adduser更傻瓜一些 删除用户，只需使用一个简单的命令“userdel 用户名”即可。不过最好将它留在系统上的文件也删除掉，你可以使用“userdel -r 用户名”来实现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COSSIGWPDesign">
+<meta property="og:url" content="https://acyanbird.github.io/2022/08/03/COSSIGWPDesign/index.html">
+<meta property="og:site_name" content="Nighthawk&#39;s nest">
+<meta property="og:description" content="嘛，弄到香港服务器开始设置。 先update，这个yum update和apt差不多呢，不update会有问题嗯。不过这里用update就好不用upgrade 用adduser设置新用户，用root搞一切绝对是不明智之选……adduser更傻瓜一些 删除用户，只需使用一个简单的命令“userdel 用户名”即可。不过最好将它留在系统上的文件也删除掉，你可以使用“userdel -r 用户名”来实现">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-03T18:30:32.000Z">
+<meta property="article:modified_time" content="2023-03-13T02:39:58.667Z">
+<meta property="article:author" content="山奈">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="COSSIG">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://acyanbird.github.io/2022/08/03/COSSIGWPDesign/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>COSSIGWPDesign | Nighthawk's nest</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Nighthawk's nest</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://acyanbird.github.io/2022/08/03/COSSIGWPDesign/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ava.jpg">
+      <meta itemprop="name" content="山奈">
+      <meta itemprop="description" content="You must have a blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nighthawk's nest">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COSSIGWPDesign
+        </h1>
+
+        <div class="post-meta">
+	  
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-08-03 18:30:32" itemprop="dateCreated datePublished" datetime="2022-08-03T18:30:32+00:00">2022-08-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-13 02:39:58" itemprop="dateModified" datetime="2023-03-13T02:39:58+00:00">2023-03-13</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>嘛，弄到香港服务器开始设置。</p>
+<p>先update，这个yum update和apt差不多呢，不update会有问题嗯。不过这里用update就好不用upgrade</p>
+<p>用adduser设置新用户，用root搞一切绝对是不明智之选……adduser更傻瓜一些</p>
+<p>删除用户，只需使用一个简单的命令“userdel 用户名”即可。不过最好将它留在系统上的文件也删除掉，你可以使用“userdel -r 用户名”来实现这一目的</p>
+<p>不能呢通过密钥登录，先设置正确权限</p>
+<p><a target="_blank" rel="noopener" href="https://serverfault.com/posts/871835/timeline">链接</a></p>
+<p>First</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 700 .ssh</span><br></pre></td></tr></table></figure>
+
+<p>and then :</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 600 .ssh/authorized_keys</span><br></pre></td></tr></table></figure>
+
+<p>and test this :</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">restorecon -r -vv .ssh/authorized_keys</span><br></pre></td></tr></table></figure>
+
+<p>唔直接 adduser 用户名就加进去了，密码通过 passwd 用户名输入新密码，不是sudoer修改</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Dream_angel_Z/article/details/45841109">Linux学习-给普通用户加sudo权限_拾毅者的博客-CSDN博客_linux 账户sudo</a></p>
+<p>visudo</p>
+<p>最后一行加入</p>
+<p>用户名 ALL&#x3D;(ALL)  NOPASSWD:ALL</p>
+<p>不需要密码，需要密码就删掉nopasswd</p>
+<h4 id="安装-WP"><a href="#安装-WP" class="headerlink" title="安装 WP"></a>安装 WP</h4><p>源是空的，要手动写</p>
+<p><code>curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-vault-8.5.2111.repo</code></p>
+<p>这是8，其他的看这里</p>
+<p><a target="_blank" rel="noopener" href="https://developer.aliyun.com/mirror/centos?spm=a2c6h.13651102.0.0.74ab1b11JEvySJ">centos镜像_centos下载地址_centos安装教程-阿里巴巴开源镜像站</a></p>
+<p>yum clean &amp;&amp; yum makecache</p>
+<p>md，还是直接升级到stream吧，金主爸爸会开心的</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wjun520/article/details/124240155">Centos 8升级至Centos 8 Stream教程_爱思考的小文文的博客-CSDN博客_centos8stream版本</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dnf --disablerepo &#x27;*&#x27; --enablerepo extras swap centos-linux-repos centos-stream-repos</span><br><span class="line"> dnf distro-sync</span><br></pre></td></tr></table></figure>
+
+<p>这样似乎就可以了，感觉是强制替换源</p>
+<p>首先创建mysql数据库</p>
+<p>yum install mysql 会变成 mariadb，是神谕收购之后的free版本</p>
+<p>那就用maria</p>
+<p><code>sudo yum install mariadb-server --allowerasing</code></p>
+<p>然后还有各种问题呜呜</p>
+<p>sudo dnf install @mariadb</p>
+<p>sudo systemctl enable –now mariadb</p>
+<p>嗯要将&#x2F;var&#x2F;lib&#x2F;mysql 下面的东西删除干净</p>
+<p>然后运行 mysql_secure_installation</p>
+<p>第一个直接回车，输入新密码之后，反正我删除了匿名用户，stop远程，删除测试db，剩下的真的明天再说了</p>
+<p><a target="_blank" rel="noopener" href="https://wordpress.org/support/article/creating-database-for-wordpress/">Creating Database for WordPress &amp;#8211; WordPress.org Forums</a></p>
+<p>按照这里写的</p>
+<h5 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h5><p>发现80端口被占用了？lsof -i:80 没有反应，要netstat -tunlp才看得到……也不知道是什么进程鸭……但是访问域名却显示了nginx！sudo fuser -k 80&#x2F;tcp 不过直接kill吧。这下子正常了的说！</p>
+<h5 id="apache"><a href="#apache" class="headerlink" title="apache"></a>apache</h5><p>结果还是去用apache了……没事！enable之后记得start</p>
+<p>打死都是critical error，于是重装系统，决定按照这个一步一步一步</p>
+<p><a target="_blank" rel="noopener" href="https://linuxconfig.org/install-wordpress-on-redhat-8">How to install WordPress on RHEL 8 &#x2F; CentOS 8 Linux - Linux Tutorials - Learn Linux Configuration</a></p>
+<p>root就root罢，不管了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># dnf install php-mysqlnd php-fpm mariadb-server httpd tar curl php-json</span><br><span class="line"># systemctl start mariadb</span><br><span class="line"># systemctl start httpd# systemctl enable mariadb</span><br><span class="line"># systemctl enable httpd</span><br><span class="line"># mysql_secure_installation</span><br><span class="line">$ curl https://wordpress.org/latest.tar.gz --output wordpress.tar.gz</span><br><span class="line">$ tar xf wordpress.tar.gz</span><br><span class="line"># cp -r wordpress /var/www/html</span><br><span class="line"># chown -R apache:apache /var/www/html/wordpress</span><br><span class="line"># chcon -t httpd_sys_rw_content_t /var/www/html/wordpress -R</span><br></pre></td></tr></table></figure>
+
+<p>遇到老问题了！中文乱码！</p>
+<p>完全的意料之中呢……</p>
+<p>當只要網址是中文會發生 404 not found 的狀況：</p>
+<ol>
+<li><p>更改 wordpress資料夾底下的 wp-includes&#x2F;class-wp.php 內容<br>將原來的這兩行</p>
+<p><code>$pathinfo = isset( $_SERVER[&#39;PATH_INFO&#39;] ) ? $_SERVER[&#39;PATH_INFO&#39;] : &#39;&#39;;   list( $req_uri ) = explode( &#39;?&#39;, $_SERVER[&#39;REQUEST_URI&#39;] );   </code><br>改為  </p>
+<p><code>pathinfo = isset( _SERVER[&#39;PATH_INFO&#39;] ) ? mb_convert_encoding($_SERVER[&#39;PATH_INFO&#39;], &quot;UTF-8&quot;, &quot;Big5&quot;) : &#39;&#39;;</code></p>
+<p><code>  list( $req_uri ) = explode( &#39;?&#39;, mb_convert_encoding($_SERVER[&#39;REQUEST_URI&#39;], &quot;UTF-8&quot;, &quot;Big5&quot;) );</code>  </p>
+</li>
+<li><p>完成，這樣就可以正常顯示中文網址了</p>
+</li>
+</ol>
+<p>稍为试试看</p>
+<p>补充一个包 </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install php-mbstring</span><br></pre></td></tr></table></figure>
+
+<p>还是不可以啾！</p>
+<p>哈欠，那就绕过去</p>
+<p><a target="_blank" rel="noopener" href="https://www.learnhard.cn/articles/70.html">https://www.learnhard.cn/articles/70.html</a></p>
+<p>安装ssl <a target="_blank" rel="noopener" href="https://certbot.eff.org/instructions?ws=apache&os=centosrhel8">Certbot Instructions | Certbot</a></p>
+<p>要到网站根目录安装</p>
+<p>算了，然后现在搞解除最大限制</p>
+<p><a target="_blank" rel="noopener" href="https://www.wpzhiku.com/zeng-jia-wordpress-shang/">https://www.wpzhiku.com/zeng-jia-wordpress-shang/</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -i | grep &#x27;php.ini&#x27;   </span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">upload_max_filesize = 128M</span><br><span class="line">post_max_size = 128M</span><br></pre></td></tr></table></figure>
+
+<p>找到这个文件，修改这俩参数，重启</p>
+<p><code>service php-fpm restrart</code></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># linux</a>
+              <a href="/tags/COSSIG/" rel="tag"># COSSIG</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/07/13/setIRC/" rel="prev" title="setIRC">
+      <i class="fa fa-chevron-left"></i> setIRC
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/08/13/v2ray%E6%90%AD%E5%BB%BA/" rel="next" title="v2ray搭建">
+      v2ray搭建 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-WP"><span class="nav-number">1.</span> <span class="nav-text">安装 WP</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#nginx"><span class="nav-number">1.1.</span> <span class="nav-text">nginx</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#apache"><span class="nav-number">1.2.</span> <span class="nav-text">apache</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="山奈"
+      src="/images/ava.jpg">
+  <p class="site-author-name" itemprop="name">山奈</p>
+  <div class="site-description" itemprop="description">You must have a blog!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">山奈</span>
+</div>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

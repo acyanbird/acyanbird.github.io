@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"acyanbird.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="展示 5 到 10 min，使用学校电脑，show 所有的features info bar 可 change 顺便放一些碰到的稀奇古怪问题……哦那个 vga_out 不完整，现在尝试补全ing 740 display 宽度，柱子宽度是 180，柱子之间间隔 190，上下间隔 注意！最顶层的 module 才和板子交互，不是 vga_out 和板子交互！所以要输出的端口需要在最顶层定义！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="fpga game">
+<meta property="og:url" content="https://acyanbird.github.io/2021/11/15/fpga-game/index.html">
+<meta property="og:site_name" content="Nighthawk&#39;s nest">
+<meta property="og:description" content="展示 5 到 10 min，使用学校电脑，show 所有的features info bar 可 change 顺便放一些碰到的稀奇古怪问题……哦那个 vga_out 不完整，现在尝试补全ing 740 display 宽度，柱子宽度是 180，柱子之间间隔 190，上下间隔 注意！最顶层的 module 才和板子交互，不是 vga_out 和板子交互！所以要输出的端口需要在最顶层定义！">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190929201409920.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQwMTgxNTky,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://i.imgur.com/zFLo3rr.png">
+<meta property="og:image" content="https://i.imgur.com/MJN9B0I.png">
+<meta property="og:image" content="https://i.imgur.com/1KLFbtH.png">
+<meta property="og:image" content="https://i.imgur.com/KvQqCEB.png">
+<meta property="article:published_time" content="2021-11-15T15:48:33.000Z">
+<meta property="article:modified_time" content="2023-03-13T02:39:58.667Z">
+<meta property="article:author" content="山奈">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190929201409920.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQwMTgxNTky,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="https://acyanbird.github.io/2021/11/15/fpga-game/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>fpga game | Nighthawk's nest</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Nighthawk's nest</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://acyanbird.github.io/2021/11/15/fpga-game/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ava.jpg">
+      <meta itemprop="name" content="山奈">
+      <meta itemprop="description" content="You must have a blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nighthawk's nest">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          fpga game
+        </h1>
+
+        <div class="post-meta">
+	  
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-11-15 15:48:33" itemprop="dateCreated datePublished" datetime="2021-11-15T15:48:33+00:00">2021-11-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-13 02:39:58" itemprop="dateModified" datetime="2023-03-13T02:39:58+00:00">2023-03-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E6%A0%A1%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学校学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>展示 5 到 10 min，使用学校电脑，show 所有的features</p>
+<p>info bar 可 change</p>
+<p>顺便放一些碰到的稀奇古怪问题……哦那个 vga_out 不完整，现在尝试补全ing</p>
+<p>740 display 宽度，柱子宽度是 180，柱子之间间隔 190，上下间隔</p>
+<p>注意！最顶层的 module 才和板子交互，不是 vga_out 和板子交互！所以要输出的端口需要在最顶层定义！</p>
+<p>&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;<br>问题出现，不可以使用 assign 去传递 draw 和 draw_r，但是为什么 curr_x 可以？</p>
+<p>assign draw_r &#x3D; draw_r_r;<br>assign draw_g &#x3D; draw_g_r;<br>assign draw_b &#x3D; draw_b_r;</p>
+<p>这样不可以，会无法显示</p>
+<p>一定要记住如果 output 是 reg那就 declare reg！</p>
+<p><img src="https://img-blog.csdnimg.cn/20190929201409920.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQwMTgxNTky,size_16,color_FFFFFF,t_70"></p>
+<p>可能是 input output 端口问题？外界输入进取的可以是reg 或者 wire，接收方需要是 wire，内部也是 output 可以是 reg 或者 wire，接收 input 是 wire</p>
+<p>输入端口：从模块内部来讲，输入端口必须为线网数据类型，从模块外部来看，输入端口可以连接到线网或者reg数据类型的变量。</p>
+<p>输出端口：从模块内部来讲，输出端口可以是线网或者reg数据类型，从模块外部来看，输出必须连接到线网类型的变量，而不能连接到reg类型的变量。</p>
+<p>输入&#x2F;输出端口</p>
+<p>​    从模块内部来讲，输入&#x2F;输出端口必须为线网数据类型；从</p>
+<p>​    模块外部来看，输入&#x2F;输出端口也必须连接到线网类型的变</p>
+<p>​    量。</p>
+<p>那么 vga_out 就可以用 reg 的 output 和 game_top 的 reg input。</p>
+<p>好吧这个 xilinx 的 init 速度不快的，所以……要等它 update 完毕之后再跑，不然</p>
+<p>当 output 是 reg 的时候必须声明，可以在 moudle declare 里面</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> pad(</span><br><span class="line">    <span class="keyword">input</span>        DIN, OEN ,</span><br><span class="line">    <span class="keyword">input</span> [<span class="number">1</span>:<span class="number">0</span>]  PULL ,</span><br><span class="line">    <span class="keyword">inout</span>        PAD ,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span>   DOUT</span><br><span class="line">    );</span><br></pre></td></tr></table></figure>
+
+<p>这样才行</p>
+<p>数组定义</p>
+<p>定义是大位在前面，但是赋值的时候还是从后面开始计算的</p>
+<p><img src="https://i.imgur.com/zFLo3rr.png"></p>
+<p><img src="https://i.imgur.com/MJN9B0I.png"></p>
+<p>所以多个位的时候要从大到小，但是单个定位是右边是 0 这样</p>
+<p>记住 input 和 output 要定义这个range啊！</p>
+<p>注意 decalre instance 的时候 instance 名称是否正确……</p>
+<p>模块例化一定要定义 wire 去承接，即使只有这两个模块使用 top 完全不使用，也必须 declare wire。</p>
+<p>如果出现问题：</p>
+<p>检查端口是否宽度正确</p>
+<p>检查是否标注 reg</p>
+<p>检查变量名是否填写正确</p>
+<p>检查是否有例化模块输入S</p>
+<p>&#x2F;home&#x2F;cyanbird&#x2F;study&#x2F;warwick&#x2F;year2&#x2F;ES2E3DigitalSystem&#x2F;lab&#x2F;lab5&#x2F;lab5.srcs&#x2F;sources_1&#x2F;new&#x2F;ground.v</p>
+<p>只有 135 个块可以放图片……省着点来吧。一个 ghost 是 3，info 是 48</p>
+<p>可以在双色图片里面导入黑白，然后根据 1 和 0 赋值颜色，大大大省空间！</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/34011576/generating-random-numbers-in-verilog">https://stackoverflow.com/questions/34011576/generating-random-numbers-in-verilog</a></p>
+<p>生成随机数，生成柱子</p>
+<p>IP 生成的名字不可以和现有文件一致，不然会出现包含错误</p>
+<h4 id="写文档"><a href="#写文档" class="headerlink" title="写文档"></a>写文档</h4><p>插入代码的时候使用 program listing，要 ctrl+shift+v 才能保持换行符</p>
+<p>然后要 configure 一下 list</p>
+<p><a target="_blank" rel="noopener" href="https://tex.stackexchange.com/questions/231658/lyx-code-tag-with-highlighting-for-c">https://tex.stackexchange.com/questions/231658/lyx-code-tag-with-highlighting-for-c</a></p>
+<p>这个设置改一下名字凑合着用吧，有时间认真学习一下。反正以后也得写 paper 早晚要学呗。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">language=Verilog</span><br><span class="line">keywordstyle=&#123;\color&#123;blue&#125;&#125;</span><br><span class="line">commentstyle=&#123;\color&#123;magenta&#125;\itshape&#125;</span><br><span class="line">emphstyle=&#123;\color&#123;red&#125;&#125;</span><br><span class="line">breaklines=true</span><br><span class="line">basicstyle=&#123;\ttfamily&#125;</span><br><span class="line">stringstyle=&#123;\color&#123;green&#125;&#125;</span><br><span class="line">identifierstyle=&#123;\color&#123;cyan&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>保存一下，圣诞假让诺兰设计一个好看点的 version 来</p>
+<p>要引用相同文档中的内容最好使用 set label 在需要的地方，然后需要引用的时候选择 insert cross refernce。这样修改就不会影响了</p>
+<p>显示中文要在 document setting language 那里选择，然后 utf8，还需要 cjk</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install latex-cjk-all</span><br></pre></td></tr></table></figure>
+
+<p>不行啊，可能是版本太老了</p>
+<p><a target="_blank" rel="noopener" href="https://wiki.lyx.org/LyX/LyXOnUbuntu">https://wiki.lyx.org/LyX/LyXOnUbuntu</a></p>
+<p>装个新版本</p>
+<p>不管了！图片引用，绝对位置</p>
+<p><img src="https://i.imgur.com/1KLFbtH.png"></p>
+<p>先右键灰色的 figure，然后选择 here definitely</p>
+<p><img src="https://i.imgur.com/KvQqCEB.png" alt="Imgur"></p>
+<p> 页宽也可以在 margin 这里调整</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/11/14/db-lab4/" rel="prev" title="db lab4">
+      <i class="fa fa-chevron-left"></i> db lab4
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/11/15/week-5-digital-system/" rel="next" title="week 5 digital system">
+      week 5 digital system <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%99%E6%96%87%E6%A1%A3"><span class="nav-number">1.</span> <span class="nav-text">写文档</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="山奈"
+      src="/images/ava.jpg">
+  <p class="site-author-name" itemprop="name">山奈</p>
+  <div class="site-description" itemprop="description">You must have a blog!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">山奈</span>
+</div>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

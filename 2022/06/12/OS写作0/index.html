@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"acyanbird.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="qemu 的小知识，x86_64 是 64位，i386 是 32位，但是 x86 是 32，64是64……所以为什么要叫86！哦，i386,我知道了。所以x86_64 指的是基于86的64位！ i386是80386，第一个支持32位的处理器，8086酱才是16位哒 其实 x86是这一系列的统称，8086这孩子是第一个，现在都说32了……因为16的花季太短了吧？ 开始征程吧哈哈哈哈！ 先是看着 bi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OS写作0">
+<meta property="og:url" content="https://acyanbird.github.io/2022/06/12/OS%E5%86%99%E4%BD%9C0/index.html">
+<meta property="og:site_name" content="Nighthawk&#39;s nest">
+<meta property="og:description" content="qemu 的小知识，x86_64 是 64位，i386 是 32位，但是 x86 是 32，64是64……所以为什么要叫86！哦，i386,我知道了。所以x86_64 指的是基于86的64位！ i386是80386，第一个支持32位的处理器，8086酱才是16位哒 其实 x86是这一系列的统称，8086这孩子是第一个，现在都说32了……因为16的花季太短了吧？ 开始征程吧哈哈哈哈！ 先是看着 bi">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.imgur.com/LBK0I5g.png">
+<meta property="og:image" content="https://i.imgur.com/GnizLI6.png">
+<meta property="og:image" content="https://i.imgur.com/S3FQLfP.png">
+<meta property="og:image" content="https://i.imgur.com/7SJew03.png">
+<meta property="og:image" content="https://i.imgur.com/fU0QZGn.png">
+<meta property="og:image" content="https://i.imgur.com/S9zvjLg.png">
+<meta property="og:image" content="https://i.imgur.com/J5Z519g.png">
+<meta property="og:image" content="https://i.imgur.com/eBM5Bsy.png">
+<meta property="og:image" content="https://i.imgur.com/uCL2W3R.png">
+<meta property="article:published_time" content="2022-06-12T21:02:21.000Z">
+<meta property="article:modified_time" content="2023-03-13T02:39:58.667Z">
+<meta property="article:author" content="山奈">
+<meta property="article:tag" content="OSwriting">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/LBK0I5g.png">
+
+<link rel="canonical" href="https://acyanbird.github.io/2022/06/12/OS%E5%86%99%E4%BD%9C0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>OS写作0 | Nighthawk's nest</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Nighthawk's nest</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://acyanbird.github.io/2022/06/12/OS%E5%86%99%E4%BD%9C0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ava.jpg">
+      <meta itemprop="name" content="山奈">
+      <meta itemprop="description" content="You must have a blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nighthawk's nest">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OS写作0
+        </h1>
+
+        <div class="post-meta">
+	  
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-06-12 21:02:21" itemprop="dateCreated datePublished" datetime="2022-06-12T21:02:21+00:00">2022-06-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-13 02:39:58" itemprop="dateModified" datetime="2023-03-13T02:39:58+00:00">2023-03-13</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>qemu 的小知识，x86_64 是 64位，i386 是 32位，但是 x86 是 32，64是64……所以为什么要叫86！哦，i386,我知道了。所以x86_64 指的是基于86的64位！</p>
+<p>i386是80386，第一个支持32位的处理器，8086酱才是16位哒</p>
+<p>其实 x86是这一系列的统称，8086这孩子是第一个，现在都说32了……因为16的花季太短了吧？</p>
+<p>开始征程吧哈哈哈哈！</p>
+<p>先是看着 birmingham 的教程做，也有这个</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/cfenollosa/os-tutorial">GitHub - cfenollosa&#x2F;os-tutorial: How to create an OS from scratch</a></p>
+<p>不过先看第一个好了</p>
+<p>使用 NASM 的汇编语言！因为一半都是要写汇编所以加油吧</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/109264787">https://zhuanlan.zhihu.com/p/109264787</a></p>
+<p>汇编语法</p>
+<p><code>mov ah , 0 x0e ; int 10/ ah = 0 eh -&gt; scrolling teletype BIOS routine</code></p>
+<p>这个解释可以看 <a target="_blank" rel="noopener" href="https://zh.m.wikipedia.org/zh-hans/INT_10H">INT 10H - 维基百科，自由的百科全书</a></p>
+<p>显示模式，可以直接输出</p>
+<p>总结一下看不懂的，times 是连续赋值多少个，db 是 define byte. <code>$</code>是当前地址，<code>$$</code> 是开头地址，所以差值是当前 offset，510 - offset 等于距离 510 还有多少位，都填满 0. boot sector 有 514，最后 4byte 是 magic number</p>
+<p>nasm bootsect.asm -f bin -o bootsect.bin</p>
+<p>hourse’s 下次一定记得经常存盘</p>
+<h5 id="初步程序"><a href="#初步程序" class="headerlink" title="初步程序"></a>初步程序</h5><p>里面有 reg，一个16bits 一共2word，可以单独定义</p>
+<p><img src="https://i.imgur.com/LBK0I5g.png"></p>
+<p><img src="https://i.imgur.com/GnizLI6.png"></p>
+<p>print hello 程序</p>
+<p><img src="https://i.imgur.com/S3FQLfP.png"></p>
+<p>该如何读取？</p>
+<p><img src="https://i.imgur.com/7SJew03.png"></p>
+<p><img src="https://i.imgur.com/fU0QZGn.png"></p>
+<p><img src="https://i.imgur.com/S9zvjLg.png"></p>
+<p>第三第四个可以读出来，[a]，a 存储的东西作为地址去寻找，因为这个是开始于 0x7c00，所以在 the_secret label 里定义的X需要加上0x7c00偏移</p>
+<p><em>org 指令</em> ORG是Origin的缩写：起始地址，源。在汇编语言源程序的开始通常都用一条ORG伪指令来实现规定程序的起始地址。如果不用ORG规定则汇编得到的目标程序将从0000H开始。例如：<br> 　　          ORG 2000H</p>
+<p>这次的 org 就是 0x7c00</p>
+<h5 id="def-string"><a href="#def-string" class="headerlink" title="def string"></a>def string</h5><p>my_string :<br>db ’ Booting OS ’</p>
+<p>因为括号起来，所以里面的每个字母转换成 ASCII，虽然是 byte 但是往后 def</p>
+<p>加上 null terminate</p>
+<p>my_string :<br>db ’ Booting OS ’ ,0</p>
+<h4 id="使用-stack"><a href="#使用-stack" class="headerlink" title="使用 stack"></a>使用 stack</h4><p>因为 CPU 自带的 reg 经常不够用，所以我们可以使用内存了 bp（base） 和 sp (top)两个特殊 reg 用来记录地址，底部和顶端。因为这个是 16 bits，所以一次 pop 16 bits</p>
+<p>base 会远离敏感程序区域，因此不用担心 stack 太大 overwrite 重要的代码。是向下发展的！sp 比 bp 地址更低（所以不会往上才碰不到），每次 push 会降低 sp 地址</p>
+<p><img src="https://i.imgur.com/J5Z519g.png"></p>
+<p>push 和 pop 都是 16 bits，当 push，A的时候前8 bits 填充为0</p>
+<h4 id="跳转语句？"><a href="#跳转语句？" class="headerlink" title="跳转语句？"></a>跳转语句？</h4><p>跟 cmp 一起使用</p>
+<p><img src="https://i.imgur.com/eBM5Bsy.png"></p>
+<p><img src="https://i.imgur.com/uCL2W3R.png"></p>
+<p>然后写一个jmp 程序</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">mov bx, 30</span><br><span class="line"></span><br><span class="line">cmp bx, 4</span><br><span class="line">jle less4 ; jump if less equal 4</span><br><span class="line">cmp bx, 40</span><br><span class="line">jl less40 ; jump if less than 40</span><br><span class="line">jmp nothing ; jump nothing happen</span><br><span class="line"></span><br><span class="line">less4:</span><br><span class="line">mov al, &#x27;A&#x27;</span><br><span class="line">less40:</span><br><span class="line">mov al, &#x27;B&#x27;</span><br><span class="line">nothing:</span><br><span class="line">mov al, &#x27;C&#x27;</span><br><span class="line">; def label</span><br><span class="line"></span><br><span class="line">mov ah, 0x0e</span><br><span class="line">int 0x10</span><br><span class="line"></span><br><span class="line">jmp $</span><br><span class="line"></span><br><span class="line">;padding with magic num</span><br><span class="line">times 510-($-$$) db 0</span><br><span class="line">dw 0xaa55</span><br></pre></td></tr></table></figure>
+
+<p>之前写错了，未定义的时候是0，打印出来是 U？这样的话它会继续执行下面的label，所以再加入一个 jmp</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">mov bx, 0</span><br><span class="line"></span><br><span class="line">cmp bx, 4</span><br><span class="line">jle less4 ; jump if less equal 4</span><br><span class="line">cmp bx, 40</span><br><span class="line">jl less40 ; jump if less than 40</span><br><span class="line">jmp nothing ; jump nothing happen</span><br><span class="line"></span><br><span class="line">less4:</span><br><span class="line">mov al, &#x27;A&#x27;</span><br><span class="line">jmp end</span><br><span class="line">less40:</span><br><span class="line">mov al, &#x27;B&#x27;</span><br><span class="line">jmp end</span><br><span class="line">nothing:</span><br><span class="line">mov al, &#x27;C&#x27;</span><br><span class="line">; def label</span><br><span class="line"></span><br><span class="line">end:</span><br><span class="line"></span><br><span class="line">mov ah, 0x0e</span><br><span class="line">int 0x10</span><br><span class="line"></span><br><span class="line">jmp $</span><br><span class="line"></span><br><span class="line">;padding with magic num</span><br><span class="line">times 510-($-$$) db 0</span><br><span class="line">dw 0xaa55</span><br></pre></td></tr></table></figure>
+
+<h5 id="定义-function"><a href="#定义-function" class="headerlink" title="定义 function"></a>定义 function</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mov al, &#x27;H&#x27; ; store H in al so func can show it</span><br><span class="line">call func ; call 相当于jump，但是把下一行地址压入stack</span><br><span class="line">...</span><br><span class="line">func:</span><br><span class="line">mov ah, 0x0e</span><br><span class="line">int 0x10</span><br><span class="line">ret ;return pop stack 地址，jump回去</span><br><span class="line">;感觉其实没有那么简单不过先这样好了</span><br></pre></td></tr></table></figure>
+
+<p>int 定义是常量，常量（constant）是程序中使用的一个确定数值，在汇编阶段就可以确定，直接编码于指令代码中，不是保存在存储器中可变的变量，因为是编码在指令中的量，和指令一起存储了，所以不用单独开辟主存空间，所以也就没法动态改变它了，这也正是高级语言常量无法修改的原因。</p>
+<p>但是这样会把 reg 数据一起洗掉！怎么办呢</p>
+<p>加入 pusha 和 popa，将数据扔到stack再return。虽然我很好奇那么它怎么知道哪个是哪个，但是避免太超纲先不看</p>
+<p>修改版本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mov al, &#x27;H&#x27; ; store H in al so func can show it</span><br><span class="line">call func ; call 相当于jump，但是把下一行地址压入stack</span><br><span class="line">...</span><br><span class="line">func:</span><br><span class="line">pusha ;把 reg 内容压入 stack</span><br><span class="line">mov ah, 0x0e</span><br><span class="line">int 0x10</span><br><span class="line">popa ; 把它们弄回来</span><br><span class="line">ret ;return pop stack 地址，jump回去</span><br><span class="line">;感觉其实没有那么简单不过先这样好了</span><br></pre></td></tr></table></figure>
+
+<p>不过这样改动之后是不是 al 也没有了？试试看</p>
+<p>不会的说！然后就 print 了两个h！</p>
+<p>卧槽，什么情况</p>
+<p>哦，是因为正常向下执行的时候再次执行了 func 所以 print 了两次，普通执行的话并不会改变什么，就算提前 pusha 也能打印出来……嗯……所以</p>
+<p>这就是为啥 func 内部改动不会改变数值！因为可能 call func 的时候要改变 reg 去 perform job，所以pusha不会把东西倒出去，数值还是一样的，但是 popa 就会一切还原</p>
+<p>所以你才用指针直接修改！！！！！！！！</p>
+<p>我！的！天！</p>
+<p>我终于看到了这个未解之谜的真相了！！！！！！！！！！！！</p>
+<h5 id="include-external-file"><a href="#include-external-file" class="headerlink" title="include external file"></a>include external file</h5><p>想要 reuse your file？可以直接引用，那么请结合以上自己写作一个打印两个 string 的程序吧~</p>
+<p>label 到底是什么？</p>
+<p>int 0x10 不是！ 那是16进制！第17终止符，ah 0x0e 是这个模式下面支持的func，详情查看 wiki</p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/INT_10H">INT 10H - Wikipedia</a></p>
+<p>int 10 是啥？int 13？</p>
+<p>CR and LF are control characters, respectively coded <code>0x0D</code> (13 decimal) and <code>0x0A</code> (10 decimal)</p>
+<p>这俩都是早期 tty 留下的产物，CR 是移动到行首但不换行，LF 是往下竖直移动一格，但不水平移动</p>
+<p>CR &#x3D; carriage return，ascii 码 13</p>
+<p>LF &#x3D; line feed，ascii 码 10</p>
+<p>现在的话win使用两个移动，就是 \r\n,0x0D 0x0A，unix 只用 LF 了，所以要换行直接在最后加上10，13</p>
+<p>附带的 print string程序</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">; using for loop to print char, until it reach 0</span><br><span class="line">print_string:</span><br><span class="line">pusha </span><br><span class="line">mov ah, 0x0e ;show mode</span><br><span class="line">mov al, [bx] ; print first char</span><br><span class="line">start:</span><br><span class="line">int 0x10 ; print current char</span><br><span class="line">add bx, 1 ; add one to bx move to next char</span><br><span class="line">mov al, [bx] ;load char</span><br><span class="line">cmp al, 0</span><br><span class="line">je end</span><br><span class="line">jmp start</span><br><span class="line"></span><br><span class="line">end:</span><br><span class="line">popa</span><br><span class="line">ret</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[org 0x7c00] ; start at this point</span><br><span class="line"></span><br><span class="line">mov bx, HELLO_MSG ; move hello to b reg</span><br><span class="line">call print_string</span><br><span class="line">mov bx, BYE_MSG</span><br><span class="line">call print_string</span><br><span class="line"></span><br><span class="line">jmp $ ;hang the code</span><br><span class="line"></span><br><span class="line">%include &quot;print_string.asm&quot; ; simply replaced by the file content</span><br><span class="line"></span><br><span class="line">;Data</span><br><span class="line">;10 13 \r\n change line</span><br><span class="line">HELLO_MSG:</span><br><span class="line">db &#x27;Hello, world&#x27;,10,13, 0</span><br><span class="line">BYE_MSG:</span><br><span class="line">db &#x27;Goodbye&#x27;,10,13, 0</span><br><span class="line"></span><br><span class="line">;padding with 0</span><br><span class="line">times 510-($-$$) db 0 ; $ for current, $$　for starting point</span><br><span class="line">dw 0xaa55</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/OSwriting/" rel="tag"># OSwriting</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/08/audacity%E4%BD%BF%E7%94%A8/" rel="prev" title="audacity使用">
+      <i class="fa fa-chevron-left"></i> audacity使用
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/15/OS%E5%86%99%E4%BD%9C1/" rel="next" title="OS写作1">
+      OS写作1 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%9D%E6%AD%A5%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.</span> <span class="nav-text">初步程序</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#def-string"><span class="nav-number">2.</span> <span class="nav-text">def string</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-stack"><span class="nav-number"></span> <span class="nav-text">使用 stack</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B7%B3%E8%BD%AC%E8%AF%AD%E5%8F%A5%EF%BC%9F"><span class="nav-number"></span> <span class="nav-text">跳转语句？</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89-function"><span class="nav-number">1.</span> <span class="nav-text">定义 function</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#include-external-file"><span class="nav-number">2.</span> <span class="nav-text">include external file</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="山奈"
+      src="/images/ava.jpg">
+  <p class="site-author-name" itemprop="name">山奈</p>
+  <div class="site-description" itemprop="description">You must have a blog!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">山奈</span>
+</div>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

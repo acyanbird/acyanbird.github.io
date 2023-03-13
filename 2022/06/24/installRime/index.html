@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"acyanbird.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="so now is for english mode, hope everything will go right. GitHub - rime&#x2F;plum: 東風破 &#x2F;plum&#x2F;: Rime configuration manager and input schema repository using plum to install curl -fsSL https:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="installRime">
+<meta property="og:url" content="https://acyanbird.github.io/2022/06/24/installRime/index.html">
+<meta property="og:site_name" content="Nighthawk&#39;s nest">
+<meta property="og:description" content="so now is for english mode, hope everything will go right. GitHub - rime&#x2F;plum: 東風破 &#x2F;plum&#x2F;: Rime configuration manager and input schema repository using plum to install curl -fsSL https:">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-06-24T00:22:40.000Z">
+<meta property="article:modified_time" content="2023-03-13T02:39:58.671Z">
+<meta property="article:author" content="山奈">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://acyanbird.github.io/2022/06/24/installRime/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>installRime | Nighthawk's nest</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Nighthawk's nest</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://acyanbird.github.io/2022/06/24/installRime/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ava.jpg">
+      <meta itemprop="name" content="山奈">
+      <meta itemprop="description" content="You must have a blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nighthawk's nest">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          installRime
+        </h1>
+
+        <div class="post-meta">
+	  
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-06-24 00:22:40" itemprop="dateCreated datePublished" datetime="2022-06-24T00:22:40+00:00">2022-06-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-13 02:39:58" itemprop="dateModified" datetime="2023-03-13T02:39:58+00:00">2023-03-13</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>so now is for english mode, hope everything will go right.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/rime/plum">GitHub - rime&#x2F;plum: 東風破 &#x2F;plum&#x2F;: Rime configuration manager and input schema repository</a></p>
+<p>using plum to install</p>
+<p><code>curl -fsSL https://raw.githubusercontent.com/rime/plum/master/rime-install | bash</code></p>
+<p>我回來了！不過要調整一下繁體簡體</p>
+<p><a target="_blank" rel="noopener" href="https://rime.im/download/">下載及安裝 | RIME | 中州韻輸入法引擎</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/rime/home/wiki/RimeWithSchemata">RimeWithSchemata · rime&#x2F;home Wiki · GitHub</a></p>
+<p>在<code>~/.config/ibus/rime/luna_pinyin.schema.yaml</code>下更改</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- name: simplification</span><br><span class="line">  reset: 1                # 增加這一行：默認啓用「繁→簡」轉換。</span><br><span class="line">  states: [ 漢字, 汉字 ]</span><br></pre></td></tr></table></figure>
+
+<p>然后按部署，要更改一行多少个可以在</p>
+<p>設定每頁候選個數的默認值爲 9，在用戶目錄建立文檔 <code>default.custom.yaml</code> ：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">patch:</span>  <span class="attr">&quot;menu/page_size&quot;:</span> <span class="number">9</span></span><br></pre></td></tr></table></figure>
+
+<p>无效了 </p>
+<p><a target="_blank" rel="noopener" href="https://github.com/rime/ibus-rime/issues/52">https://github.com/rime/ibus-rime/issues/52</a></p>
+<p>临时办法是创建 <code>~/.config/ibus/rime/build/ibus_rime.yaml</code>，添加以下内容</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">style:  horizontal:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<p>测试通过！</p>
+<p>我这次打算看看怎么加词库……算了目前就这样吧，下次再说。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43108090/article/details/122706869">RIME中州韵输入法词库扩充（搜狗词库，QQ拼音词库，清华词库，拆字词库U模式等）_惜洛-Jankin的博客-CSDN博客_rime 词库</a></p>
+<p>首先在转换的词头加上</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">name:</span> <span class="string">sougou</span></span><br><span class="line"><span class="attr">version:</span> <span class="string">&quot;2022.07.11&quot;</span></span><br><span class="line"><span class="attr">sort:</span> <span class="string">by_weight</span></span><br><span class="line"><span class="attr">use_present_vocabulary:</span> <span class="literal">true</span></span><br><span class="line"><span class="string">...</span></span><br><span class="line"></span><br><span class="line"><span class="string">阿敖</span>    <span class="string">a</span> <span class="string">ao</span>    <span class="number">1</span></span><br><span class="line"><span class="string">阿巴巴</span>    <span class="string">a</span> <span class="string">ba</span> <span class="string">ba</span>    <span class="number">1</span></span><br><span class="line"><span class="string">阿巴巴巴</span>    <span class="string">a</span> <span class="string">ba</span> <span class="string">ba</span> <span class="string">ba</span>    <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>然后检查 schema，发现原本词库是 luna-pinyin.dict.yaml，在头部加上</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">name:</span> <span class="string">luna_pinyin</span></span><br><span class="line"><span class="attr">version:</span> <span class="string">&quot;2020.08.03&quot;</span></span><br><span class="line"><span class="attr">sort:</span> <span class="string">by_weight</span></span><br><span class="line"><span class="attr">use_preset_vocabulary:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">import_tables:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">luna_pinyin</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">sougou</span></span><br><span class="line"><span class="string">...</span></span><br></pre></td></tr></table></figure>
+
+<p>然后点击部署就可以了</p>
+<p>可以尝试使用自定义 ibus</p>
+<p>！！！更新！</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/rime/home/wiki/CustomizationGuide">https://github.com/rime/home/wiki/CustomizationGuide</a></p>
+<p>看这个操作，要加入词库desu</p>
+<p>patch 无效是写的不对，应该</p>
+<p>patch:</p>
+<p>    “前面加tab这里写配置”</p>
+<p>安装 emoj </p>
+<p><a target="_blank" rel="noopener" href="https://github.com/rime/rime-emoji">GitHub - rime&#x2F;rime-emoji: Emoji &#x2F; 繪文字輸入方案</a></p>
+<p>在plum目录下运行</p>
+<p><code>bash rime-install emoji</code></p>
+<p><code>bash rime-install emoji:customize:schema=luna_pinyin</code></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/iDvel/rime-ice">GitHub - iDvel&#x2F;rime-ice: Rime 配置：雾凇拼音 | 长期维护的简体词库</a></p>
+<p>然后是这个好了，之后看一下自定义添加符号（</p>
+<h5 id="Shift-切换中英"><a href="#Shift-切换中英" class="headerlink" title="Shift 切换中英"></a>Shift 切换中英</h5><p><code>default.custom.yaml</code> 中修改 Shift 对应的选项，将 <code>noop</code> 修改为 <code>commit_code</code> 、<code>commit_text</code> 或 <code>clear</code>。</p>
+<p>这个就全部更新了……直接打开 custom.defualt.yaml 更改就好</p>
+<p>rime_ice.schemal.yaml 里面可以选择 Emoji</p>
+<p>然后自己输入默认的词典好了，找个鸟鸟词汇</p>
+<p>然后有人专门给 rime做了，就很好不是吗</p>
+<p>复制粘贴一下 </p>
+<p>总之放到 rime config 文件夹里面就好，然后查看 rime_ice.dict.yaml 把它纳入，再部署就可以了</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/20/Ubuntu%E6%B5%8B%E8%AF%95%EF%BC%81%E5%8A%A0%E6%B2%B9%EF%BC%81/" rel="prev" title="Ubuntu测试！加油！">
+      <i class="fa fa-chevron-left"></i> Ubuntu测试！加油！
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/29/OS%E5%86%99%E4%BD%9C2/" rel="next" title="OS写作2">
+      OS写作2 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#Shift-%E5%88%87%E6%8D%A2%E4%B8%AD%E8%8B%B1"><span class="nav-number">1.</span> <span class="nav-text">Shift 切换中英</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="山奈"
+      src="/images/ava.jpg">
+  <p class="site-author-name" itemprop="name">山奈</p>
+  <div class="site-description" itemprop="description">You must have a blog!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">山奈</span>
+</div>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

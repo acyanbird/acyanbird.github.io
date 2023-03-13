@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"acyanbird.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="让我们复习一下基本语句 1&#x2F;modules&#x2F;cs258&#x2F;bin&#x2F;psql postgres  为了更加方便使用我在 .bashrc 里面设置别名了 alias psql&#x3D;&#39;&#x2F;modules&#x2F;cs258&#x2F;bin&#x2F;psql postgres&#39; 也可以在命令行写来一次性使用，lab2c 来编译java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dblab2">
+<meta property="og:url" content="https://acyanbird.github.io/2021/10/26/dblab2/index.html">
+<meta property="og:site_name" content="Nighthawk&#39;s nest">
+<meta property="og:description" content="让我们复习一下基本语句 1&#x2F;modules&#x2F;cs258&#x2F;bin&#x2F;psql postgres  为了更加方便使用我在 .bashrc 里面设置别名了 alias psql&#x3D;&#39;&#x2F;modules&#x2F;cs258&#x2F;bin&#x2F;psql postgres&#39; 也可以在命令行写来一次性使用，lab2c 来编译java">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-10-26T16:45:06.000Z">
+<meta property="article:modified_time" content="2023-03-13T02:39:58.667Z">
+<meta property="article:author" content="山奈">
+<meta property="article:tag" content="sql">
+<meta property="article:tag" content="dblab">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://acyanbird.github.io/2021/10/26/dblab2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>dblab2 | Nighthawk's nest</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Nighthawk's nest</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://acyanbird.github.io/2021/10/26/dblab2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ava.jpg">
+      <meta itemprop="name" content="山奈">
+      <meta itemprop="description" content="You must have a blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nighthawk's nest">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          dblab2
+        </h1>
+
+        <div class="post-meta">
+	  
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-10-26 16:45:06" itemprop="dateCreated datePublished" datetime="2021-10-26T16:45:06+00:00">2021-10-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-13 02:39:58" itemprop="dateModified" datetime="2023-03-13T02:39:58+00:00">2023-03-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E6%A0%A1%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学校学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>让我们复习一下基本语句</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/modules/cs258/bin/psql postgres</span><br></pre></td></tr></table></figure>
+
+<p>为了更加方便使用我在 <code>.bashrc</code> 里面设置别名了</p>
+<p><code>alias psql=&#39;/modules/cs258/bin/psql postgres&#39;</code></p>
+<p>也可以在命令行写来一次性使用，lab2c 来编译java</p>
+<p>连接</p>
+<p>CREATE TABLE </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> 表名称</span><br><span class="line">(</span><br><span class="line">列名称<span class="number">1</span> 数据类型,</span><br><span class="line">列名称<span class="number">2</span> 数据类型,</span><br><span class="line">列名称<span class="number">3</span> 数据类型,</span><br><span class="line">....</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>数据类型包括</p>
+<table>
+<thead>
+<tr>
+<th>数据类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>integer(size) int(size) smallint(size) tinyint(size)</td>
+<td>仅容纳整数。在括号内规定数字的最大位数。</td>
+</tr>
+<tr>
+<td>decimal(size,d) numeric(size,d)</td>
+<td>容纳带有小数的数字。 “size” 规定数字的最大位数。”d” 规定小数点右侧的最大位数。</td>
+</tr>
+<tr>
+<td>char(size)</td>
+<td>容纳固定长度的字符串（可容纳字母、数字以及特殊字符）。 在括号中规定字符串的长度。</td>
+</tr>
+<tr>
+<td>varchar(size)</td>
+<td>容纳可变长度的字符串（可容纳字母、数字以及特殊的字符）。 在括号中规定字符串的最大长度。</td>
+</tr>
+<tr>
+<td>date(yyyymmdd)</td>
+<td>容纳日期。</td>
+</tr>
+</tbody></table>
+<p>可以在创建表时规定约束（通过 CREATE TABLE 语句），或者在表创建之后也可以（通过 ALTER TABLE 语句）。</p>
+<p>我们将主要探讨以下几种约束：</p>
+<ul>
+<li>NOT NULL</li>
+<li>UNIQUE</li>
+<li>PRIMARY KEY</li>
+<li>FOREIGN KEY</li>
+<li>CHECK</li>
+<li>DEFAULT</li>
+</ul>
+<p>这些加在数据类型之后</p>
+<p>唔，mvn， java 操纵……挺麻烦的嘛~</p>
+<h5 id="data-type-numeric-问题"><a href="#data-type-numeric-问题" class="headerlink" title="data type numeric 问题"></a>data type numeric 问题</h5><p>numertic 是 def by (size,d)，但是需要注意，这个size是包括小数点的，比如说最多存储 10，小数点两位，那么就是 numeric(4,2)</p>
+<h5 id="count-函数"><a href="#count-函数" class="headerlink" title="count() 函数"></a>count() 函数</h5><p>SQL <code>COUNT</code>函数是一个聚合函数，它返回符合条件行数。 可以使用<a target="_blank" rel="noopener" href="http://www.yiibai.com/sql/sql-select.html">SELECT语句</a>中的<code>COUNT</code>函数来获取员工数量，每个部门的员工数量，指定工作岗位的员工数量等。</p>
+<p>以下是SQL <code>COUNT</code>函数的语法：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">COUNTC ([<span class="keyword">ALL</span> <span class="operator">|</span> <span class="keyword">DISTINCT</span>] expression);</span><br></pre></td></tr></table></figure>
+
+<p>所以</p>
+<p><code>select count(*) from anage;</code> 就是返回所有行数。</p>
+<h5 id="JDBC-使用"><a href="#JDBC-使用" class="headerlink" title="JDBC 使用"></a>JDBC 使用</h5><p>这个就大概能用就行了（嚼</p>
+<p>拿其中一个举例子</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">showAllMoreThan1000Years</span><span class="params">(Connection conn)</span>&#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">selectQuery</span> <span class="operator">=</span> <span class="string">&quot;SELECT commonname,maximumlongevity FROM anage WHERE maximumlongevity &gt; 1000&quot;</span>;</span><br><span class="line">    <span class="comment">// def format</span></span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            <span class="type">PreparedStatement</span> <span class="variable">preparedStatement</span> <span class="operator">=</span> conn.prepareStatement(selectQuery);</span><br><span class="line">            <span class="comment">//给传输赋值select，直接运行</span></span><br><span class="line">            <span class="type">ResultSet</span> <span class="variable">longLives</span> <span class="operator">=</span> preparedStatement.executeQuery();</span><br><span class="line">            <span class="comment">// return 所有的结果</span></span><br><span class="line">            <span class="keyword">while</span>(longLives.next())&#123;</span><br><span class="line">                <span class="type">String</span> <span class="variable">commonname</span> <span class="operator">=</span> longLives.getString(<span class="number">1</span>);</span><br><span class="line">                <span class="type">float</span> <span class="variable">maxAge</span> <span class="operator">=</span> longLives.getFloat(<span class="number">2</span>);</span><br><span class="line">                System.out.println(maxAge + <span class="string">&quot;, &quot;</span> + commonname);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">catch</span>(SQLException e)&#123;</span><br><span class="line">            System.err.format(<span class="string">&quot;SQL State: %s\n%s\n&quot;</span>, e.getSQLState(), e.getMessage());</span><br><span class="line">            e.printStackTrace();            </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>getstring?</p>
+<p><strong>getString</strong>表示以 Java 编程语言中String的形式获取此 ResultSet对象的当前行中指定列的值。   </p>
+<p><strong>参数：</strong></p>
+<p>columnIndex - 第一个列是 1，第二个列是 2，……</p>
+<p><strong>返回：</strong></p>
+<p>列值；如果值为 SQL NULL，则返回值为 null</p>
+<p>当然也有getint，这里的getfloat，指的是获得制定列中int&#x2F;float…的值，没有返回 null。</p>
+<p>这个东西使用mvn管理，重复输入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn compile <span class="built_in">exec</span>:java -Dexec.args=<span class="string">&quot;/modules/cs258/data/anage/anage_data.txt&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>来执行</p>
+<p>注意</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ResultSet  <span class="title function_">executeQuery</span><span class="params">(String sql)</span></span><br><span class="line"><span class="comment">//用于执行select语句,返回结果集</span></span><br><span class="line"><span class="type">int</span>  <span class="title function_">executeUpdate</span><span class="params">(String sql)</span></span><br><span class="line"><span class="comment">//用于执行insert、delete和update语句，返回int</span></span><br><span class="line"><span class="type">boolean</span>  <span class="title function_">execute</span><span class="params">(String sql)</span></span><br><span class="line"><span class="comment">//用于执行create和drop等语句,返回boolean</span></span><br></pre></td></tr></table></figure>
+
+
+<p>public int getInt(String columnName) throws SQLException     </p>
+<p>返回名为columnName的列中当前行中的int值。</p>
+<p>public int getInt(int columnIndex) throws SQLException     </p>
+<p>返回指定列索引当前行中的int值。列索引从1开始，意味着行的第一列为1，行的第二列为2，依此类推。<br><a target="_blank" rel="noopener" href="https://blog.51cto.com/u_15293798/2977463">https://blog.51cto.com/u_15293798/2977463</a></p>
+<p><strong>记住java里面操纵语句不加分号嗷！</strong></p>
+<p>预编译？</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Lirx_Tech/article/details/51148853">https://blog.csdn.net/Lirx_Tech/article/details/51148853</a></p>
+<p>SQL语句的执行过程：提交SQL语句 -&gt; 数据库引擎对SQL语句进行编译得到数据库可执行的代码 -&gt; 执行SQL代码</p>
+<p>查看这个，所以是先行编译了语句，预编译支持占位符，意思就是说 INSERT </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">PreparedStatement preparedStatement = conn.prepareStatement(selectQuery);</span><br><span class="line">ResultSet rs = preparedStatement.executeQuery();</span><br><span class="line"></span><br><span class="line">如果是 update 就是</span><br><span class="line">需要填充占位符在这里</span><br><span class="line">preparedStatement.setSrting(1, &#x27;a&#x27;);</span><br><span class="line">preparedStatment.setInt(2, 2);</span><br><span class="line">... 以此类推</span><br><span class="line"></span><br><span class="line">int result = preparedStaement.executeUpdate();</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>要实现的</p>
+<ul>
+<li><input checked disabled type="checkbox"> Count the number of species that have an adult weight greater than 4000g.</li>
+</ul>
+<p><code>select count(*) from anage where anage.adultweight &gt; 4000;</code></p>
+<p>得出代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">showAdultMoreThan4000g</span><span class="params">(Connection conn)</span>&#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">selectQuery</span> <span class="operator">=</span> <span class="string">&quot;SELECT count(*) FROM anage WHERE anage.adultweight &gt; 4000&quot;</span>;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            <span class="type">PreparedStatement</span> <span class="variable">preparedStatement</span> <span class="operator">=</span> conn.prepareStatement(selectQuery);</span><br><span class="line">            <span class="type">ResultSet</span> <span class="variable">Count</span> <span class="operator">=</span> preparedStatement.executeQuery();</span><br><span class="line">            <span class="keyword">while</span>(Count.next())&#123;</span><br><span class="line">                System.out.println(Count.getInt(<span class="number">1</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">catch</span>(SQLException e)&#123;</span><br><span class="line">            System.err.format(<span class="string">&quot;SQL State: %s\n%s\n&quot;</span>, e.getSQLState(), e.getMessage());</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>为什么要next一个？最初，指针被置于第一行记录之前，通过next()方法可以将指针移动到下一行记录</p>
+<p>rs.getInt方法， 若数据库中记录的数值为null，getInt返回的是数值“0”，而不是null！</p>
+<ul>
+<li><input checked disabled type="checkbox"> Find the common name of all species that have a litter&#x2F;clutch size greater than 40000. Make sure you only project out the CommonName  column (not other columns too).</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">commonNameLitterCluch</span><span class="params">(Connection conn)</span>&#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">selectQuery</span> <span class="operator">=</span> <span class="string">&quot;SELECT anage.commonname FROM anage WHERE anage.litterorclutchsize &gt; 40000&quot;</span>;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            <span class="type">PreparedStatement</span> <span class="variable">preparedStatement</span> <span class="operator">=</span> conn.prepareStatement(selectQuery);</span><br><span class="line">            <span class="type">ResultSet</span> <span class="variable">Count</span> <span class="operator">=</span> preparedStatement.executeQuery();</span><br><span class="line">            <span class="keyword">while</span>(Count.next())&#123;</span><br><span class="line">                <span class="type">String</span> <span class="variable">commonName</span> <span class="operator">=</span> Count.getString(<span class="number">1</span>);</span><br><span class="line">                <span class="comment">// get the column 1 of current row, only 1 column is selected</span></span><br><span class="line">                <span class="comment">// row get down +1 per time</span></span><br><span class="line">                System.out.println(commonName);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">catch</span>(SQLException e)&#123;</span><br><span class="line">            System.err.format(<span class="string">&quot;SQL State: %s\n%s\n&quot;</span>, e.getSQLState(), e.getMessage());</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>其实不知道能不能 select 名字……</p>
+<ul>
+<li><input checked disabled type="checkbox"> Find the species name and common name of species that have an adultweight greater than 200 times their birthweight.</li>
+</ul>
+<p>语句</p>
+<p><code>SELECT anage.species, anage.commonname FROM anage WHERE anage.adultweight &gt; (200*anage.birthweight);</code></p>
+<p><code>System.out.format(&quot;%56s, %-31s\t\n&quot;, animals.getString(2),animals.getString(1));</code></p>
+<p>参考一下这个，同样也是输出学名和common name，占字节和左对齐</p>
+<ul>
+<li><input checked disabled type="checkbox"> Change the weight of ‘Apis mellifera’ (‘Honey bee’) to be 3g.</li>
+</ul>
+<p>要用 <code>int  executeUpdate(String sql)</code> 了</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> table_name</span><br><span class="line"><span class="keyword">SET</span> column1 <span class="operator">=</span> value1, column2 <span class="operator">=</span> value2, ...</span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">condition</span>; </span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> anage</span><br><span class="line"><span class="keyword">SET</span> adultweight <span class="operator">=</span> <span class="number">3</span>	</span><br><span class="line"><span class="keyword">WHERE</span> commonname <span class="operator">=</span> <span class="string">&#x27;Honey bee&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 加不加3.00 无所谓，会补充的</span></span><br></pre></td></tr></table></figure>
+
+<p>代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">changeBee</span><span class="params">(Connection conn)</span>&#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">sql</span> <span class="operator">=</span> <span class="string">&quot;UPDATE anage SET adultweight = 3 WHERE commonname = &#x27;Honey bee&#x27;&quot;</span>;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            <span class="type">PreparedStatement</span> <span class="variable">preparedStatement</span> <span class="operator">=</span> conn.prepareStatement(sql);</span><br><span class="line">            <span class="comment">// create prepared statement</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">success</span> <span class="operator">=</span> preparedStatement.executeUpdate();</span><br><span class="line">            <span class="comment">// get int as file discriptor?</span></span><br><span class="line">            <span class="keyword">if</span>(success &lt; <span class="number">0</span>)&#123;</span><br><span class="line">                <span class="comment">// unsucessful</span></span><br><span class="line">                System.out.println(<span class="string">&quot;Update failed.&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;Update sucessful.&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">catch</span>(SQLException e)&#123;</span><br><span class="line">            System.err.format(<span class="string">&quot;SQL State: %s\n%s\n&quot;</span>, e.getSQLState(), e.getMessage());</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li><input checked disabled type="checkbox"> Insert a (maybe fictional) animal of your choice (or one that  doesn’t appear in the dataset already — there don’t seem to be many  insects).</li>
+</ul>
+<p>这个其实大同小异了，查询语句</p>
+<p><code>INSERT INTO anage(Species, CommonName, GestationIncubation, LitterOrClutchSize) VALUES (&#39;Caprimulgus indicus&#39;, &#39;Jungle nightjar&#39;, 16, 2);</code></p>
+<h4 id="不可以将占位符用作-anage-，因为预编译？"><a href="#不可以将占位符用作-anage-，因为预编译？" class="headerlink" title="不可以将占位符用作 anage(?,?,?,?)，因为预编译？"></a>不可以将占位符用作 anage(?,?,?,?)，因为预编译？</h4><p><a target="_blank" rel="noopener" href="https://www.cxyzjd.com/article/qq_38339561/85104156">https://www.cxyzjd.com/article/qq_38339561/85104156</a></p>
+<p>PreparedStatement会为占位符?的两边自动加上单引号，这样会使得SQL语句不可执行，比如使用将表名设置为占位符，数据库执行sql语句时，表名会用单引号引起来，这样会使得sql语句执行出错或者查询不出数据</p>
+<p>所以PreparedStatement只能用来为可以加引号’的参数（如参数值）设置动态参数，即用?占位，不可用于表名、字段名等，不然怎么生成预编译的语句对象呢~ 所以sql中你必须知道你先要查询或操作那些字段。</p>
+<ul>
+<li><input checked disabled type="checkbox"> Delete your newly inserted animal.</li>
+</ul>
+<p><code>DELETE FROM anage WHERE species = &#39;Caprimulgus indicus&#39;;</code></p>
+<h5 id="创建-NBN"><a href="#创建-NBN" class="headerlink" title="创建 NBN"></a>创建 NBN</h5><p>这个简单多了，按照要求写就可以，但是注意一下 common name 不再是 not null，然后要 <code>\i nature-schema.sql</code> 一下</p>
+<p>sample code 使用了 addbatch 替代逐个 commit，修改 anage 是 if you can，所以还是下次再说罢</p>
+<h5 id="创建-observation"><a href="#创建-observation" class="headerlink" title="创建 observation"></a>创建 observation</h5><p><code>ObservationID SERIAL PRIMARY KEY</code></p>
+<p> the ‘SERIAL’ part will assign a unique incremental number everytime something is inserted.</p>
+<p>decimal 负号不占位置</p>
+<p>数据类型为decimal的字段，可以存储的最大值&#x2F;范围是多少？<br>例如：decimal(5,2)，则该字段可以存储-999.99~999.99，最大值为999.99。<br>也就是说D表示的是小数部分长度，(M-D)表示的是整数部分长度。</p>
+<p>剩下的是看文档写constrain，我真的要死了，吐魂，下次再说</p>
+<p>ref:</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/43802865">https://zhuanlan.zhihu.com/p/43802865</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.yiibai.com/sql/sql-count.html">https://www.yiibai.com/sql/sql-count.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Thinkingcao/article/details/69950314">https://blog.csdn.net/Thinkingcao/article/details/69950314</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/kenx/p/13553931.html">https://www.cnblogs.com/kenx/p/13553931.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qbg19881206/article/details/19850857">https://blog.csdn.net/qbg19881206/article/details/19850857</a></p>
+<p><a target="_blank" rel="noopener" href="https://qiushurong.github.io/2014/02/22/jdbc-resultset/">https://qiushurong.github.io/2014/02/22/jdbc-resultset/</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Lirx_Tech/article/details/51148853">https://blog.csdn.net/Lirx_Tech/article/details/51148853</a></p>
+<p><a target="_blank" rel="noopener" href="https://bbs.huaweicloud.com/forum/thread-90199-1-1.html">https://bbs.huaweicloud.com/forum/thread-90199-1-1.html</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/sql/" rel="tag"># sql</a>
+              <a href="/tags/dblab/" rel="tag"># dblab</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/26/OSlab2/" rel="prev" title="OSlab2">
+      <i class="fa fa-chevron-left"></i> OSlab2
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/10/28/linux-user-mask-%E6%98%AF%E4%BB%80%E4%B9%88/" rel="next" title="linux user mask 是什么">
+      linux user mask 是什么 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#data-type-numeric-%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">data type numeric 问题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#count-%E5%87%BD%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">count() 函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#JDBC-%E4%BD%BF%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">JDBC 使用</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8D%E5%8F%AF%E4%BB%A5%E5%B0%86%E5%8D%A0%E4%BD%8D%E7%AC%A6%E7%94%A8%E4%BD%9C-anage-%EF%BC%8C%E5%9B%A0%E4%B8%BA%E9%A2%84%E7%BC%96%E8%AF%91%EF%BC%9F"><span class="nav-number"></span> <span class="nav-text">不可以将占位符用作 anage(?,?,?,?)，因为预编译？</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-NBN"><span class="nav-number">1.</span> <span class="nav-text">创建 NBN</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-observation"><span class="nav-number">2.</span> <span class="nav-text">创建 observation</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="山奈"
+      src="/images/ava.jpg">
+  <p class="site-author-name" itemprop="name">山奈</p>
+  <div class="site-description" itemprop="description">You must have a blog!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">山奈</span>
+</div>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

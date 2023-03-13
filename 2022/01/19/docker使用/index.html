@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"acyanbird.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="首先在本机上安装 docker，参照 https:&#x2F;&#x2F;docs.docker.com&#x2F;engine&#x2F;install&#x2F;ubuntu&#x2F;#install-using-the-repository 需要将本用户加入 docker 用户组或者一直使用 sudo 123456789101112131415# 添加docker用户组，一般已存在，不需要执行sudo groupadd docker# 将登陆用户加">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker使用">
+<meta property="og:url" content="https://acyanbird.github.io/2022/01/19/docker%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="Nighthawk&#39;s nest">
+<meta property="og:description" content="首先在本机上安装 docker，参照 https:&#x2F;&#x2F;docs.docker.com&#x2F;engine&#x2F;install&#x2F;ubuntu&#x2F;#install-using-the-repository 需要将本用户加入 docker 用户组或者一直使用 sudo 123456789101112131415# 添加docker用户组，一般已存在，不需要执行sudo groupadd docker# 将登陆用户加">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-01-19T19:39:22.000Z">
+<meta property="article:modified_time" content="2023-03-13T02:39:58.667Z">
+<meta property="article:author" content="山奈">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://acyanbird.github.io/2022/01/19/docker%E4%BD%BF%E7%94%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>docker使用 | Nighthawk's nest</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Nighthawk's nest</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://acyanbird.github.io/2022/01/19/docker%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ava.jpg">
+      <meta itemprop="name" content="山奈">
+      <meta itemprop="description" content="You must have a blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nighthawk's nest">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          docker使用
+        </h1>
+
+        <div class="post-meta">
+	  
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-01-19 19:39:22" itemprop="dateCreated datePublished" datetime="2022-01-19T19:39:22+00:00">2022-01-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-13 02:39:58" itemprop="dateModified" datetime="2023-03-13T02:39:58+00:00">2023-03-13</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>首先在本机上安装 docker，参照</p>
+<p><a target="_blank" rel="noopener" href="https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository">https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository</a></p>
+<p>需要将本用户加入 docker 用户组或者一直使用 sudo</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># 添加docker用户组，一般已存在，不需要执行</span><br><span class="line"></span><br><span class="line">sudo groupadd docker</span><br><span class="line"></span><br><span class="line"># 将登陆用户加入到docker用户组中</span><br><span class="line"></span><br><span class="line">sudo gpasswd -a $USER docker</span><br><span class="line"></span><br><span class="line"># 更新用户组</span><br><span class="line"></span><br><span class="line">newgrp docker</span><br><span class="line"></span><br><span class="line"># 测试docker命令是否可以使用sudo正常使用</span><br><span class="line"></span><br><span class="line">docker version</span><br></pre></td></tr></table></figure>
+
+<p>然后 check 是否安装成功，使用 <code>docker run hello-world</code> 一般来说第一次会 pull</p>
+<p>然后就进入我猜配置阶段啦，可以先看看这个 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/166672337">https://zhuanlan.zhihu.com/p/166672337</a></p>
+<p>如果要使用 mysql 最好单独开一个 docker</p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/d9b6bbc7fd77">https://www.jianshu.com/p/d9b6bbc7fd77</a></p>
+<p>参考一下这个</p>
+<p><a target="_blank" rel="noopener" href="http://www.1os.top/it/cloud/docker/docker-django/">http://www.1os.top/it/cloud/docker/docker-django/</a></p>
+<p>哦还有这一篇手把手教你的</p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/u/dusai">https://segmentfault.com/u/dusai</a></p>
+<p>基本上配置了一个 django，可以打开的网页，然后先尝试单独打包</p>
+<p>当然要先 migrate  <code>python manage.py migrate</code> 然后写入 Dockerfile</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># 从仓库拉取 带有 python 3.7 的 Linux 环境</span><br><span class="line">FROM python:3.7</span><br><span class="line"></span><br><span class="line"># 设置 python 环境变量</span><br><span class="line">ENV PYTHONUNBUFFERED 1</span><br><span class="line"></span><br><span class="line"># 创建 code 文件夹并将其设置为工作目录</span><br><span class="line">RUN mkdir /code</span><br><span class="line">WORKDIR /code</span><br><span class="line"># 更新 pip</span><br><span class="line">RUN pip install pip -U</span><br><span class="line"># 将 requirements.txt 复制到容器的 code 目录</span><br><span class="line">COPY requirements.txt /code/</span><br><span class="line"># 安装库</span><br><span class="line">RUN pip install -r requirements.txt</span><br><span class="line"># 将当前目录复制到容器的 code 目录</span><br><span class="line">ADD . /code/</span><br></pre></td></tr></table></figure>
+
+<p>哎呀官方推荐使用 copy</p>
+<p>当然了这个是 用了 py 3.9</p>
+<p><code>pipenv lock -r &gt; requirements.txt</code></p>
+<p>生成 requirements.txt</p>
+<p>然后使用 docker-compose 毕竟以后要启用多个，写入<strong>docker-compose.yml</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">version: &quot;3&quot;</span><br><span class="line">services:</span><br><span class="line">  app:</span><br><span class="line">    restart: always</span><br><span class="line">    build: .  # &#x27;点&#x27;代表当前目录</span><br><span class="line">    command: &quot;python3 manage.py runserver 0.0.0.0:8000&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - .:/code</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;8000:8000&quot;</span><br></pre></td></tr></table></figure>
+
+<p>restart， 在出现意外的时候定时重启。 - .:&#x2F;code 左边是本机，右边是 docker，两个连接到一起，类似于虚拟机的共享文件夹？</p>
+<p><code>volumes</code> ：<strong>卷，这是个很重要的概念。</strong>前面说过容器是和宿主机完全隔离的，但是有些时候又需要将其连通；比如我们开发的 Django 项目代码常常会更新，并且更新时还依赖如 Git 之类的程序，在容器里操作就显得不太方便。所以就有<strong>卷</strong>，它定义了宿主机和容器之间的映射：**”.”** 表示宿主机的当前目录，**”:”** 为分隔符，”&#x2F;code” 表示容器中的目录。即宿主机当前目录和容器的 &#x2F;code 目录是连通的，宿主机当前目录的 Django 代码更新时，容器中的 &#x2F;code 目录中的代码也相应的更新了。这有点儿像是在容器上打了一个洞，某种程度上也是<strong>实用性</strong>和<strong>隔离性</strong>的一种妥协。</p>
+<p>遇到了端口占用，记得把 command 和 ports 的端口都修改</p>
+<p>在 setting 里面把 0.0.0.0 给加到 ALLOWED_HOSTS &#x3D; [‘.localhost’, ‘127.0.0.1’, ‘0.0.0.0’] 似乎是 127 不能监视什么的不管了。</p>
+<p>然后添加 mysql，应该来说似乎 mysql 8 有什么特殊的登录方式所以要使用别的参数</p>
+<p>先在 yaml 那里加入 mysql，然后更改 dockerfiles</p>
+<p>草，看来要尝试 postgres 了，然后说是不 empty 所以需要先删一个</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/62697071/docker-compose-postgres-upgrade-initdb-error-directory-var-lib-postgresql-da">https://stackoverflow.com/questions/62697071/docker-compose-postgres-upgrade-initdb-error-directory-var-lib-postgresql-da</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker volume ls</span><br><span class="line">docker volume inspect db_data &lt;-- will show you the mountpoint</span><br></pre></td></tr></table></figure>
+
+<p>pipenv 无法直接安装 psycopg2,要安装 psycopg2-binary，然后输出 requirements</p>
+<p>有时候可以在 run 后面加上 -y 来搞定 apt 安装的交互</p>
+<h5 id="frontend-react-安装"><a href="#frontend-react-安装" class="headerlink" title="frontend react 安装"></a>frontend react 安装</h5><p>嗯好像每次 npm 总得出事……</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/46013544/yarn-install-command-error-no-such-file-or-directory-install">https://stackoverflow.com/questions/46013544/yarn-install-command-error-no-such-file-or-directory-install</a></p>
+<p>如果安装了就先 remove 掉</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt remove cmdtest</span><br><span class="line">sudo apt remove yarn</span><br></pre></td></tr></table></figure>
+
+<p>Install it simple via npm</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g yarn</span><br></pre></td></tr></table></figure>
+
+<p>记得退出原来的 pipenv 环境！然后</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yarn install</span><br><span class="line">yarn run</span><br></pre></td></tr></table></figure>
+
+<p>然后报错……</p>
+<p><code>/bin/sh: 1: react-scripts: not found</code></p>
+<p>查看了一下需要先运行一下 yarn，直接<code>yarn</code>一下之后得到了是 node 版本太低</p>
+<p>卧槽，node 这么麻烦……这家伙要手动切换版本……算了一般麻烦吧，使用 nvm 切换版本</p>
+<p><code>nvm install [version]</code></p>
+<p><code>nvm use [version]</code></p>
+<p>然后再 install, follow above steps</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">npm install -g yarn</span><br><span class="line">yarn</span><br><span class="line">yarn install</span><br><span class="line">yarn start</span><br></pre></td></tr></table></figure>
+
+<p>这样就可以了</p>
+<p>dockerfile 设置环境，docker-compose 定义服务</p>
+<p>所以简单来说这次的 dockerfile 就是跑 yarn</p>
+<p><a target="_blank" rel="noopener" href="https://codefresh.io/docs/docs/learn-by-example/nodejs/react/">https://codefresh.io/docs/docs/learn-by-example/nodejs/react/</a></p>
+<p>找到一个 example</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">FROM node</span><br><span class="line">RUN mkdir /frontend</span><br><span class="line">WORKDIR /frontend</span><br><span class="line"></span><br><span class="line">COPY package.json yarn.lock ./</span><br><span class="line">RUN yarn</span><br><span class="line">COPY . /frontend/</span><br><span class="line">RUN yarn</span><br><span class="line">RUN yarn build</span><br></pre></td></tr></table></figure>
+
+<p>整个是这样的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">version: &quot;3.1&quot;</span><br><span class="line">services:</span><br><span class="line">  db:</span><br><span class="line">    image: postgres</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;5432:5432&quot;</span><br><span class="line">    restart: always</span><br><span class="line">    environment:</span><br><span class="line">      - POSTGRES_NAME=postgres</span><br><span class="line">      - POSTGRES_PASSWORD=example</span><br><span class="line">  frontend:</span><br><span class="line">    restart: always</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;3000:3000&quot;</span><br><span class="line">    build: ./frontend</span><br><span class="line">    command: bash -c &quot;yarn start&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - ./frontend:/frontend</span><br><span class="line">  backend:</span><br><span class="line">    restart: always</span><br><span class="line">    build: ./backend  # dockerfile position</span><br><span class="line">    command: bash -c &quot;python3 manage.py migrate &amp;&amp; python3 manage.py runserver 0.0.0.0:8010&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - ./backend:/backend</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;8010:8010&quot;</span><br><span class="line">    environment:</span><br><span class="line">      - DB_ENGINE=django.db.backends.postgresql</span><br><span class="line">      - DB_NAME=postgres</span><br><span class="line">      - DB_USER=postgres</span><br><span class="line">      - DB_PASSWORD=example</span><br><span class="line">      - DB_HOST=db</span><br><span class="line">      - DB_PORT=5432</span><br><span class="line">    depends_on:</span><br><span class="line">      - db</span><br></pre></td></tr></table></figure>
+
+<p>我也不指望自己能够学会，就下次再来看吧</p>
+<p>docker 无法使用 .. 访问上一层文件，可以也很麻烦… 所以一定要到本层访问。可以先安装 pipenv 让它输出再 requirement 再使用</p>
+<p><a target="_blank" rel="noopener" href="https://pythonspeed.com/articles/pipenv-docker/">https://pythonspeed.com/articles/pipenv-docker/</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/01/18/w2TODO/" rel="prev" title="w2TODO">
+      <i class="fa fa-chevron-left"></i> w2TODO
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/01/19/django%E4%BD%BF%E7%94%A8/" rel="next" title="django使用">
+      django使用 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#frontend-react-%E5%AE%89%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">frontend react 安装</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="山奈"
+      src="/images/ava.jpg">
+  <p class="site-author-name" itemprop="name">山奈</p>
+  <div class="site-description" itemprop="description">You must have a blog!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">山奈</span>
+</div>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

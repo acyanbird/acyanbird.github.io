@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"acyanbird.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="tcp 头部长度是 ihl  Internet Header Length is the length of the internet header in 32 bit  words. 所以整个头部的长度是 ip_head-&gt;ihl*4不需要 ntohs 转换，格式就是 unsigned char 1struct tcphdr *tcp_head &#x3D; (struct tcphdr *) (p">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OS course work">
+<meta property="og:url" content="https://acyanbird.github.io/2021/11/16/OS-course-work/index.html">
+<meta property="og:site_name" content="Nighthawk&#39;s nest">
+<meta property="og:description" content="tcp 头部长度是 ihl  Internet Header Length is the length of the internet header in 32 bit  words. 所以整个头部的长度是 ip_head-&gt;ihl*4不需要 ntohs 转换，格式就是 unsigned char 1struct tcphdr *tcp_head &#x3D; (struct tcphdr *) (p">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-3e35b246648f4ac393f2ad7eb0d406e8_720w.jpg">
+<meta property="og:image" content="https://segmentfault.com/img/remote/1460000008293905">
+<meta property="article:published_time" content="2021-11-16T13:20:09.000Z">
+<meta property="article:modified_time" content="2023-03-13T02:39:58.667Z">
+<meta property="article:author" content="山奈">
+<meta property="article:tag" content="c语言">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic1.zhimg.com/80/v2-3e35b246648f4ac393f2ad7eb0d406e8_720w.jpg">
+
+<link rel="canonical" href="https://acyanbird.github.io/2021/11/16/OS-course-work/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>OS course work | Nighthawk's nest</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Nighthawk's nest</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://acyanbird.github.io/2021/11/16/OS-course-work/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ava.jpg">
+      <meta itemprop="name" content="山奈">
+      <meta itemprop="description" content="You must have a blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nighthawk's nest">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OS course work
+        </h1>
+
+        <div class="post-meta">
+	  
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-11-16 13:20:09" itemprop="dateCreated datePublished" datetime="2021-11-16T13:20:09+00:00">2021-11-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-13 02:39:58" itemprop="dateModified" datetime="2023-03-13T02:39:58+00:00">2023-03-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E6%A0%A1%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学校学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>tcp 头部长度是 ihl </p>
+<p>Internet Header Length is the length of the internet header <strong>in 32 bit  words</strong>.</p>
+<p>所以整个头部的长度是 <code>ip_head-&gt;ihl*4</code>不需要 ntohs 转换，格式就是 unsigned char</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">tcphdr</span> *<span class="title">tcp_head</span> =</span> (<span class="keyword">struct</span> tcphdr *) (packet + <span class="keyword">sizeof</span>(<span class="keyword">struct</span> ethhdr) + ip_head-&gt;ihl*<span class="number">4</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这个是 tcp 偏移位置</p>
+<p>在回调函数里面需要用 fflush（stdout）强制输出！我也不知道为啥，结束之后问问看吧。</p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/30267881">https://www.zhihu.com/question/30267881</a></p>
+<p>for 第三个 ++i 会比 i++ 更快一些其他没有区别，放心使用</p>
+<p>ctrl 加上鼠标左键直接跳转原定义！</p>
+<p><strong>const</strong>是一个<strong>C</strong>语言（ANSI <strong>C</strong>）的关键字，具有着举足轻重的地位。 它限定一个变量不允许被改变，产生静态作用。 使用<strong>const</strong>在一定程度上可以提高程序的安全性和可靠性。</p>
+<p>记得要转换，不过应该大家都是大尾吧……</p>
+<p>To do this, the function <code>ntohs</code> can be used as follows.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;netinet/in.h&gt;</span><br><span class="line">...</span><br><span class="line">unsigned short ethernet_type = ntohs(eth_header-&gt;ether_type);</span><br></pre></td></tr></table></figure>
+
+<p>目前无法读取 netinet，用 linux 下的替代</p>
+<p> <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/dd1cbfa44012">https://www.jianshu.com/p/dd1cbfa44012</a></p>
+<p>记得 apt pcap</p>
+<p><code>sudo apt install libpcap-dev</code></p>
+<p>GCC 不会符合任何一个 ISO 标准，惊不惊喜，意不意外啊</p>
+<p>PCAP exposes a domain specific language which allows you to specify packet filters. <strong>This feature should not be used to complete the coursework. You must  implement the logic to access and process packet headers manually.</strong> A central aim of this coursework is for you to become familiar with the network stack; marks will be deducted from solutions that rely on  external parsing or filtering logic.</p>
+<p>不可以使用 PCAP filter 逻辑，哎呀反正这是啥我也不知道</p>
+<h3 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a>测试环境</h3><p>ssh -p 3217 root@localhost</p>
+<p>连接到有 root 权限的虚拟机，我现在还是没摸透……算了，慢慢嗅呗</p>
+<h3 id="各个文件的职责"><a href="#各个文件的职责" class="headerlink" title="各个文件的职责"></a>各个文件的职责</h3><p>main.c 负责 call</p>
+<p>sniff.c 负责捕捉，将 TCP IP ehter 的包赋值到 struct 上，以便后面解析，</p>
+<p>analysis.c 使用 analysis func to determine if pakacge is malicious, currently nothing</p>
+<p>dispatch.c 并行 call analysis，想要高分肯定要用 thread pool 啦（笑</p>
+<h3 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">../build/idsniff invoked. Settings:</span><br><span class="line">        Interface: eth0</span><br><span class="line">        Verbose: 0</span><br><span class="line">SUCCESS! Opened eth0 for capture</span><br><span class="line">==============================</span><br><span class="line">Blacklisted URL violation detected</span><br><span class="line">Source IP address: 10.0.2.15</span><br><span class="line">Destination IP address: 212.58.237.249</span><br><span class="line">==============================</span><br><span class="line">==============================</span><br><span class="line">Blacklisted URL violation detected</span><br><span class="line">Source IP address: 10.0.2.15</span><br><span class="line">Destination IP address: 142.250.200.3</span><br><span class="line">==============================</span><br><span class="line">==============================</span><br><span class="line">Blacklisted URL violation detected</span><br><span class="line">Source IP address: 10.0.2.15</span><br><span class="line">Destination IP address: 142.250.200.3</span><br><span class="line">==============================</span><br><span class="line">^C</span><br><span class="line">Intrusion Detection Report:</span><br><span class="line">4 SYN  packets detected from 1 different IPs (syn attack)</span><br><span class="line">2 ARP responses (cache poisoning)</span><br><span class="line">3 URL Blacklist violations</span><br></pre></td></tr></table></figure>
+
+<p>输出应该是这样，检测网络包，并且标注每一个的攻击类型，这次检测的是三个层次</p>
+<p><img src="https://pic1.zhimg.com/80/v2-3e35b246648f4ac393f2ad7eb0d406e8_720w.jpg"></p>
+<p>TCP&#x2F;IP&#x2F;ehternet，transport，network，link</p>
+<h3 id="多进程"><a href="#多进程" class="headerlink" title="多进程"></a>多进程</h3><p>For this work we will focus on POSIX threads you were introduced to  in lab 3. In order to use POSIX threads, the lpthread linker flag must  be added to the project makefile like so (should be done already):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LDFLAGS := -lpthread -lpcap</span><br></pre></td></tr></table></figure>
+
+<p>嗯，要用标准进程，谁知道是啥标准哈</p>
+<p>大概是一个搞多进程的库吧</p>
+<h3 id="头文件"><a href="#头文件" class="headerlink" title="头文件"></a>头文件</h3><p>这里都有 .h 的头文件，所以要了解一下</p>
+<p>头文件是扩展名为 <strong>.h</strong> 的文件，包含了 C 函数声明和宏定义，被多个源文件中引用共享。有两种类型的头文件：程序员编写的头文件和编译器自带的头文件。</p>
+<p>在程序中要使用头文件，需要使用 C 预处理指令 <strong>#include</strong> 来引用它。前面我们已经看过 <strong>stdio.h</strong> 头文件，它是编译器自带的头文件。</p>
+<p>引用头文件相当于复制头文件的内容，但是我们不会直接在源文件中复制头文件的内容，因为这么做很容易出错，特别在程序是由多个源文件组成的时候。</p>
+<p>A simple practice in C 或 C++ 程序中，建议把所有的常量、宏、系统全局变量和函数原型写在头文件中，在需要的时候随时引用这些头文件。</p>
+<p><a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-header-files.html">https://www.runoob.com/cprogramming/c-header-files.html</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;file&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这种形式用于引用系统头文件。它在系统目录的标准列表中搜索名为 file 的文件。在编译源代码时，您可以通过 -I 选项把目录前置在该列表前。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;file&quot;</span><br></pre></td></tr></table></figure>
+
+<p>这种形式用于引用用户头文件。它在包含当前文件的目录中搜索名为 file 的文件。在编译源代码时，您可以通过 -I 选项把目录前置在该列表前。</p>
+<p>以前一直都不知道鸭……</p>
+<h4 id="只引用一次头文件"><a href="#只引用一次头文件" class="headerlink" title="只引用一次头文件"></a>只引用一次头文件</h4><p>如果一个头文件被引用两次，编译器会处理两次头文件的内容，这将产生错误。为了防止这种情况，标准的做法是把文件的整个内容放在条件编译语句中，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#ifndef HEADER_FILE</span><br><span class="line">#define HEADER_FILE</span><br><span class="line"></span><br><span class="line">the entire header file file</span><br><span class="line"></span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+
+<p>这种结构就是通常所说的包装器 <strong>#ifndef</strong>。当再次引用头文件时，条件为假，因为 HEADER_FILE 已定义。此时，预处理器会跳过文件的整个内容，编译器会忽略它。</p>
+<h3 id="PCAP"><a href="#PCAP" class="headerlink" title="PCAP"></a>PCAP</h3><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/21921020/pcap-reading-tcp-header-fields-fails-silently">https://stackoverflow.com/questions/21921020/pcap-reading-tcp-header-fields-fails-silently</a></p>
+<p>如果要解析 tcp ip，需要添加偏移量</p>
+<p>解析看</p>
+<p><a target="_blank" rel="noopener" href="https://www.codeleading.com/article/61202964299/">https://www.codeleading.com/article/61202964299/</a></p>
+<p>在<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%AE%A1%E7%AE%97%E6%9C%BA">计算机</a><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%BD%91%E7%BB%9C%E7%AE%A1%E7%90%86">网络管理</a>领域，<strong>pcap</strong>（全称：packet capture）是一个用于<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%95%B8%E6%93%9A%E5%8C%85%E5%88%86%E6%9E%90%E5%99%A8">捕获网络流量</a>的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E6%8E%A5%E5%8F%A3">应用程序接口</a>（API）。pcap是用<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/C%E8%AF%AD%E8%A8%80">C语言</a>编写的。在<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%B1%BBUnix%E7%B3%BB%E7%BB%9F">类Unix系统</a>中透过libpcap<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%87%BD%E5%BC%8F%E5%BA%AB">库</a>来实作pcap.</p>
+<p>这里使用了 pcap_open_live() and pcap_next()</p>
+<p> pcap_open_live() </p>
+<p>pcap_open_live - open a device for capturing，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">pcap_t</span> *<span class="title function_">pcap_open_live</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *device, <span class="type">int</span> snaplen,</span></span><br><span class="line"><span class="params">               <span class="type">int</span> promisc, <span class="type">int</span> to_ms, <span class="type">char</span> *errbuf)</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>snaplen</strong> specifies the snapshot length to be set on the handle.</p>
+<p><strong>promisc</strong> specifies if the interface is to be put into promiscuous mode.</p>
+<p><strong>to_ms</strong>  specifies the packet buffer timeout, as a non-negative value, in milliseconds.  (See pcap (3PCAP) for an explanation of the packet buffer timeout.)</p>
+<p>第一个参数是第一步获取的网络接口字符串，可以直接使用硬编码。<br>第二个参数是对于每个数据包，从开头要抓多少个字节，我们可以设置这个值来只抓每个数据包的头部，而不关心具体的内容。典型的以太网帧长度是1518字节，但其他的某些协议的数据包会更长一点，但任何一个协议的一个数据包长度都必然小于65535个字节。<br>第三个参数指定是否打开混杂模式(Promiscuous Mode)，0表示非混杂模式，任何其他值表示混合模式。如果要打开混杂模式，那么网卡必须也要打开混杂模式，可以使用如下的命令打开eth0混杂模式：<br>ifconfig eth0 promisc<br>第四个参数指定需要等待的毫秒数，超过这个数值后，第3步获取数据包的这几个函数就会立即返回。0表示一直等待直到有数据包到来。<br>第五个参数是存放出错信息的数组。<br>————————————————<br>版权声明：本文为CSDN博主「htttw」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。<br>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/htttw/article/details/7521053">https://blog.csdn.net/htttw/article/details/7521053</a></p>
+<p>混杂模式？<strong>混杂模式</strong>（英语：promiscuous mode）是电脑网络中的术语。 是指一台机器的<strong>网卡</strong>能够接收所有经过它的数据流，而不论其目的地址是否是它。</p>
+<p>example 是</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">pcap_t</span> *pcap_handle = pcap_open_live(interface, <span class="number">4096</span>, <span class="number">1</span>, <span class="number">1000</span>, errbuf);</span><br><span class="line"><span class="keyword">if</span> (pcap_handle == <span class="literal">NULL</span>) &#123;</span><br><span class="line">  <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Unable to open interface %s\n&quot;</span>, errbuf);</span><br><span class="line">  <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;SUCCESS! Opened %s for capture\n&quot;</span>, interface);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第一个参数是在输入的时候就指定的网卡的名称，lo 或者 eth0，咱这里没有 eth0 估计是名称有所改变吧……就用 lo 就好，不过 lo 是测试 only 也不知道能不能实际运用</p>
+<p>plus：果然要搞微缩版本的网鲨? 网夜鹰也可（笑</p>
+<p>pcap_next()</p>
+<p>read the next packet from a pcap_t，就是打开之后就读取的意味吧……</p>
+<p><code>const u_char *pcap_next(pcap_t *p, struct pcap_pkthdr *h);</code></p>
+<p>例子是 </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">pcap_pkthdr</span> <span class="title">header</span>;</span></span><br><span class="line"><span class="comment">// pcap_pkthdr 是 type of per package，直接 assign 进去</span></span><br><span class="line"></span><br><span class="line">packet = pcap_next(pcap_handle, &amp;header);</span><br></pre></td></tr></table></figure>
+
+<p>这个是使用 while true 捕获包，需要用 pcap_loop</p>
+<p><code>int pcap_loop(pcap_t *p, int cnt, pcap_handler callback, u_char *user);</code></p>
+<p>It does not return when live packet buffer timeouts occur. A value of -1 or 0 for cnt is equivalent to infinity.</p>
+<h4 id="pcap-loop"><a href="#pcap-loop" class="headerlink" title="pcap_loop"></a>pcap_loop</h4><p>这个大概是这么使用的</p>
+<p><a target="_blank" rel="noopener" href="http://lihuia.com/libpcap%E6%A0%B8%E5%BF%83pcap_loop/">http://lihuia.com/libpcap%E6%A0%B8%E5%BF%83pcap_loop/</a></p>
+<p>callback 就是去 call dispatch，进而 call analysis？</p>
+<p><code>pcap_loop(pcap_handle, -1, dispatch, verbose);</code> </p>
+<p>第一个是 pcap 正在执行的指针，第二个是 0 或者 -1 就是无限循环，第三个是抓到的包传输给哪一个函数处理，第四个是用户传入的参数，data type 是 u_char，传入之后就是</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">dispatch</span><span class="params">(<span class="type">unsigned</span> <span class="type">char</span> *userdata, <span class="keyword">struct</span> pcap_pkthdr *header,<span class="type">const</span> <span class="type">unsigned</span> <span class="type">char</span> *packet)</span></span><br></pre></td></tr></table></figure>
+
+<p>所以 verbose 作为 userdata 被传入，因此在 call 下一个的时候就需要转换</p>
+<p><code>analyse(header, packet, (int)userdata);</code> 反正都是 int 警告一下也没有问题了嘛（摊爪</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">pcap_loop</span><span class="params">(<span class="type">pcap_t</span> *p, <span class="type">int</span> cnt, pcap_handler callback, u_char *user)</span>;</span><br><span class="line"><span class="comment">/*参数说明：</span></span><br><span class="line"><span class="comment">功能：循环捕获数据包,不会响应pcap_open_live()函数设置的超时时间</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">参数 pcap_t *p: p是嗅探器会话句柄参数 </span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">cnt：cnt用于设置所捕获数据包的个数，负数的cnt表示pcap_loop永远循环抓包，直到出现错误。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">参数callback：是个回调函数指针，它的原型如下：typedef void (*pcap_handler)(u_char *user, const struct pcap_pkthdr *h,const u_char *bytes);</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">参数 user：用来给回调函数传递参数的，在callback函数当中只有第一个user指针是可以留给用户使用的，</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">如果你想给callback传递自己参数，那就只能通过pcap_loop的最后一个参数user来实现了*/</span></span><br></pre></td></tr></table></figure>
+
+<p>所以说回调函数应该就是用来处理这个包的函数啦</p>
+<p>回调函数？<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000008293902">https://segmentfault.com/a/1190000008293902</a></p>
+<p><img src="https://segmentfault.com/img/remote/1460000008293905"></p>
+<p>假设我们要使用一个排序函数来对数组进行排序，那么在主程序(Main program)中，我们先通过库，选择一个库排序函数(Library  function)。但排序算法有很多，有冒泡排序，选择排序，快速排序，归并排序。同时，我们也可能需要对特殊的对象进行排序，比如特定的结构体等。库函数会根据我们的需要选择一种排序算法，然后调用实现该算法的函数来完成排序工作。这个被调用的排序函数就是回调函数(Callback function)。</p>
+<p>注意，回调函数并不是C语言特有的，几乎任何语言都有回调函数。在C语言中，我们通过使用函数指针来实现回调函数。那函数指针是什么？不着急，下面我们就先来看看什么是函数指针。</p>
+<h3 id="函数指针的定义"><a href="#函数指针的定义" class="headerlink" title="函数指针的定义"></a>函数指针的定义</h3><p>函数指针虽然也是指针，但它的定义方式却和其他指针看上去很不一样，我们来看看它是如何定义的：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 方法1 */</span></span><br><span class="line"><span class="type">void</span> (*p_func)(<span class="type">int</span>, <span class="type">int</span>, <span class="type">float</span>) = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 方法2 */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">void</span> (*tp_func)(<span class="type">int</span>, <span class="type">int</span>, <span class="type">float</span>);</span><br><span class="line">tp_func p_func = <span class="literal">NULL</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这两种方式都是定义了一个指向返回值为 <strong><code>void</code></strong> 类型，参数为 <strong><code>(int, int, float)</code></strong> 的函数指针。</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> (*p_func)(<span class="keyword">int</span>, <span class="keyword">int</span>, <span class="keyword">float</span>) = <span class="keyword">NULL</span>;</span><br><span class="line">p_func = &amp;func1;</span><br><span class="line">p_func = func2;</span><br></pre></td></tr></table></figure>
+
+<p>上面两种方法都是合法的，对于第二种方法，编译器会隐式地将 <strong><code>func_2</code></strong> 由 <strong><code>void ()(int, int, float)</code></strong> 类型转换成  <strong><code>void (*)(int, int, float)</code></strong> 类型</p>
+<p>好了剩下的还是自己去连接看吧，全部复制粘贴略没品了点。</p>
+<p>好吧看起来问题是 c 语言到底是怎么编译函数的，所以才能知道函数指针是啥</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/CarpenterLee/p/5994681.html">https://www.cnblogs.com/CarpenterLee/p/5994681.html</a></p>
+<p>看这个理解怎么编译</p>
+<p>算了，再放个资料 <a target="_blank" rel="noopener" href="http://blog.chinaunix.net/uid-10540984-id-3070572.html">http://blog.chinaunix.net/uid-10540984-id-3070572.html</a> 到时候再改吧，看起来要先写完 handler 才能填写 call back func</p>
+<h4 id="如何在-ctrl-c-的时候-print？"><a href="#如何在-ctrl-c-的时候-print？" class="headerlink" title="如何在 ctrl c 的时候 print？"></a>如何在 ctrl c 的时候 print？</h4><p><a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-function-signal.html">https://www.runoob.com/cprogramming/c-function-signal.html</a></p>
+<p>在 while 之前写上</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">signal(SIGINT,sigHandle);</span><br></pre></td></tr></table></figure>
+
+<p>然后 <code>sighandle</code> 就是在退出之前 call 的函数，记得要在 sigHandle 里写上 exit(1) 哦</p>
+<p>要使用全局变量进行不同 IP 的记录，还有不同攻击数量，那么需要使用 mutex 锁来防止篡改。</p>
+<h4 id="multi-thread"><a href="#multi-thread" class="headerlink" title="multi thread"></a>multi thread</h4><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34352738/article/details/78307116">https://blog.csdn.net/qq_34352738/article/details/78307116</a></p>
+<p>任何一个线程调用 exit 都会导致结束。</p>
+<p>如果一切都是main来handle，那么就是单线程</p>
+<p>如果在执行函数之前先 create 一个线程，然后在线程要执行的函数那边将线程 kill 掉</p>
+<h5 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h5><p>在所有 func 外面定义，在一个 c 里正常定义，其他的地方使用 extern</p>
+<p>int a;</p>
+<p>extern int a;</p>
+<h5 id="转换网络字节序"><a href="#转换网络字节序" class="headerlink" title="转换网络字节序"></a>转换网络字节序</h5><p>ip 地址是 32 位，所以要转换成 long 才行，端口可以是 short</p>
+<p><code>printf(&quot;send ip addr is %u\n&quot;, ntohl(ip_head-&gt;saddr));</code></p>
+<p><code>printf(&quot;Dest port is %d\n&quot;, ntohs(tcp_head-&gt;dest));</code></p>
+<p>不过转换过来的 long int 仍然需要转换才能 print 成日常的样子</p>
+<p>整数IP地址 unsigned int IP_Addr &#x3D; 1713350848 转化为二进制为：01100110-00011111-10101000-11000000 根据8位划分得到结果为102-31-168-192，由于网络字节倒序的问题，实际IP为192.168.31.102</p>
+<p>整体是这样</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">print_ip</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span> ip)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> bytes[<span class="number">4</span>];</span><br><span class="line">    bytes[<span class="number">0</span>] = ip &amp; <span class="number">0xFF</span>;</span><br><span class="line">    bytes[<span class="number">1</span>] = (ip &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xFF</span>;</span><br><span class="line">    bytes[<span class="number">2</span>] = (ip &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xFF</span>;</span><br><span class="line">    bytes[<span class="number">3</span>] = (ip &gt;&gt; <span class="number">24</span>) &amp; <span class="number">0xFF</span>;   </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d.%d.%d.%d\n&quot;</span>, bytes[<span class="number">3</span>], bytes[<span class="number">2</span>], bytes[<span class="number">1</span>], bytes[<span class="number">0</span>]);        </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后这样 0xFF 就是 1111，每次都截取最后八个二进制，这就是一部分，然后使用位移将上一截弄成最后一截，再节选最后一截然后 print 出来。</p>
+<h4 id="SYN-Flooding-Attack"><a href="#SYN-Flooding-Attack" class="headerlink" title="SYN Flooding Attack"></a>SYN Flooding Attack</h4><p><a target="_blank" rel="noopener" href="https://pcapplusplus.github.io/v1808/Documentation/a01467.html">https://pcapplusplus.github.io/v1808/Documentation/a01467.html</a></p>
+<p>在这里看 flag，然后 6 个 flag 都查一次</p>
+<p>然后创建数组存储，但是注意不能在全局变量中使用 malloc 这样的，因为这需要被执行，全局变量只能是固定的</p>
+<p><code>data = (unsigned int *) calloc(10, sizeof (unsigned int ));</code></p>
+<p>像这个样子，先创建大小为 10 的数组，他会 init 成 0</p>
+<p>全局变量记录数组大小和当前数目，如果相等了就扩大一个</p>
+<p><code>data= (unsigned int *) realloc(data, dataSize*sizeof(unsigned int ));</code></p>
+<p>注意，realloc 第二个参数也是和 malloc 一致的，需要乘以这个 type</p>
+<h5 id="ARP-poison"><a href="#ARP-poison" class="headerlink" title="ARP poison"></a>ARP poison</h5><p>python 找不到包，用 pip 不可以，需要</p>
+<p><code>sudo apt-get install python3-scapy</code> 和 sudo 权限才能 run</p>
+<p>直接看 ARP 包的协议，就是 proto，如果它定义是 ARP 直接标注</p>
+<h5 id="Blacklisted-URLs"><a href="#Blacklisted-URLs" class="headerlink" title="Blacklisted URLs"></a>Blacklisted URLs</h5><p>HTTP 看这里 <a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000019788537">https://segmentfault.com/a/1190000019788537</a></p>
+<p>首先试着 print 一下好了，反正先看到是输出到 80 的，然后算出数据长度</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> hdatalen = header-&gt;len - ETH_HLEN - ip_head-&gt;ihl*<span class="number">4</span> - <span class="number">20</span>;</span><br></pre></td></tr></table></figure>
+
+<p>header 是整个包的长度，减去 14 eth head 长度，减去 ip head 长度，减去最小 tcp 长度，然后再循环打印</p>
+<p>嗯，检查 整个</p>
+<h4 id="函数重复"><a href="#函数重复" class="headerlink" title="函数重复"></a>函数重复</h4><p>不能在两个 c 里面定义一个函数，如果要在另一个文件里面使用，那么将这个函数包括在 head 里面，再 include 过去.</p>
+<h3 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h3><ul>
+<li><input disabled type="checkbox"> 多线程</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/c%E8%AF%AD%E8%A8%80/" rel="tag"># c语言</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/11/15/week-5-digital-system/" rel="prev" title="week 5 digital system">
+      <i class="fa fa-chevron-left"></i> week 5 digital system
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/11/16/%E5%88%9B%E5%BB%BA%E5%9B%BE%E7%89%87-coe-%E6%96%87%E4%BB%B6/" rel="next" title="创建图片 coe 文件">
+      创建图片 coe 文件 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%8E%AF%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">测试环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%84%E4%B8%AA%E6%96%87%E4%BB%B6%E7%9A%84%E8%81%8C%E8%B4%A3"><span class="nav-number">2.</span> <span class="nav-text">各个文件的职责</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA"><span class="nav-number">3.</span> <span class="nav-text">输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E8%BF%9B%E7%A8%8B"><span class="nav-number">4.</span> <span class="nav-text">多进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%B4%E6%96%87%E4%BB%B6"><span class="nav-number">5.</span> <span class="nav-text">头文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%AA%E5%BC%95%E7%94%A8%E4%B8%80%E6%AC%A1%E5%A4%B4%E6%96%87%E4%BB%B6"><span class="nav-number">5.1.</span> <span class="nav-text">只引用一次头文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PCAP"><span class="nav-number">6.</span> <span class="nav-text">PCAP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#pcap-loop"><span class="nav-number">6.1.</span> <span class="nav-text">pcap_loop</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">7.</span> <span class="nav-text">函数指针的定义</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%9C%A8-ctrl-c-%E7%9A%84%E6%97%B6%E5%80%99-print%EF%BC%9F"><span class="nav-number">7.1.</span> <span class="nav-text">如何在 ctrl c 的时候 print？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#multi-thread"><span class="nav-number">7.2.</span> <span class="nav-text">multi thread</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F"><span class="nav-number">7.2.1.</span> <span class="nav-text">全局变量</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BD%AC%E6%8D%A2%E7%BD%91%E7%BB%9C%E5%AD%97%E8%8A%82%E5%BA%8F"><span class="nav-number">7.2.2.</span> <span class="nav-text">转换网络字节序</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SYN-Flooding-Attack"><span class="nav-number">7.3.</span> <span class="nav-text">SYN Flooding Attack</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#ARP-poison"><span class="nav-number">7.3.1.</span> <span class="nav-text">ARP poison</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Blacklisted-URLs"><span class="nav-number">7.3.2.</span> <span class="nav-text">Blacklisted URLs</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E9%87%8D%E5%A4%8D"><span class="nav-number">7.4.</span> <span class="nav-text">函数重复</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TODO"><span class="nav-number">8.</span> <span class="nav-text">TODO</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="山奈"
+      src="/images/ava.jpg">
+  <p class="site-author-name" itemprop="name">山奈</p>
+  <div class="site-description" itemprop="description">You must have a blog!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">山奈</span>
+</div>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
