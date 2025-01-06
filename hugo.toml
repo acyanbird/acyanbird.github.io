@@ -1,0 +1,79 @@
+baseURL = "/"
+languageCode = "zh-cn"
+title = "Nighthawk's nest"
+theme = "github-style"
+pygmentsCodeFences = true   # 启动代码高亮
+pygmentsUseClasses = false
+buildDrafts = false
+PygmentsStyle = "tango"
+enableEmoji = true  # 支持 emoji
+
+# 在 md 里面启用 HTML 
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[params]
+  author = "你的名字"
+  description = "你的描述"
+  github = "GitHub ID"
+  email = "邮箱"
+  url = "个人网站地址"
+#   keywords = "blog, google analytics"
+  # rss = true
+  # userStatusEmoji = "😀"
+  favicon = "/images/ava_c_trans.png" #标签页的那个小图标
+  avatar = "/images/ava_c.png"
+  headerIcon = "/images/ava_c.png"
+  location = "Shenzhen, China"
+  enableGitalk = false
+  # 支持本地搜索，这里与下面的 outputs
+  enableSearch = true
+
+[outputs]
+  home = ["html", "json"]
+
+[outputFormats.json]
+  mediaType = "application/json"
+  baseName = "index"
+  isPlainText = false
+
+#   [params.gitalk]
+#     clientID = ""
+#     clientSecret = ""
+#     repo = "存放评论的 repo 名"
+#     owner = "你的GitHub ID"
+#     admin = "你的GitHub ID"
+#     id = "decodeURI(location.pathname)"
+#     labels = "gitalk"
+#     perPage = 15
+#     pagerDirection = "last"
+#     createIssueManually = false
+#     distractionFreeMode = false
+
+
+  [[params.links]]
+    title = "bilibili"
+    href = "https://space.bilibili.com/205319947"
+    icon = "/images/bilibili.svg"
+
+  [[params.links]]
+    title = "QQ Group"
+    icon = "/images/qq.svg"
+    href = "https://qm.qq.com/q/cXb0hh1uC"
+
+    [[params.links]]
+    title = "ebird"
+    href = "https://ebird.org/profile/MjQ3NDIyOQ/world"
+    icon = "/images/ebirdicon.png"
+
+lastmod = true
+[frontmatter]
+  lastmod = ["lastmod", ":fileModTime", ":default"]
+
+# [services]
+#   [services.googleAnalytics]
+#     ID = "UA-123456-789"
+
+
