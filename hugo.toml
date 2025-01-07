@@ -1,4 +1,4 @@
-baseURL = "/"
+baseURL = "https://acyanbird.github.io/"
 languageCode = "zh-cn"
 title = "Nighthawk's nest"
 theme = "github-style"

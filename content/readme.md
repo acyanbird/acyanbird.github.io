@@ -1,0 +1,2 @@
+hello, world! 这里是为了 szdiy 分享准备的示例站点~  
+请查看[这篇文档](https://acyanbird.tech/post/%E7%99%BD%E5%AB%96blog/)获取搭建指南！也可也查看[仓库](https://github.com/acyanbird/acyanbird.github.io)来参考这个站点的配置！感谢hugo，感谢GitHub-theme，gitalk的作者和贡献者们~
